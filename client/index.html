@@ -1,0 +1,65 @@
+<!DOCTYPE html><html lang="zh"><head><script>(function(){
+  var needsPolyfill=(function(){
+    try{
+      if(typeof crypto==="undefined"||typeof crypto.randomUUID!=="function")return true;
+      if(typeof Object.hasOwn!=="function")return true;
+      if(typeof[].at!=="function")return true;
+      if(typeof[].findLast!=="function")return true;
+      return false;
+    }catch(e){return true}
+  })();
+  if(needsPolyfill){
+    document.write('<script src="/assets/polyfills.js"><\/script>');
+  }
+})();</script><script>window.appId = "app_17g1b8sj7x4";
+    window.userId = "";
+    window.tenantId = "5129903202";
+    window.userName = "";
+    window.csrfToken = "desktop-local-csrf-token";
+    window.ENVIRONMENT = "desktop";
+    window.__BASENAME__ = "/app/app_17g1b8sj7x4";
+    const appInfo = {
+      name: "全职高手考研系统",
+      avatar: "https://miaoda.feishu.cn/aily/api/v1/files/static/171e8c0da91f565200a67a5d80c7cc113ab29eb1aace4d77229afd260743ef8c_ve_miaoda?x-tos-process=image%2FResize%2Cw_120%2Ch_120%2Cm_fixed%7Crounded-corners%2Cr_14%2Fformat%2Cpng",
+      description: "基于考试大纲和历年真题权重生成个性化考研复习计划，借助间隔重复机制动态调整学习安排，帮考生高效掌握专业课知识点，提升备考效率。",
+    };
+    if (appInfo.name) {
+      window._appInfo = appInfo;
+    }</script><script>(function(g){
+  if(!window[g]){var q=[];window[g]=function(){q.push([].slice.call(arguments));};window[g].q=q;}
+  window.__slardarErrBuf=window.__slardarErrBuf||[];
+  var ref=document.referrer||'';
+  function _cap(err){
+    if(window[g]&&!window[g].q){
+      window[g]('captureException',err instanceof Error?err:new Error(String(err)),{source:'runtime-error',referrer:ref});
+    }else{
+      (window.__slardarErrBuf=window.__slardarErrBuf||[]).push(err);
+    }
+  }
+  window.addEventListener('error',function(e){
+    if(e.error==null&&e.target instanceof Element){
+      var t=e.target,url=t.src||t.href||'';
+      if(url)window[g]('captureException',new Error('Resource load failed: '+url),{team:'miaoda-sdk',source:'resource-error',resourceType:t.tagName.toLowerCase(),resourceUrl:url,referrer:ref});
+      return;
+    }
+    if(e.error!=null){
+      var err=e.error;
+      if(e.filename&&typeof err.stack==='string'&&err.stack.indexOf(e.filename)<0){
+        try{err.stack+='\n    at '+e.filename+':'+(e.lineno||0)+':'+(e.colno||0);}catch(ex){}
+      }
+      _cap(err);
+    }else{
+      var msg=e.message||'Script error';
+      var err=new Error(msg);
+      if(e.filename)err.stack=msg+'\n    at '+e.filename+':'+(e.lineno||0)+':'+(e.colno||0);
+      _cap(err);
+    }
+  },true);
+  window.addEventListener('unhandledrejection',function(e){
+    if(e.reason!=null)_cap(e.reason instanceof Error?e.reason:new Error(String(e.reason)));
+  });
+})('KSlardarWeb');</script><meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>全职高手考研系统</title><script>try {
+      window.__platform__ = JSON.parse('{"csrfToken":"desktop-local-csrf-token","userId":"","appId":"app_17g1b8sj7x4","appName":"全职高手考研系统","appAvatar":"https://miaoda.feishu.cn/aily/api/v1/files/static/171e8c0da91f565200a67a5d80c7cc113ab29eb1aace4d77229afd260743ef8c_ve_miaoda?x-tos-process=image%2FResize%2Cw_120%2Ch_120%2Cm_fixed%7Crounded-corners%2Cr_14%2Fformat%2Cpng","appDescription":"基于考试大纲和历年真题权重生成个性化考研复习计划，借助间隔重复机制动态调整学习安排，帮考生高效掌握专业课知识点，提升备考效率。","loginUrl":"/app/app_17g1b8sj7x4/runtime/page/login?redirect_uri=https%3A%2F%2F4m95ysesq0ayu.doubaoapps.com%2Fapp%2Fapp_17g1b8sj7x4","userType":"","tenantId":5129903202,"environment":"online","showBadge":true,"appPublished":{"status_code":1,"app_info":{"app_name":"全职高手考研系统","app_avatar":"https://miaoda.feishu.cn/aily/api/v1/files/static/171e8c0da91f565200a67a5d80c7cc113ab29eb1aace4d77229afd260743ef8c_ve_miaoda?x-tos-process\u003dimage%2FResize%2Cw_120%2Ch_120%2Cm_fixed%7Crounded-corners%2Cr_14%2Fformat%2Cpng","app_description":"基于考试大纲和历年真题权重生成个性化考研复习计划，借助间隔重复机制动态调整学习安排，帮考生高效掌握专业课知识点，提升备考效率。","show_badge":true},"app_runtime_extra":{"url":"https://4m95ysesq0ayu-aadkzyrag6alw.feishuapp.cn/suda/api/v1/workspaces/workspace_aadkzyrag6alw","bucket":{"default_bucket_id":"bucket_aadkz5qdnlkdo"}}},"basename":"/app/app_17g1b8sj7x4"}');
+    } catch (e) {
+      console.error('Failed to parse __platform__', e);
+    }</script><script type="module" crossorigin src="/assets/index-DBjcn8eH.js"></script><link rel="modulepreload" crossorigin href="/assets/rolldown-runtime-hePW80VL.js"><link rel="modulepreload" crossorigin href="/assets/radix-BFu8ltLO.js"><link rel="modulepreload" crossorigin href="/assets/button-D89ee02W.js"><link rel="modulepreload" crossorigin href="/assets/chevron-up-Z7PdsS_t.js"><link rel="modulepreload" crossorigin href="/assets/chevron-down-D4yPIBDK.js"><link rel="modulepreload" crossorigin href="/assets/star-CPSHfWL7.js"><link rel="modulepreload" crossorigin href="/assets/x-q2bxRAHg.js"><link rel="modulepreload" crossorigin href="/assets/input-Cl9PUNGj.js"><link rel="stylesheet" crossorigin href="/assets/index-DwO3XZxs.css"><meta property="og:title" content="全职高手考研系统"><meta property="og:description" content="基于考试大纲和历年真题权重生成个性化考研复习计划，借助间隔重复机制动态调整学习安排，帮考生高效掌握专业课知识点，提升备考效率。"><meta property="og:image" content="https://miaoda.feishu.cn/aily/api/v1/files/static/171e8c0da91f565200a67a5d80c7cc113ab29eb1aace4d77229afd260743ef8c_ve_miaoda?x-tos-process&#x3D;image%2FResize%2Cw_120%2Ch_120%2Cm_fixed%7Crounded-corners%2Cr_14%2Fformat%2Cpng"><meta name="description" content="基于考试大纲和历年真题权重生成个性化考研复习计划，借助间隔重复机制动态调整学习安排，帮考生高效掌握专业课知识点，提升备考效率。"><link rel="icon" href="https://miaoda.feishu.cn/aily/api/v1/files/static/171e8c0da91f565200a67a5d80c7cc113ab29eb1aace4d77229afd260743ef8c_ve_miaoda?x-tos-process&#x3D;image%2FResize%2Cw_120%2Ch_120%2Cm_fixed%7Crounded-corners%2Cr_14%2Fformat%2Cpng"></head><body><div id="root"></div></body></html>

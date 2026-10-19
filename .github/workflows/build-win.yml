@@ -38,6 +38,11 @@ jobs:
         run: |
           EXPORT_OUT="$GITHUB_WORKSPACE/server/data-export" python scripts/export_data.py || EXPORT_OUT="$GITHUB_WORKSPACE/server/data-export" python3 scripts/export_data.py
 
+      - name: Fetch client build assets (from CDN)
+        shell: bash
+        run: |
+          CLIENT_OUT="$GITHUB_WORKSPACE/client" python scripts/fetch_client.py || CLIENT_OUT="$GITHUB_WORKSPACE/client" python3 scripts/fetch_client.py
+
       - name: Package Windows (nsis)
         run: npx electron-builder --win --config build/electron-builder.yml
 
