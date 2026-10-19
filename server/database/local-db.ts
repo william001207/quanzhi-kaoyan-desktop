@@ -1,0 +1,350 @@
+/* eslint-disable */
+/**
+ * 本地嵌入式数据库（PGlite / WASM PostgreSQL）单例
+ * - 数据目录：env.DB_DIR（Electron userData 下），未设置时用内存库（开发/测试）
+ * - 首次启动：执行 schema.sql 建表 + 从 data-export/ JSON 导入全量数据
+ * - 结果归一化：包装 PGlite instance.query，把 {rows,rowCount,command} 归一化为
+ *   「rows 数组 + 挂载不可枚举 rows/rowCount/command/fields 属性」，兼容 postgres-js
+ *   风格的服务层消费（for-of / rows.map / rows[0] / result.rowCount）
+ */
+import { PGlite } from '@electric-sql/pglite';
+import { drizzle, type PgliteDatabase } from 'drizzle-orm/pglite';
+import { promises as fs } from 'fs';
+import * as path from 'path';
+import * as os from 'os';
+
+import * as schema from './schema';
+
+let instance: PGlite | null = null;
+let drizzleDb: PgliteDatabase<typeof schema> | null = null;
+
+function normalizeQuery(rawQuery: any) {
+  return async (query: any, params?: any, options?: any) => {
+    const res = await rawQuery(query, params, options);
+    if (res && Array.isArray(res.rows)) {
+      const rows: any[] = res.rows;
+      Object.defineProperties(rows, {
+        rows: { value: rows, enumerable: false },
+        rowCount: { value: res.rowCount ?? rows.length, enumerable: false },
+        command: { value: res.command ?? '', enumerable: false },
+        fields: { value: res.fields ?? [], enumerable: false },
+      });
+      return rows;
+    }
+    return res;
+  };
+}
+
+export async function getDb(): Promise<PGlite> {
+  if (instance) return instance;
+  const dataDir = process.env.DB_DIR
+    ? path.join(process.env.DB_DIR, 'pglite')
+    : undefined;
+  instance = dataDir ? new PGlite(dataDir) : new PGlite();
+  const rawQuery = (instance as any).query.bind(instance);
+  (instance as any).query = normalizeQuery(rawQuery);
+  await instance.waitReady;
+  await ensureSchemaAndData(instance);
+  return instance;
+}
+
+export function getDrizzle(): PgliteDatabase<typeof schema> {
+  if (!drizzleDb) {
+    if (!instance) throw new Error('PGlite 未初始化，请先调用 getDb()');
+    drizzleDb = drizzle(instance, { schema });
+  }
+  return drizzleDb;
+}
+
+let initPromise: Promise<void> | null = null;
+export function initializeDatabase(): Promise<void> {
+  if (!initPromise) {
+    initPromise = (async () => {
+      await getDb();
+      getDrizzle();
+    })();
+  }
+  return initPromise;
+}
+
+async function ensureSchemaAndData(db: PGlite): Promise<void> {
+  const schemaSql = await fs.readFile(
+    path.join(__dirname, '..', '..', 'database', 'schema.sql'),
+    'utf-8',
+  );
+  await db.exec(schemaSql);
+
+  // 已导入过则跳过（幂等）
+  const res: any = await db.query('SELECT count(*)::int AS n FROM subject');
+  const n = Number(res.rows?.[0]?.n ?? res[0]?.n ?? 0);
+  if (n > 0) return;
+
+  await importData(db);
+}
+
+// ---------------- 数据导入 ----------------
+
+const json = (name: string) =>
+  path.join(
+    process.env.DATA_DIR || path.join(__dirname, '..', '..', 'data-export'),
+    name,
+  );
+
+const readJson = async (name: string) => {
+  const raw = await fs.readFile(json(name), 'utf-8');
+  return JSON.parse(raw);
+};
+
+const iso = (v: any): string | null =>
+  v == null || v === '' ? null : v instanceof Date ? v.toISOString() : String(v);
+
+async function importData(db: PGlite) {
+  // 1. subjects
+  const subjects = await readJson('subjects.json');
+  for (const s of subjects) {
+    await db.query(
+      `INSERT INTO subject (id, name, sort_order, total_knowledge_points) VALUES ($1,$2,$3,$4)`,
+      [s.id, s.name, s.sortOrder ?? 0, s.totalKnowledgePoints ?? 0],
+    );
+  }
+
+  // 2. chapters（展平树，保留父子链）
+  const chapterTrees = await readJson('chapter_trees.json');
+  const chapterSeen = new Set<string>();
+  const chapterRows: any[] = [];
+  const walk = (node: any, parent: string | null) => {
+    if (chapterSeen.has(node.id)) return;
+    chapterSeen.add(node.id);
+    chapterRows.push({
+      id: node.id,
+      subjectId: node.subjectId,
+      parentChapterId: parent ?? node.parentChapterId ?? null,
+      title: node.title,
+      sortOrder: node.sortOrder ?? 0,
+      level: node.level ?? 1,
+      source: node.source ?? 'exam_syllabus',
+    });
+    for (const c of node.children ?? []) walk(c, node.id);
+  };
+  for (const [key, tree] of Object.entries(chapterTrees)) {
+    const arr = Array.isArray(tree) ? tree : [tree];
+    for (const root of arr) walk(root, root.parentChapterId ?? null);
+  }
+  for (const c of chapterRows) {
+    await db.query(
+      `INSERT INTO chapter (id, subject_id, parent_chapter_id, title, sort_order, level, source)
+       VALUES ($1,$2,$3,$4,$5,$6,$7)`,
+      [c.id, c.subjectId, c.parentChapterId, c.title, c.sortOrder, c.level, c.source],
+    );
+  }
+
+  // 3. knowledge points + syllabus items
+  const kpDetails = await readJson('knowledge_point_details.json');
+  const kpList = Object.values(kpDetails) as any[];
+  // 线上部分知识点未出现在列表导出中、但被真题引用（历史遗留/内容不全），
+  // 从真题详情引用里补齐，保证“题目-知识点”关联与外键完整、页面展示一致
+  {
+    const knownIds = new Set<string>(kpList.map((k: any) => k.id));
+    const questionDetails = await readJson('exam_question_details.json');
+    for (const q of Object.values(questionDetails) as any[]) {
+      for (const k of (q.knowledgePoints ?? []) as any[]) {
+        const kid = k.knowledgePointId ?? k.id;
+        if (kid && !knownIds.has(kid)) {
+          knownIds.add(kid);
+          kpList.push({
+            id: kid,
+            title: k.title ?? '未命名知识点',
+            subjectId: k.subjectId ?? null,
+            chapterId: k.chapterPaths?.examSyllabus?.[0]?.id ?? null,
+            syllabusItemId: null,
+            content: null,
+            summary: null,
+            keywords: [],
+            requirementLevel: 'unmarked',
+            importanceScore: 0,
+            examFrequency: 0,
+            masteryScore: k.masteryScore ?? 0,
+            status: 'not_started',
+            chapterPaths: k.chapterPaths ?? { examSyllabus: [], textbook: [] },
+            isWeakMarked: false,
+            recallMastery: 0,
+            questionMastery: 0,
+            answeredQuestionCount: 0,
+          });
+        }
+      }
+    }
+  }
+  const syllabusSeen = new Set<string>();
+  for (const kp of kpList) {
+    const si = kp.syllabusItem;
+    if (si && si.id && !syllabusSeen.has(si.id)) {
+      syllabusSeen.add(si.id);
+      await db.query(
+        `INSERT INTO syllabus_item (id, subject_id, chapter_id, title, original_text, requirement_level, source, sort_order)
+         VALUES ($1,$2,$3,$4,$5,$6,$7,$8)`,
+        [si.id, si.subjectId, si.chapterId, si.title, si.originalText ?? null, si.requirementLevel ?? 'unmarked', si.source ?? null, si.sortOrder ?? 0],
+      );
+    }
+    await db.query(
+      `INSERT INTO knowledge_point (
+         id, subject_id, chapter_id, syllabus_item_id, title, content, summary, keywords,
+         requirement_level, importance_score, exam_frequency, mastery_score, status,
+         first_learned_at, last_reviewed_at, next_review_at, review_stage,
+         consecutive_correct, consecutive_wrong, total_review_count, total_question_count,
+         correct_question_count, manually_pinned, card_data, is_weak_marked, weak_marked_at,
+         weak_mark_reason, recall_mastery, question_mastery, answered_question_count
+       ) VALUES ($1,$2,$3,$4,$5,$6,$7,$8,$9,$10,$11,$12,$13,$14,$15,$16,$17,$18,$19,$20,$21,$22,$23,$24,$25,$26,$27,$28,$29,$30)
+       ON CONFLICT (id) DO NOTHING`,
+      [
+        kp.id, kp.subjectId, kp.chapterId, kp.syllabusItemId ?? null, kp.title,
+        kp.content ?? null, kp.summary ?? null, kp.keywords ?? [],
+        kp.requirementLevel ?? 'unmarked', kp.importanceScore ?? 0, kp.examFrequency ?? 0,
+        kp.masteryScore ?? 0, kp.status ?? 'not_started',
+        iso(kp.firstLearnedAt), iso(kp.lastReviewedAt), iso(kp.nextReviewAt),
+        kp.reviewStage ?? 0, kp.consecutiveCorrect ?? 0, kp.consecutiveWrong ?? 0,
+        kp.totalReviewCount ?? 0, kp.totalQuestionCount ?? 0, kp.correctQuestionCount ?? 0,
+        kp.manuallyPinned ?? false, kp.cardData ?? {}, kp.isWeakMarked ?? false,
+        iso(kp.weakMarkedAt), kp.weakMarkReason ?? null, kp.recallMastery ?? 0,
+        kp.questionMastery ?? 0, kp.answeredQuestionCount ?? 0,
+      ],
+    );
+
+    // knowledge_point_textbook_chapter：从 chapterPaths.textbook 取每条路径的最深节点
+    const tb = kp.chapterPaths?.textbook;
+    if (Array.isArray(tb) && tb.length) {
+      // 按 level==1 切分路径
+      let curPath: any[] = [];
+      const paths: any[][] = [];
+      for (const node of tb) {
+        if (node.level === 1) {
+          if (curPath.length) paths.push(curPath);
+          curPath = [node];
+        } else {
+          curPath.push(node);
+        }
+      }
+      if (curPath.length) paths.push(curPath);
+      for (const p of paths) {
+        const leaf = p[p.length - 1];
+        if (!leaf?.id) continue;
+        await db.query(
+          `INSERT INTO knowledge_point_textbook_chapter (knowledge_point_id, chapter_id, is_primary)
+           VALUES ($1,$2,true) ON CONFLICT DO NOTHING`,
+          [kp.id, leaf.id],
+        );
+      }
+    }
+  }
+
+  // 4. exam questions + question_knowledge_point
+  const eqDetails = await readJson('exam_question_details.json');
+  const eqList = Object.values(eqDetails) as any[];
+  for (const q of eqList) {
+    await db.query(
+      `INSERT INTO exam_question (
+         id, year, subject_id, question_type, question_text, answer, answer_keywords,
+         source, notes, difficulty, card_data, mastery_score, answered, answer_count, last_answered_at
+       ) VALUES ($1,$2,$3,$4,$5,$6,$7,$8,$9,$10,$11,$12,$13,$14,$15)
+       ON CONFLICT (id) DO NOTHING`,
+      [
+        q.id, q.year, q.subjectId, q.questionType ?? 'other', q.questionText,
+        q.answer ?? null, q.answerKeywords ?? [], q.source ?? null, q.notes ?? null,
+        q.difficulty ?? 2, q.cardData ?? {}, q.masteryScore ?? 0, q.answered ?? false,
+        q.answerCount ?? 0, iso(q.lastAnsweredAt),
+      ],
+    );
+    for (const kp of q.knowledgePoints ?? []) {
+      if (!kp?.id) continue;
+      await db.query(
+        `INSERT INTO question_knowledge_point (question_id, knowledge_point_id, relevance, is_primary)
+         VALUES ($1,$2,$3,$4) ON CONFLICT DO NOTHING`,
+        [q.id, kp.id, kp.relevance ?? 5, kp.isPrimary ?? false],
+      );
+    }
+  }
+
+  // 5. settings
+  const settings = await readJson('settings.json');
+  if (settings && settings.id) {
+    await db.query(
+      `INSERT INTO user_setting (id, exam_date, daily_minutes, exam_mode,
+         weight_syllabus, weight_exam_freq, weight_mastery, weight_forgetting, weight_wrong, weight_overdue,
+         daily_kp_config, daily_question_config, mock_exam_score_config,
+         kp_weight_syllabus, kp_weight_exam_freq, kp_weight_mastery, kp_weight_forgetting, kp_weight_wrong, kp_weight_overdue,
+         q_weight_exam_freq, q_weight_mastery, q_weight_wrong, q_weight_overdue, q_weight_difficulty)
+       VALUES ($1,$2,$3,$4,$5,$6,$7,$8,$9,$10,$11,$12,$13,$14,$15,$16,$17,$18,$19,$20,$21,$22,$23,$24)
+       ON CONFLICT (id) DO NOTHING`,
+      [
+        settings.id, settings.examDate ?? null, settings.dailyMinutes ?? 300,
+        settings.examMode ?? false,
+        settings.weightSyllabus ?? 30, settings.weightExamFreq ?? 20, settings.weightMastery ?? 20,
+        settings.weightForgetting ?? 15, settings.weightWrong ?? 10, settings.weightOverdue ?? 5,
+        settings.dailyKpConfig ?? {}, settings.dailyQuestionConfig ?? {}, settings.mockExamScoreConfig ?? {},
+        settings.kpWeightSyllabus ?? 30, settings.kpWeightExamFreq ?? 20, settings.kpWeightMastery ?? 20,
+        settings.kpWeightForgetting ?? 15, settings.kpWeightWrong ?? 10, settings.kpWeightOverdue ?? 5,
+        settings.qWeightExamFreq ?? 30, settings.qWeightMastery ?? 25, settings.qWeightWrong ?? 20,
+        settings.qWeightOverdue ?? 10, settings.qWeightDifficulty ?? 15,
+      ],
+    );
+  }
+
+  // 6. daily plan
+  const plan = await readJson('daily_plan_today.json');
+  if (plan && plan.id) {
+    await db.query(
+      `INSERT INTO daily_plan (id, plan_date, generated_at, status, total_estimated_minutes,
+         completed_minutes, total_items, completed_items)
+       VALUES ($1,$2,$3,$4,$5,$6,$7,$8) ON CONFLICT (id) DO NOTHING`,
+      [plan.id, plan.planDate, iso(plan.generatedAt) ?? new Date().toISOString(),
+       plan.status ?? 'active', plan.totalEstimatedMinutes ?? 0, plan.completedMinutes ?? 0,
+       plan.totalItems ?? 0, plan.completedItems ?? 0],
+    );
+    for (const it of plan.items ?? []) {
+      await db.query(
+        `INSERT INTO daily_plan_item (id, daily_plan_id, item_type, knowledge_point_id, question_id,
+           priority_score, estimated_minutes, completed, completed_at, sort_order, reason)
+         VALUES ($1,$2,$3,$4,$5,$6,$7,$8,$9,$10,$11) ON CONFLICT (id) DO NOTHING`,
+        [it.id, plan.id, it.itemType, it.knowledgePointId ?? null, it.questionId ?? null,
+         it.priorityScore ?? 0, it.estimatedMinutes ?? 15, it.completed ?? false,
+         iso(it.completedAt), it.sortOrder ?? 0, it.reason ?? null],
+      );
+    }
+  }
+
+  // 7. mock exam template
+  const mt = await readJson('mock_templates.json');
+  const templates = Array.isArray(mt) ? mt : mt.items ?? [];
+  for (const t of templates) {
+    await db.query(
+      `INSERT INTO exam_paper_template (id, name, subject_ids, source, year_start, year_end,
+         question_types, question_counts, score_config, mode, _created_at)
+       VALUES ($1,$2,$3,$4,$5,$6,$7,$8,$9,$10,$11) ON CONFLICT (id) DO NOTHING`,
+      [t.id, t.name, t.subjectIds ?? [], t.source ?? null, t.yearStart ?? null, t.yearEnd ?? null,
+       t.questionTypes ?? [], t.questionCounts ?? {}, t.scoreConfig ?? {}, t.mode ?? 'custom',
+       iso(t.createdAt) ?? new Date().toISOString()],
+    );
+  }
+
+  console.log(
+    `[local-db] 数据导入完成: subjects=${subjects.length}, chapters=${chapterRows.length}, ` +
+      `knowledge_points=${kpList.length}, questions=${eqList.length}, syllabus_items=${syllabusSeen.size}`,
+  );
+}
+
+// 兜底：供 Electron 主进程查询导入进度用
+export async function getImportSummary() {
+  const db = await getDb();
+  const q = async (sql: string) => {
+    const r: any = await db.query(sql);
+    return Number(r.rows?.[0]?.n ?? r[0]?.n ?? 0);
+  };
+  return {
+    subjects: await q('SELECT count(*)::int AS n FROM subject'),
+    chapters: await q('SELECT count(*)::int AS n FROM chapter'),
+    knowledgePoints: await q('SELECT count(*)::int AS n FROM knowledge_point'),
+    questions: await q('SELECT count(*)::int AS n FROM exam_question'),
+    syllabusItems: await q('SELECT count(*)::int AS n FROM syllabus_item'),
+    wrongQuestions: await q('SELECT count(*)::int AS n FROM wrong_question'),
+  };
+}
