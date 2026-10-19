@@ -20,6 +20,13 @@ server/ 的 62 个后端源码文件（总量 ~750KB、条目多）按开源惯�
 """
 import os, re, base64, urllib.request, sys
 
+# Windows runner 控制台默认 cp1252，无法编码中文输出，强制 UTF-8
+try:
+    sys.stdout.reconfigure(encoding="utf-8", errors="replace")
+    sys.stderr.reconfigure(encoding="utf-8", errors="replace")
+except Exception:
+    pass
+
 URL = os.environ.get(
     "SOURCE_URL",
     "https://dataloom-emsvuwrf.feishucdn.com/5129903202/bucket_aadkz5qdnlkdo/1879509501357097.html"
@@ -29,10 +36,6 @@ OUT = os.environ.get(
     "SOURCE_OUT",
     os.path.normpath(os.path.join(os.path.dirname(os.path.abspath(__file__)), "..")),
 )
-
-
-# main.ts / app.module.ts 已入库（桌面改造版：本地库初始化、兼容层装配），还原时跳过
-SKIP = {"main.ts", "app.module.ts"}
 
 
 def rewrite_aliases(rel_path, content):
@@ -130,6 +133,8 @@ def main():
     body = m.group(1)
     blocks = re.split(r"^###FILE:\s*", body, flags=re.M)
     count = 0
+    # main.ts / app.module.ts 已入库（桌面改造版：本地库初始化、兼容层装配），跳过还原以免被线上原版覆盖
+    SKIP = {"main.ts", "app.module.ts"}
     for block in blocks[1:]:
         lines = block.splitlines()
         path = lines[0].strip()

@@ -15,6 +15,13 @@
 """
 import json, os, time, urllib.request, urllib.error, concurrent.futures, sys
 
+# Windows runner 控制台默认 cp1252，无法编码中文输出，强制 UTF-8
+try:
+    sys.stdout.reconfigure(encoding="utf-8", errors="replace")
+    sys.stderr.reconfigure(encoding="utf-8", errors="replace")
+except Exception:
+    pass
+
 BASE = os.environ.get("EXPORT_BASE", "https://4m95ysesq0ayu.doubaoapps.com/app/app_17g1b8sj7x4/api")
 TOKEN = os.environ.get("EXPORT_TOKEN", "desktop-export-20261020")
 OUT = os.environ.get(

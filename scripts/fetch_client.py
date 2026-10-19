@@ -11,6 +11,13 @@ CI 打包前运行本脚本，从 CDN 拉取全部 assets 分块到 client/asset
 """
 import os, urllib.request, concurrent.futures, sys
 
+# Windows runner 控制台默认 cp1252，无法编码中文输出，强制 UTF-8
+try:
+    sys.stdout.reconfigure(encoding="utf-8", errors="replace")
+    sys.stderr.reconfigure(encoding="utf-8", errors="replace")
+except Exception:
+    pass
+
 CDN_ROOT = os.environ.get(
     "CLIENT_CDN_ROOT",
     "https://lf-miaoda-static.feishucdn.com/app_17g1b8sj7x4/39a9def6c224c1df3d9b44ff3ae34d329e26d177/client",
