@@ -33,6 +33,11 @@ jobs:
         working-directory: server
         run: npm run build
 
+      - name: Export full data (from online API)
+        shell: bash
+        run: |
+          EXPORT_OUT="$GITHUB_WORKSPACE/server/data-export" python scripts/export_data.py || EXPORT_OUT="$GITHUB_WORKSPACE/server/data-export" python3 scripts/export_data.py
+
       - name: Package Windows (nsis)
         run: npx electron-builder --win --config build/electron-builder.yml
 

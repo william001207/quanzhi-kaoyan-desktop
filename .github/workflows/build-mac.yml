@@ -30,6 +30,10 @@ jobs:
         working-directory: server
         run: npm run build
 
+      - name: Export full data (from online API)
+        run: |
+          EXPORT_OUT="$GITHUB_WORKSPACE/server/data-export" python3 scripts/export_data.py
+
       - name: Package macOS (dmg, unsigned)
         # 不签名：CSC_IDENTITY_AUTO_DISCOVERY=false 跳过代码签名，dmg 可直接安装（首次打开右键→打开）
         run: |
