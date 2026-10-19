@@ -1,0 +1,53 @@
+# macOS 安装包（dmg）构建 —— 推 tag（v*）或手动触发后在 macos runner 上产出 dmg
+# 说明：dmg 只能在 macOS 上构建（需要 hdiutil），本机为 Linux，因此走 GitHub Actions CI。
+# 推 tag 触发时会自动创建/更新 GitHub Release 并上传 dmg；手动触发（workflow_dispatch）只产出 artifact。
+name: build-macos
+
+on:
+  workflow_dispatch:
+  push:
+    tags:
+      - 'v*'
+
+jobs:
+  build-macos:
+    runs-on: macos-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+
+      - name: Install root deps (electron / electron-builder)
+        run: npm install --no-audit --no-fund
+
+      - name: Install server deps
+        working-directory: server
+        run: npm install --no-audit --no-fund
+
+      - name: Build server (tsc)
+        working-directory: server
+        run: npm run build
+
+      - name: Package macOS (dmg, unsigned)
+        # 不签名：CSC_IDENTITY_AUTO_DISCOVERY=false 跳过代码签名，dmg 可直接安装（首次打开右键→打开）
+        run: |
+          CSC_IDENTITY_AUTO_DISCOVERY=false npx electron-builder --mac dmg --config build/electron-builder.yml
+        env:
+          CSC_IDENTITY_AUTO_DISCOVERY: 'false'
+
+      - name: Upload to GitHub Release (tag push 触发时)
+        if: startsWith(github.ref, 'refs/tags/v')
+        uses: softprops/action-gh-release@v2
+        with:
+          files: |
+            release/*.dmg
+          fail_on_unmatched_files: false
+
+      - name: Upload artifact (手动触发时)
+        uses: actions/upload-artifact@v4
+        with:
+          name: macos-dmg
+          path: release/*.dmg
+          if-no-files-found: error
