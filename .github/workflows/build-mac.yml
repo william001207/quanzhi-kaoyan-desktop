@@ -30,6 +30,11 @@ jobs:
         working-directory: server
         run: npm run build
 
+      - name: Restore build icon
+        run: |
+          mkdir -p build
+          base64 -d build/icon.png.b64 > build/icon.png
+
       - name: Export full data (from online API)
         run: |
           EXPORT_OUT="$GITHUB_WORKSPACE/server/data-export" python3 scripts/export_data.py

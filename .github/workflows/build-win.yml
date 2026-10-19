@@ -33,6 +33,12 @@ jobs:
         working-directory: server
         run: npm run build
 
+      - name: Restore build icon
+        shell: bash
+        run: |
+          mkdir -p build
+          base64 -d build/icon.png.b64 > build/icon.png
+
       - name: Export full data (from online API)
         shell: bash
         run: |

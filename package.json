@@ -6,6 +6,10 @@
   "main": "electron/main.js",
   "author": "quanzhi",
   "homepage": "https://github.com/william001207/quanzhi-kaoyan-desktop",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/william001207/quanzhi-kaoyan-desktop.git"
+  },
   "license": "MIT",
   "private": true,
   "scripts": {

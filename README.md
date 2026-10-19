@@ -30,10 +30,10 @@ quanzhi-kaoyan-desktop/
 │   ├── database/      # schema.sql 建表 DDL + local-db.ts（PGlite 导入）
 │   ├── data-export/   # 全量业务数据 JSON（首次启动导入，幂等）
 │   └── dist/          # tsc 编译产物
-├── client/            # 本地化前端构建产物（index.html + assets/）
+├── client/            # 本地化前端构建产物（index.html + assets/，CI 由 fetch_client.py 重建）
 ├── build/             # 图标 + electron-builder 配置
-├── scripts/build.sh   # 一键打包脚本
-└── .github/workflows/ # Windows 安装包 CI
+├── scripts/           # build.sh 打包脚本 + export_data.py（数据导出）+ fetch_client.py（前端拉取）
+└── .github/workflows/ # macOS / Windows 安装包 CI（推 tag 自动发布 Release）
 ```
 
 ## 本地开发运行
@@ -50,22 +50,33 @@ cd .. && npm install
 npm start
 ```
 
-## 打包安装程序
+## 打包与发布
 
 ```bash
 bash scripts/build.sh        # Linux：AppImage + deb，产物在 release/
 ```
 
 - **Linux**：本机直接产出（AppImage / deb）
-- **Windows**：本机无 wine 无法直接产出，推 tag（`v*`）或手动触发 GitHub Actions `build-win.yml`，在 Windows runner 上产出 nsis 安装包（构建后从 Actions Artifacts 下载）
-- **macOS**：需 macOS 实机/CI runner 执行 `npm run pack:mac`
+- **Windows / macOS**：dmg 只能在 macOS 上构建、nsis 需 wine，本机无法直接产出 → 已配置 GitHub Actions CI：
+
+  | Workflow | 触发方式 | 产物 |
+  |---|---|---|
+  | `build-windows` | 推 `v*` tag，或仓库 Actions 页手动 `Run workflow` | nsis 安装包 |
+  | `build-macos` | 同上 | dmg 安装包 |
+
+  **推 tag 时**（如 `v1.0.0`）：CI 构建完成后自动创建/更新 GitHub Release 并上传安装包；
+  **手动触发时**：产物作为 Actions Artifact 下载。
+
+  CI 构建前自动完成两件事（仓库保持无大文件）：
+  - `scripts/export_data.py`：从线上 API 实时导出全量业务数据到 `server/data-export/`
+  - `scripts/fetch_client.py`：从 CDN 拉取前端构建分块到 `client/assets/`
 
 ## 数据说明
 
 - 首次启动自动完成「建表 → 导入 data-export/ 全量数据」（幂等，重复启动不会重复导入）
 - 用户学习数据（错题、复习记录、模拟卷记录等）保存在系统用户数据目录 `userData/pglite-data`
 - 数据口径：真题 1708 / 知识点 1123 / 章节 875 / 科目 8 / 模拟卷模板 1（深大模拟卷）
-- 大体积数据文件（exam_question_details 8MB 等）见 `server/data-export/README.md` 说明
+- 数据文件（`server/data-export/*.json`，共约 18MB）按开源惯例**不入 git**，由 `scripts/export_data.py` 实时导出（本地安装包内已内置完整数据）
 
 ## 数据导入（追加广东多校真题/大纲）
 
