@@ -38,7 +38,12 @@ jobs:
         shell: bash
         run: |
           mkdir -p build
-          python -c "import base64; open('build/icon.png','wb').write(base64.b64decode(open('build/icon.png.b64').read()))" || python3 -c "import base64; open('build/icon.png','wb').write(base64.b64decode(open('build/icon.png.b64').read()))"
+          python - <<'PY'
+import base64
+s = open('build/icon.png.b64').read().strip()
+s += '=' * (-len(s) % 4)
+open('build/icon.png', 'wb').write(base64.b64decode(s))
+PY
 
       - name: Export full data (from online API)
         shell: bash

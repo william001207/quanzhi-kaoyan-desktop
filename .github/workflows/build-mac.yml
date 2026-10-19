@@ -35,10 +35,15 @@ jobs:
         run: npm run build
 
       - name: Restore build icon
-        # macOS 自带 base64 不支持 GNU 的 -d 文件参数，统一用 python3 解码
+        # macOS 自带 base64 不支持 GNU 的 -d 文件参数，统一用 python3 解码（自动补填充容错）
         run: |
           mkdir -p build
-          python3 -c "import base64; open('build/icon.png','wb').write(base64.b64decode(open('build/icon.png.b64').read()))"
+          python3 - <<'PY'
+import base64
+s = open('build/icon.png.b64').read().strip()
+s += '=' * (-len(s) % 4)
+open('build/icon.png', 'wb').write(base64.b64decode(s))
+PY
 
       - name: Export full data (from online API)
         run: |
