@@ -1,0 +1,44 @@
+# Windows 安装包构建 —— 推送/手动触发后在 GitHub Actions 的 Windows runner 上产出 nsis 安装包
+# 说明：本地 Linux 环境无法直接产出 Windows 包（electron-builder 需 wine），因此走 CI。
+name: build-windows
+
+on:
+  workflow_dispatch:
+  push:
+    tags:
+      - 'v*'
+
+jobs:
+  build-windows:
+    runs-on: windows-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: npm
+          cache-dependency-path: |
+            package-lock.json
+            server/package-lock.json
+
+      - name: Install root deps (electron / electron-builder)
+        run: npm install --no-audit --no-fund
+
+      - name: Install server deps
+        working-directory: server
+        run: npm install --no-audit --no-fund
+
+      - name: Build server (tsc)
+        working-directory: server
+        run: npm run build
+
+      - name: Package Windows (nsis)
+        run: npx electron-builder --win --config build/electron-builder.yml
+
+      - name: Upload artifacts
+        uses: actions/upload-artifact@v4
+        with:
+          name: windows-installer
+          path: release/*.exe
+          if-no-files-found: error

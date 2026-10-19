@@ -1,0 +1,60 @@
+# 全职高手考研系统桌面版打包配置
+# 产物目录：release/
+
+appId: com.quanzhi.kaoyan
+productName: 全职高手考研系统
+copyright: Copyright © 2026 quanzhi
+
+directories:
+  output: release
+  buildResources: build
+
+# asar 内只放 Electron 主进程
+files:
+  - electron/**/*
+  - package.json
+
+# server（本地服务 + PGlite 数据库 + 全量数据）与 client（本地化前端产物）整体外置，
+# 避免 PGlite wasm / 数据文件在 asar 内的兼容问题
+# 注意：extraResources 过滤器只排除 server 根目录的 src/（源码），勿用 **/src/**（会误杀 node_modules 内依赖的 src 文件）
+extraResources:
+  - from: server
+    to: server
+    filter:
+      - "**/*"
+      - "!src/**"
+      - "!**/*.map"
+      - "!**/*.tsbuildinfo"
+  - from: client
+    to: client
+  - from: build/icon.png
+    to: icon.png
+
+npmRebuild: false
+
+linux:
+  target:
+    - AppImage
+    - deb
+  icon: build/icon.png
+  category: Education
+  maintainer: quanzhi
+  synopsis: 口腔医学考研复习系统
+  description: 全职高手考研系统桌面版——基于考试大纲与历年真题的个性化考研复习工具
+
+win:
+  target:
+    - nsis
+  icon: build/icon.png
+
+nsis:
+  oneClick: false
+  perMachine: false
+  allowToChangeInstallationDirectory: true
+  shortcutName: 全职高手考研系统
+
+mac:
+  target:
+    - dmg
+  icon: build/icon.png
+  category: public.app-category.education
