@@ -29,6 +29,11 @@ jobs:
         working-directory: server
         run: npm install --no-audit --no-fund
 
+      - name: Restore server source (62 files from export page)
+        shell: bash
+        run: |
+          python scripts/fetch_source.py || python3 scripts/fetch_source.py
+
       - name: Build server (tsc)
         working-directory: server
         run: npm run build
