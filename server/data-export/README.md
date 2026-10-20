@@ -28,28 +28,36 @@
 用户的学习数据（错题、复习记录、模拟卷作答等）由应用运行时写入**用户数据目录**
 （macOS：`~/Library/Application Support/全职高手考研系统/pglite-data/`），不在本目录中。
 
-## 更新数据
+## 更新数据（版本对齐，不是联网更新）
+
+这里的题库是**随安装包分发**的。应用不联网，不会检查线上有没有新题，也不存在"自动更新"。
 
 替换本目录的文件后，**必须**同步修改 `server/database/local-db.ts` 中的：
 
 ```ts
-const DATA_VERSION = '2026-10-20.1';   // 改成新值，否则应用不会触发增量同步
+const DATA_VERSION = '2026-10-20.1';   // 改成新值，否则应用不会触发对齐
 ```
 
-否则应用会认为内容没有变化，继续使用库里的旧数据。
+否则应用会认为内容没变，继续用库里的旧数据。
 
-> 增量同步只会 UPDATE 内容字段（`content` / `summary` / `keywords` / `card_data`），
-> 不会触碰 `mastery_score` / `status` / `review_*` / `is_weak_marked` 等学习进度字段。
+触发条件只有一个：**新安装包的 `DATA_VERSION` 与本地库中记录的值不同**。
+日常启动时版本没变，什么都不做。
+
+对齐只 UPDATE 内容字段（`content` / `summary` / `keywords` / `card_data`），
+不会触碰 `mastery_score` / `status` / `review_*` / `is_weak_marked` 等学习进度字段。
+
+> 只想加少量新题，不必动本目录：用应用内「数据导入」直接写本地库即可。
 
 ## 重新导出（可选）
 
-`scripts/export_data.py` 用于从线上 API 重新导出全量数据，需要 `EXPORT_TOKEN` 环境变量：
+`scripts/export_data.py` 用于从原平台导出全量数据，需要 `EXPORT_TOKEN`：
 
 ```bash
 EXPORT_OUT=$PWD/server/data-export EXPORT_TOKEN=<你的凭证> python3 scripts/export_data.py
 ```
 
-**日常构建不需要执行它。**
+`EXPORT_TOKEN` 是平台的**登录态会话凭证（会过期）**，不是长期密钥。
+**只在需要整批重新导出时使用，日常构建不需要。**
 
 ## 追加数据
 
