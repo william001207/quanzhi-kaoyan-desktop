@@ -86,7 +86,7 @@ def main():
     save("subjects.json", fetch("/subjects"))
 
     print("== 2. chapters tree (per subject x source) ==")
-    subjects = json.load(open(os.path.join(OUT, "subjects.json")))
+    subjects = json.load(open(os.path.join(OUT, "subjects.json"), encoding="utf-8"))
     trees = {}
     for s in subjects:
         for src in ("exam_syllabus", "textbook"):

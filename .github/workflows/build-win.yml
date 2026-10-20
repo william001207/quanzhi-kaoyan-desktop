@@ -34,7 +34,7 @@ jobs:
         working-directory: server
         run: npm run build
 
-      - name: Restore build icon
+      - name: Restore build icon (from b64, 标准解码)
         shell: bash
         run: python -c "import base64; s=open('build/icon.png.b64').read().strip(); s+='='*(-len(s)%4); open('build/icon.png','wb').write(base64.b64decode(s))"
 
