@@ -2,6 +2,10 @@
 # 说明：本地 Linux 环境无法直接产出 Windows 包（electron-builder 需 wine），因此走 CI。
 name: build-windows
 
+# 上传 Release 资产需要 contents: write 权限
+permissions:
+  contents: write
+
 on:
   workflow_dispatch:
   push:
