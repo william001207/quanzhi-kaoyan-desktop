@@ -67,6 +67,10 @@ export function initializeDatabase(): Promise<void> {
   return initPromise;
 }
 
+// 数据内容版本：线上题库内容（知识点卡片/题目等）有更新时递增。
+// 客户端检测到版本变化后执行增量内容同步（只更新内容字段，保留用户学习进度）。
+const DATA_VERSION = '2026-10-20.1'; // 网页版补卡（10 条空卡知识点已补齐）
+
 async function ensureSchemaAndData(db: PGlite): Promise<void> {
   const schemaSql = await fs.readFile(
     path.join(__dirname, '..', '..', 'database', 'schema.sql'),
@@ -77,9 +81,31 @@ async function ensureSchemaAndData(db: PGlite): Promise<void> {
   // 已导入过则跳过（幂等）
   const res: any = await db.query('SELECT count(*)::int AS n FROM subject');
   const n = Number(res.rows?.[0]?.n ?? res[0]?.n ?? 0);
-  if (n > 0) return;
+  if (n === 0) {
+    await importData(db);
+    await setDataVersion(db);
+    return;
+  }
 
-  await importData(db);
+  // 已有数据：比较数据版本，不一致时执行增量内容同步
+  const vr: any = await db.query(
+    `SELECT value FROM app_meta WHERE key = 'data_version'`,
+  );
+  const version = vr.rows?.[0]?.value ?? null;
+  if (version !== DATA_VERSION) {
+    console.log(`[local-db] 检测到数据版本变化（${version ?? '旧版'} → ${DATA_VERSION}），执行增量内容同步…`);
+    await syncBusinessContent(db);
+    await setDataVersion(db);
+    console.log('[local-db] 增量内容同步完成');
+  }
+}
+
+async function setDataVersion(db: PGlite): Promise<void> {
+  await db.query(
+    `INSERT INTO app_meta (key, value) VALUES ('data_version', $1)
+     ON CONFLICT (key) DO UPDATE SET value = EXCLUDED.value`,
+    [DATA_VERSION],
+  );
 }
 
 // ---------------- 数据导入 ----------------
@@ -139,42 +165,7 @@ async function importData(db: PGlite) {
   }
 
   // 3. knowledge points + syllabus items
-  const kpDetails = await readJson('knowledge_point_details.json');
-  const kpList = Object.values(kpDetails) as any[];
-  // 线上部分知识点未出现在列表导出中、但被真题引用（历史遗留/内容不全），
-  // 从真题详情引用里补齐，保证“题目-知识点”关联与外键完整、页面展示一致
-  {
-    const knownIds = new Set<string>(kpList.map((k: any) => k.id));
-    const questionDetails = await readJson('exam_question_details.json');
-    for (const q of Object.values(questionDetails) as any[]) {
-      for (const k of (q.knowledgePoints ?? []) as any[]) {
-        const kid = k.knowledgePointId ?? k.id;
-        if (kid && !knownIds.has(kid)) {
-          knownIds.add(kid);
-          kpList.push({
-            id: kid,
-            title: k.title ?? '未命名知识点',
-            subjectId: k.subjectId ?? null,
-            chapterId: k.chapterPaths?.examSyllabus?.[0]?.id ?? null,
-            syllabusItemId: null,
-            content: null,
-            summary: null,
-            keywords: [],
-            requirementLevel: 'unmarked',
-            importanceScore: 0,
-            examFrequency: 0,
-            masteryScore: k.masteryScore ?? 0,
-            status: 'not_started',
-            chapterPaths: k.chapterPaths ?? { examSyllabus: [], textbook: [] },
-            isWeakMarked: false,
-            recallMastery: 0,
-            questionMastery: 0,
-            answeredQuestionCount: 0,
-          });
-        }
-      }
-    }
-  }
+  const kpList = await buildKpList();
   const syllabusSeen = new Set<string>();
   for (const kp of kpList) {
     const si = kp.syllabusItem;
@@ -329,6 +320,212 @@ async function importData(db: PGlite) {
   console.log(
     `[local-db] 数据导入完成: subjects=${subjects.length}, chapters=${chapterRows.length}, ` +
       `knowledge_points=${kpList.length}, questions=${eqList.length}, syllabus_items=${syllabusSeen.size}`,
+  );
+}
+
+// 构建知识点全量列表：详情 + 真题引用补录（保证“题目-知识点”关联与外键完整）
+async function buildKpList(): Promise<any[]> {
+  const kpDetails = await readJson('knowledge_point_details.json');
+  const kpList = Object.values(kpDetails) as any[];
+  const knownIds = new Set<string>(kpList.map((k: any) => k.id));
+  const questionDetails = await readJson('exam_question_details.json');
+  for (const q of Object.values(questionDetails) as any[]) {
+    for (const k of (q.knowledgePoints ?? []) as any[]) {
+      const kid = k.knowledgePointId ?? k.id;
+      if (kid && !knownIds.has(kid)) {
+        knownIds.add(kid);
+        kpList.push({
+          id: kid,
+          title: k.title ?? '未命名知识点',
+          subjectId: k.subjectId ?? null,
+          chapterId: k.chapterPaths?.examSyllabus?.[0]?.id ?? null,
+          syllabusItemId: null,
+          content: null,
+          summary: null,
+          keywords: [],
+          requirementLevel: 'unmarked',
+          importanceScore: 0,
+          examFrequency: 0,
+          masteryScore: k.masteryScore ?? 0,
+          status: 'not_started',
+          chapterPaths: k.chapterPaths ?? { examSyllabus: [], textbook: [] },
+          isWeakMarked: false,
+          recallMastery: 0,
+          questionMastery: 0,
+          answeredQuestionCount: 0,
+        });
+      }
+    }
+  }
+  return kpList;
+}
+
+// ---------------- 增量内容同步（保留用户进度字段） ----------------
+// 线上题库内容更新（如知识点卡片补齐）时：只 UPDATE 内容字段，不触碰
+// mastery_score / status / review_* / wrong_question / review_record 等用户进度数据。
+async function syncBusinessContent(db: PGlite) {
+  // 1. subjects（名称/排序同步）
+  const subjects = await readJson('subjects.json');
+  for (const s of subjects) {
+    await db.query(
+      `UPDATE subject SET name=$2, sort_order=$3, total_knowledge_points=$4 WHERE id=$1`,
+      [s.id, s.name, s.sortOrder ?? 0, s.totalKnowledgePoints ?? 0],
+    );
+  }
+
+  // 2. chapters（仅补新章节，不动存量结构与用户数据）
+  const chapterTrees = await readJson('chapter_trees.json');
+  const chapterSeen = new Set<string>();
+  const chapterRows: any[] = [];
+  const walk = (node: any, parent: string | null) => {
+    if (chapterSeen.has(node.id)) return;
+    chapterSeen.add(node.id);
+    chapterRows.push({
+      id: node.id,
+      subjectId: node.subjectId,
+      parentChapterId: parent ?? node.parentChapterId ?? null,
+      title: node.title,
+      sortOrder: node.sortOrder ?? 0,
+      level: node.level ?? 1,
+      source: node.source ?? 'exam_syllabus',
+    });
+    for (const c of node.children ?? []) walk(c, node.id);
+  };
+  for (const [key, tree] of Object.entries(chapterTrees)) {
+    const arr = Array.isArray(tree) ? tree : [tree];
+    for (const root of arr) walk(root, root.parentChapterId ?? null);
+  }
+  for (const c of chapterRows) {
+    await db.query(
+      `INSERT INTO chapter (id, subject_id, parent_chapter_id, title, sort_order, level, source)
+       VALUES ($1,$2,$3,$4,$5,$6,$7) ON CONFLICT (id) DO NOTHING`,
+      [c.id, c.subjectId, c.parentChapterId, c.title, c.sortOrder, c.level, c.source],
+    );
+  }
+
+  // 3. syllabus_item + knowledge_point（内容字段同步，进度字段保留）
+  const kpList = await buildKpList();
+  const syllabusSeen = new Set<string>();
+  for (const kp of kpList) {
+    const si = kp.syllabusItem;
+    if (si && si.id && !syllabusSeen.has(si.id)) {
+      syllabusSeen.add(si.id);
+      await db.query(
+        `INSERT INTO syllabus_item (id, subject_id, chapter_id, title, original_text, requirement_level, source, sort_order)
+         VALUES ($1,$2,$3,$4,$5,$6,$7,$8) ON CONFLICT (id) DO NOTHING`,
+        [si.id, si.subjectId, si.chapterId, si.title, si.originalText ?? null, si.requirementLevel ?? 'unmarked', si.source ?? null, si.sortOrder ?? 0],
+      );
+    }
+    await db.query(
+      `INSERT INTO knowledge_point (
+         id, subject_id, chapter_id, syllabus_item_id, title, content, summary, keywords,
+         requirement_level, importance_score, exam_frequency, mastery_score, status,
+         first_learned_at, last_reviewed_at, next_review_at, review_stage,
+         consecutive_correct, consecutive_wrong, total_review_count, total_question_count,
+         correct_question_count, manually_pinned, card_data, is_weak_marked, weak_marked_at,
+         weak_mark_reason, recall_mastery, question_mastery, answered_question_count
+       ) VALUES ($1,$2,$3,$4,$5,$6,$7,$8,$9,$10,$11,$12,$13,$14,$15,$16,$17,$18,$19,$20,$21,$22,$23,$24,$25,$26,$27,$28,$29,$30)
+       ON CONFLICT (id) DO UPDATE SET
+         subject_id = EXCLUDED.subject_id, chapter_id = EXCLUDED.chapter_id,
+         syllabus_item_id = EXCLUDED.syllabus_item_id, title = EXCLUDED.title,
+         content = EXCLUDED.content, summary = EXCLUDED.summary, keywords = EXCLUDED.keywords,
+         requirement_level = EXCLUDED.requirement_level,
+         importance_score = EXCLUDED.importance_score, exam_frequency = EXCLUDED.exam_frequency,
+         card_data = EXCLUDED.card_data
+       -- 用户进度字段（mastery_score/status/review_*/manually_pinned/is_weak_marked 等）保留不动
+       `,
+      [
+        kp.id, kp.subjectId, kp.chapterId, kp.syllabusItemId ?? null, kp.title,
+        kp.content ?? null, kp.summary ?? null, kp.keywords ?? [],
+        kp.requirementLevel ?? 'unmarked', kp.importanceScore ?? 0, kp.examFrequency ?? 0,
+        kp.masteryScore ?? 0, kp.status ?? 'not_started',
+        iso(kp.firstLearnedAt), iso(kp.lastReviewedAt), iso(kp.nextReviewAt),
+        kp.reviewStage ?? 0, kp.consecutiveCorrect ?? 0, kp.consecutiveWrong ?? 0,
+        kp.totalReviewCount ?? 0, kp.totalQuestionCount ?? 0, kp.correctQuestionCount ?? 0,
+        kp.manuallyPinned ?? false, kp.cardData ?? {}, kp.isWeakMarked ?? false,
+        iso(kp.weakMarkedAt), kp.weakMarkReason ?? null, kp.recallMastery ?? 0,
+        kp.questionMastery ?? 0, kp.answeredQuestionCount ?? 0,
+      ],
+    );
+
+    // knowledge_point_textbook_chapter：重建（纯内容关联，无用户状态）
+    await db.query(
+      `DELETE FROM knowledge_point_textbook_chapter WHERE knowledge_point_id = $1`,
+      [kp.id],
+    );
+    const tb = kp.chapterPaths?.textbook;
+    if (Array.isArray(tb) && tb.length) {
+      let curPath: any[] = [];
+      const paths: any[][] = [];
+      for (const node of tb) {
+        if (node.level === 1) {
+          if (curPath.length) paths.push(curPath);
+          curPath = [node];
+        } else {
+          curPath.push(node);
+        }
+      }
+      if (curPath.length) paths.push(curPath);
+      for (const p of paths) {
+        const leaf = p[p.length - 1];
+        if (!leaf?.id) continue;
+        await db.query(
+          `INSERT INTO knowledge_point_textbook_chapter (knowledge_point_id, chapter_id, is_primary)
+           VALUES ($1,$2,true) ON CONFLICT DO NOTHING`,
+          [kp.id, leaf.id],
+        );
+      }
+    }
+  }
+
+  // 4. exam questions（内容字段同步，进度字段保留）+ question_knowledge_point 重建
+  const eqDetails = await readJson('exam_question_details.json');
+  const eqList = Object.values(eqDetails) as any[];
+  for (const q of eqList) {
+    await db.query(
+      `INSERT INTO exam_question (
+         id, year, subject_id, question_type, question_text, answer, answer_keywords,
+         source, notes, difficulty, card_data, mastery_score, answered, answer_count, last_answered_at
+       ) VALUES ($1,$2,$3,$4,$5,$6,$7,$8,$9,$10,$11,$12,$13,$14,$15)
+       ON CONFLICT (id) DO UPDATE SET
+         year = EXCLUDED.year, subject_id = EXCLUDED.subject_id,
+         question_type = EXCLUDED.question_type, question_text = EXCLUDED.question_text,
+         answer = EXCLUDED.answer, answer_keywords = EXCLUDED.answer_keywords,
+         source = EXCLUDED.source, notes = EXCLUDED.notes, difficulty = EXCLUDED.difficulty,
+         card_data = EXCLUDED.card_data
+       -- 用户刷题进度字段（mastery_score/answered/answer_count/last_answered_at）保留不动
+       `,
+      [
+        q.id, q.year, q.subjectId, q.questionType ?? 'other', q.questionText,
+        q.answer ?? null, q.answerKeywords ?? [], q.source ?? null, q.notes ?? null,
+        q.difficulty ?? 2, q.cardData ?? {}, q.masteryScore ?? 0, q.answered ?? false,
+        q.answerCount ?? 0, iso(q.lastAnsweredAt),
+      ],
+    );
+    // question_knowledge_point：重建（纯关联，无用户状态）
+    await db.query(`DELETE FROM question_knowledge_point WHERE question_id = $1`, [q.id]);
+    for (const kp of q.knowledgePoints ?? []) {
+      if (!kp?.id) continue;
+      await db.query(
+        `INSERT INTO question_knowledge_point (question_id, knowledge_point_id, relevance, is_primary)
+         VALUES ($1,$2,$3,$4) ON CONFLICT DO NOTHING`,
+        [q.id, kp.id, kp.relevance ?? 5, kp.isPrimary ?? false],
+      );
+    }
+  }
+
+  // settings / daily plan / mock templates：用户数据或低频配置，保持不覆盖
+  const settings = await readJson('settings.json');
+  if (settings && settings.id) {
+    await db.query(
+      `INSERT INTO user_setting (id) VALUES ($1) ON CONFLICT (id) DO NOTHING`,
+      [settings.id],
+    );
+  }
+
+  console.log(
+    `[local-db] 内容同步完成: subjects=${subjects.length}, chapters=${chapterRows.length}, ` +
+      `knowledge_points=${kpList.length}, questions=${eqList.length}`,
   );
 }
 
