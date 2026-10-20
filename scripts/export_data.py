@@ -64,7 +64,7 @@ def save(name, data):
 
 
 def fetch_paginated(path_prefix, page_size=100, key="items"):
-    """循环分页拉取全部条目。"""
+    """循环分页拉取全部条目（不依赖 total 提前截断，抓至空页为止）。"""
     items, page, total = [], 1, None
     while True:
         d = fetch(f"{path_prefix}?page={page}&pageSize={page_size}")
@@ -73,8 +73,10 @@ def fetch_paginated(path_prefix, page_size=100, key="items"):
         if total is None:
             total = d.get("total", 0)
             print(f"  total={total}")
-        items.extend(d.get(key, []))
-        if not d.get(key) or len(items) >= (total or 0) or page > 200:
+        page_items = d.get(key, [])
+        items.extend(page_items)
+        # 以"本页不足 page_size 或空页"为准，避免 total 与实际不符导致漏拉
+        if not page_items or len(page_items) < page_size or page > 200:
             break
         page += 1
     return items
@@ -171,6 +173,22 @@ def main():
     save("exam_question_details.json", details)
     print(f"  got {len(details)} details")
 
+    print("== 10b. 补拉失败的 question details ==")
+    missing_q = [qid for qid in qids if qid not in details]
+    for round_no in range(2):
+        if not missing_q:
+            break
+        retry = {}
+        with concurrent.futures.ThreadPoolExecutor(max_workers=8) as ex:
+            for qid, d in ex.map(fetch_q, missing_q):
+                if d:
+                    retry[qid] = d
+        details.update(retry)
+        missing_q = [qid for qid in qids if qid not in details]
+        print(f"  retry round {round_no+1}: 补回 {len(retry)}, 仍缺 {len(missing_q)}")
+    save("exam_question_details.json", details)
+    print(f"  final got {len(details)} details")
+
     print("== 11. kp details (parallel, for syllabus_item + chapter associations) ==")
     kpids = [k["id"] for k in kps]
     kp_details = {}
@@ -189,6 +207,22 @@ def main():
                 print(f"  {i+1}/{len(kpids)}")
     save("knowledge_point_details.json", kp_details)
     print(f"  got {len(kp_details)} details")
+
+    print("== 11b. 补拉失败的 kp details ==")
+    missing_kp = [kid for kid in kpids if kid not in kp_details]
+    for round_no in range(2):
+        if not missing_kp:
+            break
+        retry = {}
+        with concurrent.futures.ThreadPoolExecutor(max_workers=8) as ex:
+            for kid, d in ex.map(fetch_kp, missing_kp):
+                if d:
+                    retry[kid] = d
+        kp_details.update(retry)
+        missing_kp = [kid for kid in kpids if kid not in kp_details]
+        print(f"  retry round {round_no+1}: 补回 {len(retry)}, 仍缺 {len(missing_kp)}")
+    save("knowledge_point_details.json", kp_details)
+    print(f"  final got {len(kp_details)} details")
 
     print("\nDONE")
 
