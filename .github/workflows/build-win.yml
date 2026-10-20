@@ -58,6 +58,16 @@ jobs:
         # --publish never 关闭 electron-builder 自动发布（CI 无 GH_TOKEN，发布由下方 action-gh-release 完成）
         run: npx electron-builder --win --config build/electron-builder.yml --publish never
 
+      - name: Rename installer (ASCII filename)
+        # 文件名用英文（ASCII），避免 GitHub 中文文件名下载链接不稳定（404）
+        shell: bash
+        run: |
+          cd release
+          for f in *.exe; do
+            if [ "$f" != "quanzhi-kaoyan-1.0.0-win-x64.exe" ]; then mv "$f" "quanzhi-kaoyan-1.0.0-win-x64.exe"; fi
+          done
+          ls -lh
+
       - name: Upload to GitHub Release (tag push 触发时)
         if: startsWith(github.ref, 'refs/tags/v')
         uses: softprops/action-gh-release@v2
