@@ -20,6 +20,7 @@ const READY_MARK = 'DESKTOP_SERVER_READY';
 let serverProc = null;
 let mainWindow = null;
 let serverReady = false;
+let appLoaded = false;
 
 /** 打包后 server/client 位于 resources/ 下；开发模式下位于工程根 */
 function resolveDirs() {
@@ -66,7 +67,7 @@ function startServer(dirs) {
     process.stdout.write('[server] ' + chunk);
     if (!serverReady && chunk.includes(READY_MARK)) {
       serverReady = true;
-      createWindow(dirs);
+      loadApp(dirs);
     }
   });
   serverProc.stderr.on('data', (d) => process.stderr.write('[server:err] ' + d.toString()));
@@ -101,14 +102,17 @@ function createWindow(dirs) {
     icon: dirs.iconPath,
     autoHideMenuBar: true,
     backgroundColor: '#f5f6fa',
+    show: false,
     webPreferences: {
       contextIsolation: true,
       nodeIntegration: false,
       sandbox: true,
     },
   });
+  // 先显示本地加载页，避免服务就绪前出现白屏/空白窗口
+  mainWindow.loadFile(path.join(dirs.clientDir, 'loading.html'));
+  mainWindow.once('ready-to-show', () => mainWindow.show());
   mainWindow.setMenuBarVisibility(false);
-  mainWindow.loadURL(BASE_URL);
   // 页面内新窗口一律交给系统浏览器
   mainWindow.webContents.setWindowOpenHandler(({ url }) => {
     if (/^https?:/i.test(url)) shell.openExternal(url);
@@ -120,14 +124,20 @@ function createWindow(dirs) {
   });
 }
 
+/** 服务就绪后切入应用主界面；窗口尚未创建则先创建（加载页），随后跳转 */
+function loadApp(dirs) {
+  if (!mainWindow) createWindow(dirs);
+  if (!appLoaded) {
+    appLoaded = true;
+    mainWindow.loadURL(BASE_URL);
+  }
+}
+
 app.whenReady().then(() => {
   const dirs = resolveDirs();
+  // 立即创建窗口并显示本地加载页（白屏期也有内容），服务就绪后 loadApp 切入
+  createWindow(dirs);
   startServer(dirs);
-  // 兜底：30 秒后仍未就绪也尝试打开窗口（页面会显示加载失败提示）
-  const timer = setTimeout(() => {
-    if (!serverReady && !mainWindow) createWindow(dirs);
-  }, 30000);
-  if (typeof timer.unref === 'function') timer.unref();
 });
 
 // 关闭全部窗口即退出（含服务进程）
