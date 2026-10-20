@@ -51,13 +51,18 @@ jobs:
         run: |
           CLIENT_OUT="$GITHUB_WORKSPACE/client" python3 scripts/fetch_client.py
 
-      - name: Package macOS (dmg, unsigned)
-        # 不签名：CSC_IDENTITY_AUTO_DISCOVERY=false 跳过代码签名；--publish never 关闭 electron-builder 自动发布
-        #（CI 无 GH_TOKEN，发布由下方 softprops/action-gh-release 完成）
+      - name: Package macOS (dmg, ad-hoc signed)
+        # 先打 dir（未签名 .app），再做 ad-hoc 签名（codesign -s -），最后 hdiutil 制作 dmg。
+        # 原因：macOS 新版本（Sequoia+）对完全无签名的 arm64 应用直接判定 malware 且无法绕过；
+        # ad-hoc 签名后系统提示「无法验证开发者」，右键打开即可正常使用。
         run: |
-          CSC_IDENTITY_AUTO_DISCOVERY=false npx electron-builder --mac dmg --config build/electron-builder.yml --publish never
-        env:
-          CSC_IDENTITY_AUTO_DISCOVERY: 'false'
+          CSC_IDENTITY_AUTO_DISCOVERY=false npx electron-builder --mac dir --config build/electron-builder.yml --publish never
+          echo "== ad-hoc codesign =="
+          codesign --force --deep --sign - "release/mac-arm64/全职高手考研系统.app"
+          codesign --verify --deep --strict --verbose=2 "release/mac-arm64/全职高手考研系统.app" || echo "verify warning (non-fatal)"
+          echo "== create dmg =="
+          hdiutil create -volname "全职高手考研系统" -srcfolder "release/mac-arm64/全职高手考研系统.app" -ov -format UDZO "release/全职高手考研系统-1.0.0-arm64.dmg"
+          ls -lh release/
 
       - name: Upload to GitHub Release (tag push 触发时)
         if: startsWith(github.ref, 'refs/tags/v')
