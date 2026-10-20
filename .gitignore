@@ -12,6 +12,10 @@ server/dist/
 pglite-data/
 *.log
 
+# 构建缓存
+.electron-cache/
+.npm-cache/
+
 # 系统文件
 .DS_Store
 Thumbs.db
