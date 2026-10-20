@@ -21,6 +21,9 @@ let serverProc = null;
 let mainWindow = null;
 let serverReady = false;
 let appLoaded = false;
+// 主动退出流程标志：区分「用户主动关应用」和「服务自己崩了」。
+// 主动退出时服务是被我们请退的，绝不能再弹「服务意外退出」。
+let appQuitting = false;
 
 /** 打包后 server/client 位于 resources/ 下；开发模式下位于工程根 */
 function resolveDirs() {
@@ -85,6 +88,11 @@ function startServer(dirs) {
     if (code !== 0 && code !== null) {
       console.error('[desktop] server exited with code', code);
     }
+    // 主动退出（关窗 / Cmd+Q）：服务是被我们请退的，属于正常流程，不提示任何错误。
+    // 之前漏了这个判断，导致 Cmd+Q 退出时会误弹「本地服务已停止」。
+    if (appQuitting) {
+      return;
+    }
     // 出问题时必须让用户看见原因，否则窗口一闪而过、无从排查
     if (neverReady) {
       dialog.showErrorBox(
@@ -110,6 +118,9 @@ function startServer(dirs) {
 
 let serverStopping = false;
 function stopServer() {
+  // 只要走到这里，就说明是我们在主动结束服务（关窗 / Cmd+Q / 退出），
+  // 打上标记，让 exit 回调知道这不是崩溃。
+  appQuitting = true;
   if (!serverProc || serverStopping) return;
   serverStopping = true;
   const proc = serverProc;
