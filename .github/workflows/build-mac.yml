@@ -64,7 +64,11 @@ jobs:
           codesign --verify --deep --strict --verbose=2 "release/mac-arm64/全职高手考研系统.app" || echo "verify warning (non-fatal)"
           echo "== create dmg =="
           # 文件名用英文（ASCII），避免 GitHub 中文文件名下载链接不稳定（404）
-          hdiutil create -volname "全职高手考研系统" -srcfolder "release/mac-arm64/全职高手考研系统.app" -ov -format UDZO "release/quanzhi-kaoyan-1.0.0-mac-arm64.dmg"
+          # 标准 dmg 布局：app + Applications 快捷方式（方便拖拽安装）
+          mkdir -p release/dmg-staging
+          cp -R "release/mac-arm64/全职高手考研系统.app" release/dmg-staging/
+          ln -s /Applications release/dmg-staging/Applications
+          hdiutil create -volname "全职高手考研系统" -srcfolder release/dmg-staging -ov -format UDZO "release/quanzhi-kaoyan-1.0.0-mac-arm64.dmg"
           ls -lh release/
 
       - name: Upload to GitHub Release (tag push 触发时)
