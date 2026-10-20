@@ -46,9 +46,10 @@ jobs:
           CLIENT_OUT="$GITHUB_WORKSPACE/client" python3 scripts/fetch_client.py
 
       - name: Package macOS (dmg, unsigned)
-        # 不签名：CSC_IDENTITY_AUTO_DISCOVERY=false 跳过代码签名，dmg 可直接安装（首次打开右键→打开）
+        # 不签名：CSC_IDENTITY_AUTO_DISCOVERY=false 跳过代码签名；--publish never 关闭 electron-builder 自动发布
+        #（CI 无 GH_TOKEN，发布由下方 softprops/action-gh-release 完成）
         run: |
-          CSC_IDENTITY_AUTO_DISCOVERY=false npx electron-builder --mac dmg --config build/electron-builder.yml
+          CSC_IDENTITY_AUTO_DISCOVERY=false npx electron-builder --mac dmg --config build/electron-builder.yml --publish never
         env:
           CSC_IDENTITY_AUTO_DISCOVERY: 'false'
 
