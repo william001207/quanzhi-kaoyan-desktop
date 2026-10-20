@@ -326,7 +326,6 @@ CREATE TABLE IF NOT EXISTS exam_paper (
   question_ids text[] NOT NULL DEFAULT '{}',
   score_config jsonb NOT NULL DEFAULT '{}'::jsonb,
   _created_at timestamptz(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
-  _created_by user_profile,
   _updated_at timestamptz(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
   _updated_by user_profile
 );
@@ -353,3 +352,9 @@ CREATE TABLE IF NOT EXISTS exam_record (
 );
 CREATE INDEX IF NOT EXISTS idx_exam_record_status ON exam_record(status);
 CREATE INDEX IF NOT EXISTS idx_exam_record_created_at ON exam_record(_created_at);
+
+-- 应用元信息（数据版本等）
+CREATE TABLE IF NOT EXISTS app_meta (
+  key varchar(100) PRIMARY KEY,
+  value text NOT NULL
+);
