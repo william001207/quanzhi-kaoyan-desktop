@@ -40,7 +40,7 @@ jobs:
 
       - name: Fetch app icon (from CDN, 生成标准 PNG)
         run: |
-          python3 -m pip install --quiet pillow
+          python3 -m pip install --quiet --break-system-packages pillow
           python3 scripts/fetch_icon.py
 
       - name: Export full data (from online API)
