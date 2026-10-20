@@ -111,6 +111,8 @@ function startServer(dirs) {
     }
     // 服务意外退出时，若窗口还开着则退出应用，避免出现死窗口
     if (mainWindow && !mainWindow.isDestroyed()) {
+      // 被动退出也要放行窗口关闭，否则会被上面 close 拦截逻辑挡住、退不出去
+      appQuitting = true;
       app.quit();
     }
   });
@@ -170,9 +172,17 @@ function createWindow(dirs) {
       shell.openExternal(url);
     }
   });
+  // 点红叉 = 把窗口收起来，应用继续留在 Dock 里，服务也继续运行。
+  // 这样下次点 Dock 图标能瞬间恢复（页面状态都还在，不用重新加载、不用重新初始化数据库）。
+  // 真正退出应用请用 ⌘Q 或 Dock 右键「退出」。
+  mainWindow.on('close', (event) => {
+    if (appQuitting) return; // 正在退出：放行，让窗口正常关闭
+    event.preventDefault();
+    mainWindow.hide();
+  });
   mainWindow.on('closed', () => {
     mainWindow = null;
-    stopServer();
+    // 这里不再 stopServer()：关窗不等于退出应用，服务要跟着应用活着
   });
 }
 
@@ -207,8 +217,28 @@ if (!app.requestSingleInstanceLock()) {
   });
 }
 
-// 关闭全部窗口即退出（含服务进程）
+// 点 Dock 图标：把收起来的窗口叫回来；万一窗口已被销毁则重建
+app.on('activate', () => {
+  if (mainWindow) {
+    mainWindow.show();
+    mainWindow.focus();
+    return;
+  }
+  const dirs = resolveDirs();
+  createWindow(dirs);
+  if (serverReady) {
+    // 服务还在跑，直接进主界面，不用再看加载页
+    mainWindow.loadURL(BASE_URL);
+  } else {
+    startServer(dirs);
+  }
+});
+
+// 所有窗口都没了（只有窗口被真正销毁才会走到这里，点红叉只是 hide 不会触发）
 app.on('window-all-closed', () => {
+  // macOS 惯例：关窗不退出应用，留在 Dock 里
+  if (process.platform === 'darwin') return;
+  appQuitting = true;
   stopServer();
   app.quit();
 });
