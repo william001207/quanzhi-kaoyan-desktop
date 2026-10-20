@@ -14,10 +14,15 @@
   "private": true,
   "scripts": {
     "start": "electron .",
-    "build": "bash scripts/build.sh",
-    "pack:linux": "electron-builder --linux",
-    "pack:win": "electron-builder --win",
-    "pack:mac": "electron-builder --mac"
+    "verify": "python3 scripts/verify_repo.py",
+    "build:server": "npm --prefix server run build",
+    "build:mac": "npm run build:server && electron-builder --mac --config build/electron-builder.yml",
+    "build:win": "npm run build:server && electron-builder --win --config build/electron-builder.yml",
+    "build:linux": "npm run build:server && electron-builder --linux --config build/electron-builder.yml",
+    "build": "bash scripts/build-desktop.sh",
+    "pack:linux": "electron-builder --linux --config build/electron-builder.yml",
+    "pack:win": "electron-builder --win --config build/electron-builder.yml",
+    "pack:mac": "electron-builder --mac --config build/electron-builder.yml"
   },
   "devDependencies": {
     "electron": "^31.7.7",

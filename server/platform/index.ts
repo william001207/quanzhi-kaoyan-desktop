@@ -40,9 +40,12 @@ export async function configureApp(
   app: NestExpressApplication,
   options?: { disableSwagger?: boolean },
 ): Promise<void> {
-  // 客户端与本地服务同源，CORS 仅作兜底
+  // 只允许应用自身的地址跨域访问。
+  // 原来的 origin: true 会把任何来源都原样放行，配合 credentials 等于让任意网页
+  // 都能读写本机数据库；桌面端前后端本来就同源，不需要放开。
+  const localPort = process.env.SERVER_PORT || '17890';
   app.enableCors({
-    origin: true,
+    origin: [`http://127.0.0.1:${localPort}`, `http://localhost:${localPort}`],
     credentials: true,
   });
 

@@ -529,6 +529,25 @@ async function syncBusinessContent(db: PGlite) {
   );
 }
 
+/**
+ * 关闭数据库连接。
+ * 必须在进程退出前调用：PGlite 是跑在 WASM 里的 PostgreSQL，有自己的缓冲区和 WAL，
+ * 直接杀进程不保证数据已落盘，可能丢掉最后几次写入。
+ */
+export async function closeDb(): Promise<void> {
+  if (!instance) return;
+  try {
+    await instance.close();
+    console.log('[local-db] 数据库已安全关闭');
+  } catch (e) {
+    console.error('[local-db] 关闭数据库时出错：', e);
+  } finally {
+    instance = null;
+    drizzleDb = null;
+    initPromise = null;
+  }
+}
+
 // 兜底：供 Electron 主进程查询导入进度用
 export async function getImportSummary() {
   const db = await getDb();

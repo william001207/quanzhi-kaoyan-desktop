@@ -1,13 +1,17 @@
 import { NestFactory } from '@nestjs/core';
 import { Logger } from '@nestjs/common';
 import { configureApp } from './platform';
-import { initializeDatabase } from './database/local-db';
+import { initializeDatabase, closeDb } from './database/local-db';
 import { join } from 'path';
 // eslint-disable-next-line @typescript-eslint/no-var-requires
 const hbs = require('hbs');
 
 import type { NestExpressApplication } from '@nestjs/platform-express';
 import { AppModule } from './app.module';
+
+// 保存应用实例，供退出时优雅关闭使用
+let httpApp: NestExpressApplication | null = null;
+let shuttingDown = false;
 
 async function bootstrap() {
   // 先确保本地数据库就绪（建表 + 数据导入）
@@ -16,6 +20,7 @@ async function bootstrap() {
   const app = await NestFactory.create<NestExpressApplication>(AppModule, {
     abortOnError: process.env.NODE_ENV !== 'development',
   });
+  httpApp = app;
   await configureApp(app, {
     disableSwagger: true,
   });
@@ -41,4 +46,34 @@ async function bootstrap() {
   console.log('DESKTOP_SERVER_READY');
 }
 
-bootstrap();
+/**
+ * 优雅关闭：先停 HTTP 服务，再关数据库。
+ * 关窗时 Electron 会发 SIGTERM 过来，走这里才能保证数据落盘。
+ */
+async function shutdown(reason: string): Promise<void> {
+  if (shuttingDown) return;
+  shuttingDown = true;
+  console.log(`[shutdown] 收到 ${reason}，正在安全关闭…`);
+  try {
+    // 先取到局部变量再 await，避免 TypeScript 在 await 之后丢失类型收窄
+    const app = httpApp;
+    if (app) await app.close();
+  } catch (e) {
+    console.error('[shutdown] 关闭 HTTP 服务时出错：', e);
+  }
+  try {
+    await closeDb();
+  } catch (e) {
+    console.error('[shutdown] 关闭数据库时出错：', e);
+  }
+  process.exit(0);
+}
+
+process.on('SIGTERM', () => void shutdown('SIGTERM'));
+process.on('SIGINT', () => void shutdown('SIGINT'));
+
+// 启动失败必须打印原因并以非 0 退出，否则父进程只会看到「窗口一闪而过」
+bootstrap().catch((err) => {
+  console.error('[fatal] 本地服务启动失败：', err);
+  process.exit(1);
+});

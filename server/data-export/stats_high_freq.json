@@ -1,0 +1,747 @@
+[
+ {
+  "rank": 1,
+  "knowledgePointId": "6a104e66-42d0-43b7-b1b5-f2454bbf29d9",
+  "title": "全口义齿的固位和稳定",
+  "count": 49,
+  "latestYear": 2026,
+  "subjectName": "口腔修复学",
+  "sourceSchools": [],
+  "chapterPaths": {
+   "examSyllabus": [
+    {
+     "id": "650006b5-ba73-4866-9535-0955a76f869c",
+     "title": "六、全口义齿",
+     "level": 1
+    }
+   ],
+   "textbook": [
+    {
+     "id": "882033c1-d390-494b-8a20-a9a938f7fd32",
+     "title": "口腔修复学",
+     "level": 1
+    },
+    {
+     "id": "a75281f6-8764-445c-8847-f5995bc65466",
+     "title": "第六章 牙列缺失的全口义齿修复",
+     "level": 2
+    },
+    {
+     "id": "74fa3365-00f7-48d9-985c-855e8cdad1ae",
+     "title": "第三节 全口义齿的固位和稳定",
+     "level": 3
+    }
+   ]
+  }
+ },
+ {
+  "rank": 2,
+  "knowledgePointId": "d96cb7d1-edff-4fa7-90ca-a900123be62a",
+  "title": "全口义齿的初戴",
+  "count": 47,
+  "latestYear": 2026,
+  "subjectName": "口腔修复学",
+  "sourceSchools": [],
+  "chapterPaths": {
+   "examSyllabus": [
+    {
+     "id": "650006b5-ba73-4866-9535-0955a76f869c",
+     "title": "六、全口义齿",
+     "level": 1
+    }
+   ],
+   "textbook": [
+    {
+     "id": "882033c1-d390-494b-8a20-a9a938f7fd32",
+     "title": "口腔修复学",
+     "level": 1
+    },
+    {
+     "id": "09dce94c-1515-4390-a57a-609a4c62e3af",
+     "title": "第五章 牙列缺损的可摘局部义齿修复",
+     "level": 2
+    },
+    {
+     "id": "7af77e94-6de6-4809-90e7-bc54ffe3c0e1",
+     "title": "第八节 初戴",
+     "level": 3
+    }
+   ]
+  }
+ },
+ {
+  "rank": 3,
+  "knowledgePointId": "290fec94-736e-4620-85ac-8942cd971f9f",
+  "title": "可摘局部义齿的组成及其作用",
+  "count": 39,
+  "latestYear": 2026,
+  "subjectName": "口腔修复学",
+  "sourceSchools": [],
+  "chapterPaths": {
+   "examSyllabus": [
+    {
+     "id": "663b2d44-b7de-4ffd-8ec8-0d6b0dc92d83",
+     "title": "五、可摘局部义齿",
+     "level": 1
+    }
+   ],
+   "textbook": [
+    {
+     "id": "882033c1-d390-494b-8a20-a9a938f7fd32",
+     "title": "口腔修复学",
+     "level": 1
+    },
+    {
+     "id": "09dce94c-1515-4390-a57a-609a4c62e3af",
+     "title": "第五章 牙列缺损的可摘局部义齿修复",
+     "level": 2
+    },
+    {
+     "id": "92cd2b9a-3e63-472e-9ed2-97a7dc28f892",
+     "title": "第四节 可摘局部义齿的组成及其作用",
+     "level": 3
+    }
+   ]
+  }
+ },
+ {
+  "rank": 4,
+  "knowledgePointId": "bc9b36a1-3064-457d-ac9a-28f48436c87e",
+  "title": "可摘局部义齿的模型观测",
+  "count": 36,
+  "latestYear": 2025,
+  "subjectName": "口腔修复学",
+  "sourceSchools": [],
+  "chapterPaths": {
+   "examSyllabus": [
+    {
+     "id": "663b2d44-b7de-4ffd-8ec8-0d6b0dc92d83",
+     "title": "五、可摘局部义齿",
+     "level": 1
+    }
+   ],
+   "textbook": [
+    {
+     "id": "882033c1-d390-494b-8a20-a9a938f7fd32",
+     "title": "口腔修复学",
+     "level": 1
+    },
+    {
+     "id": "09dce94c-1515-4390-a57a-609a4c62e3af",
+     "title": "第五章 牙列缺损的可摘局部义齿修复",
+     "level": 2
+    },
+    {
+     "id": "4df55303-c2d5-4d0b-bd4e-ac3ececb3df8",
+     "title": "第三节 可摘局部义齿的模型观测",
+     "level": 3
+    }
+   ]
+  }
+ },
+ {
+  "rank": 5,
+  "knowledgePointId": "49e9357c-689c-48ef-9d04-bbb93c8b3e39",
+  "title": "牙周-牙髓联合病变、根分叉病变、牙周脓肿、牙龈退缩及呼气异味",
+  "count": 23,
+  "latestYear": 2025,
+  "subjectName": "牙周病学",
+  "sourceSchools": [],
+  "chapterPaths": {
+   "examSyllabus": [
+    {
+     "id": "dbe6f0b1-06d8-4b1c-878b-a5c7781554f4",
+     "title": "四、牙周炎伴发病变的临床特点、诊断及治疗原则",
+     "level": 1
+    }
+   ],
+   "textbook": [
+    {
+     "id": "7e6c5359-b705-48a5-b80f-7d45c354547a",
+     "title": "牙周病学",
+     "level": 1
+    },
+    {
+     "id": "8d00d189-dbaa-42db-be03-8b4fd2db227b",
+     "title": "第二章 牙周组织的应用解剖和生理",
+     "level": 2
+    },
+    {
+     "id": "86906df5-4e54-458e-be01-a5cb7fb4784f",
+     "title": "第一节 牙龈",
+     "level": 3
+    }
+   ]
+  }
+ },
+ {
+  "rank": 6,
+  "knowledgePointId": "08c3c662-7dbd-42a6-97ef-5d3c3f6188b2",
+  "title": "牙周病的局部促进因素",
+  "count": 23,
+  "latestYear": 2025,
+  "subjectName": "牙周病学",
+  "sourceSchools": [],
+  "chapterPaths": {
+   "examSyllabus": [
+    {
+     "id": "96b91d0d-04d3-483d-9814-2d5f12959377",
+     "title": "二、牙周病的病因学及发病机制",
+     "level": 1
+    },
+    {
+     "id": "55282924-e8e7-4732-99f1-0aa6d967b580",
+     "title": "2. 局部促进因素、全身易感因素",
+     "level": 2
+    }
+   ],
+   "textbook": [
+    {
+     "id": "7e6c5359-b705-48a5-b80f-7d45c354547a",
+     "title": "牙周病学",
+     "level": 1
+    },
+    {
+     "id": "43f03d75-a008-4423-a078-f9c9e0f81613",
+     "title": "第六章牙周病宿主的免疫炎症反应和促进因素",
+     "level": 2
+    },
+    {
+     "id": "6b60dd9d-2b64-4adc-bbee-3033bc66d50c",
+     "title": "第四节 牙周病的全身促进因素",
+     "level": 3
+    }
+   ]
+  }
+ },
+ {
+  "rank": 7,
+  "knowledgePointId": "68c81bad-9430-4da1-98d7-ffacd3f68de7",
+  "title": "颌骨骨折的诊断、处理原则",
+  "count": 22,
+  "latestYear": 2026,
+  "subjectName": "口腔颌面外科学",
+  "sourceSchools": [],
+  "chapterPaths": {
+   "examSyllabus": [
+    {
+     "id": "ba25ec01-e770-4d1b-bc8e-17014c29b754",
+     "title": "第七章 口腔颌面部损伤",
+     "level": 1
+    }
+   ],
+   "textbook": [
+    {
+     "id": "48412aea-65f5-49e9-a6c2-9223327c5d82",
+     "title": "口腔颌面外科学",
+     "level": 1
+    },
+    {
+     "id": "bcf30599-540d-4378-996f-b23f1e37b0ac",
+     "title": "第七章 口腔颌面部损伤",
+     "level": 2
+    },
+    {
+     "id": "59719ba3-39dc-44ae-98f0-9e4dceba6681",
+     "title": "第五节 颌骨骨折",
+     "level": 3
+    }
+   ]
+  }
+ },
+ {
+  "rank": 8,
+  "knowledgePointId": "bb9b5351-75a1-4ded-a4aa-a0692510c711",
+  "title": "牙周病的概念及学科地位",
+  "count": 21,
+  "latestYear": 2025,
+  "subjectName": "牙周病学",
+  "sourceSchools": [],
+  "chapterPaths": {
+   "examSyllabus": [
+    {
+     "id": "5516b8f2-1c51-4194-89ba-14c676d075f4",
+     "title": "三、牙周病的分类、临床表现及诊断",
+     "level": 1
+    }
+   ],
+   "textbook": [
+    {
+     "id": "7e6c5359-b705-48a5-b80f-7d45c354547a",
+     "title": "牙周病学",
+     "level": 1
+    },
+    {
+     "id": "1946f4c1-82e9-48ca-aaec-edb749aaa5f0",
+     "title": "第三章 牙周病的分类和流行病学",
+     "level": 2
+    },
+    {
+     "id": "64bccb7d-d88b-455f-9943-b91b62bf42f3",
+     "title": "第一节 牙周病的分类",
+     "level": 3
+    }
+   ]
+  }
+ },
+ {
+  "rank": 9,
+  "knowledgePointId": "fd0eb909-3423-42ff-9fc0-1c8bffadd0b0",
+  "title": "牙周病的预后与治疗计划",
+  "count": 21,
+  "latestYear": 2025,
+  "subjectName": "牙周病学",
+  "sourceSchools": [],
+  "chapterPaths": {
+   "examSyllabus": [
+    {
+     "id": "e66ba387-59cd-4a2f-9a0d-611185008108",
+     "title": "六、牙周病的预后判断和治疗计划的拟定",
+     "level": 1
+    }
+   ],
+   "textbook": [
+    {
+     "id": "7e6c5359-b705-48a5-b80f-7d45c354547a",
+     "title": "牙周病学",
+     "level": 1
+    },
+    {
+     "id": "8680ee51-a0f5-4c66-ab4f-4a133d30ca65",
+     "title": "第十三章 牙周病的危险因素评估和预后",
+     "level": 2
+    },
+    {
+     "id": "8d91b458-bcc7-41c1-a55c-2e7f3a63ac3e",
+     "title": "第二节 牙周病的预后",
+     "level": 3
+    }
+   ]
+  }
+ },
+ {
+  "rank": 10,
+  "knowledgePointId": "efa84454-c987-4345-8a7b-e0def4735ab2",
+  "title": "牙体缺损的修复原则",
+  "count": 20,
+  "latestYear": 2025,
+  "subjectName": "口腔修复学",
+  "sourceSchools": [],
+  "chapterPaths": {
+   "examSyllabus": [
+    {
+     "id": "524893b3-e361-41d1-9aa0-3bba56292c17",
+     "title": "二、牙体缺损",
+     "level": 1
+    }
+   ],
+   "textbook": [
+    {
+     "id": "882033c1-d390-494b-8a20-a9a938f7fd32",
+     "title": "口腔修复学",
+     "level": 1
+    },
+    {
+     "id": "f1fcba26-4988-41ae-89b1-6ded8b0ab231",
+     "title": "第三章 牙体缺损的修复",
+     "level": 2
+    },
+    {
+     "id": "b018a28d-115f-49b6-8baa-0ce181a6204c",
+     "title": "第二节 牙体缺损的修复原则",
+     "level": 3
+    }
+   ]
+  }
+ },
+ {
+  "rank": 11,
+  "knowledgePointId": "744b240d-561e-446d-b320-bb845f8e9a99",
+  "title": "牙体缺损的病因，牙体缺损修复体的种类",
+  "count": 18,
+  "latestYear": 2025,
+  "subjectName": "口腔修复学",
+  "sourceSchools": [],
+  "chapterPaths": {
+   "examSyllabus": [
+    {
+     "id": "524893b3-e361-41d1-9aa0-3bba56292c17",
+     "title": "二、牙体缺损",
+     "level": 1
+    }
+   ],
+   "textbook": [
+    {
+     "id": "882033c1-d390-494b-8a20-a9a938f7fd32",
+     "title": "口腔修复学",
+     "level": 1
+    },
+    {
+     "id": "f1fcba26-4988-41ae-89b1-6ded8b0ab231",
+     "title": "第三章 牙体缺损的修复",
+     "level": 2
+    },
+    {
+     "id": "b018a28d-115f-49b6-8baa-0ce181a6204c",
+     "title": "第二节 牙体缺损的修复原则",
+     "level": 3
+    }
+   ]
+  }
+ },
+ {
+  "rank": 12,
+  "knowledgePointId": "960a3544-c0d5-48b1-83ad-2834ffecd764",
+  "title": "口腔颌面部恶性肿瘤的临床特点和治疗原则",
+  "count": 16,
+  "latestYear": 2025,
+  "subjectName": "口腔颌面外科学",
+  "sourceSchools": [],
+  "chapterPaths": {
+   "examSyllabus": [
+    {
+     "id": "b92976bf-abe7-4d89-aa8f-a2516d349ce4",
+     "title": "第八章 口腔颌面部肿瘤",
+     "level": 1
+    }
+   ],
+   "textbook": [
+    {
+     "id": "48412aea-65f5-49e9-a6c2-9223327c5d82",
+     "title": "口腔颌面外科学",
+     "level": 1
+    },
+    {
+     "id": "645b606d-1716-46a6-8f42-94778d9ed183",
+     "title": "第八章 口腔颌面部肿瘤",
+     "level": 2
+    },
+    {
+     "id": "0e817b85-efcc-4024-8e75-7ac1965d0966",
+     "title": "第四节 恶性肿瘤",
+     "level": 3
+    }
+   ]
+  }
+ },
+ {
+  "rank": 13,
+  "knowledgePointId": "0db85279-d60c-4d49-a1e3-72d902ab8a23",
+  "title": "成釉细胞瘤的病理表现及生物学行为",
+  "count": 15,
+  "latestYear": 2025,
+  "subjectName": "口腔组织病理学",
+  "sourceSchools": [],
+  "chapterPaths": {
+   "examSyllabus": [
+    {
+     "id": "87cc2f13-10da-42af-9030-284b172a2e52",
+     "title": "4. 口腔病理学",
+     "level": 1
+    },
+    {
+     "id": "baeb00a4-09c3-4daf-9788-4cec51e2046e",
+     "title": "4.8 牙源性肿瘤及囊肿",
+     "level": 2
+    }
+   ],
+   "textbook": [
+    {
+     "id": "2f761378-3abe-4ca1-9714-48dcb69a83ff",
+     "title": "口腔组织病理学",
+     "level": 1
+    },
+    {
+     "id": "dd293ee2-c186-4c73-a28f-e28aa91a53a9",
+     "title": "第二篇 口腔病理学",
+     "level": 2
+    }
+   ]
+  }
+ },
+ {
+  "rank": 14,
+  "knowledgePointId": "987eef97-8f9a-480e-b6a6-4587edb54f9d",
+  "title": "牙髓病与根尖周病的治疗原则和治疗方法",
+  "count": 13,
+  "latestYear": 2026,
+  "subjectName": "牙体牙髓病学",
+  "sourceSchools": [],
+  "chapterPaths": {
+   "examSyllabus": [
+    {
+     "id": "56e90b7c-695a-4e79-9ffd-08246eb81746",
+     "title": "三、牙髓和根尖周病",
+     "level": 1
+    },
+    {
+     "id": "2bd1f32c-3981-450b-824f-c6885865746a",
+     "title": "5. 治疗",
+     "level": 2
+    }
+   ],
+   "textbook": [
+    {
+     "id": "00cd60b9-ec11-4020-ac52-240d47f2ded4",
+     "title": "牙体牙髓病学",
+     "level": 1
+    },
+    {
+     "id": "b6b64bc3-da62-4ff1-a032-aeba88d5697e",
+     "title": "第二篇 牙体硬组织非龋性疾病",
+     "level": 2
+    },
+    {
+     "id": "c6068e38-a4f6-4f2d-b22b-9435dedfa5ac",
+     "title": "第八章 牙本质敏感症",
+     "level": 3
+    },
+    {
+     "id": "f7b7edd7-1b83-4d6d-b97b-91e7cf4ee8f4",
+     "title": "五、治疗原则和方法",
+     "level": 4
+    }
+   ]
+  }
+ },
+ {
+  "rank": 15,
+  "knowledgePointId": "38190baf-0e95-44eb-bd0d-d8c904acc444",
+  "title": "多形性腺瘤的病理表现及生物学特点",
+  "count": 13,
+  "latestYear": 2025,
+  "subjectName": "口腔组织病理学",
+  "sourceSchools": [],
+  "chapterPaths": {
+   "examSyllabus": [
+    {
+     "id": "87cc2f13-10da-42af-9030-284b172a2e52",
+     "title": "4. 口腔病理学",
+     "level": 1
+    },
+    {
+     "id": "8280dae1-e6a4-43f7-b9a9-daa6cc526919",
+     "title": "4.7 唾液腺疾病及肿瘤",
+     "level": 2
+    }
+   ],
+   "textbook": [
+    {
+     "id": "2f761378-3abe-4ca1-9714-48dcb69a83ff",
+     "title": "口腔组织病理学",
+     "level": 1
+    },
+    {
+     "id": "dd293ee2-c186-4c73-a28f-e28aa91a53a9",
+     "title": "第二篇 口腔病理学",
+     "level": 2
+    }
+   ]
+  }
+ },
+ {
+  "rank": 16,
+  "knowledgePointId": "bb7e59d4-bc41-486d-95c5-4b75788cf47d",
+  "title": "桩核的组成、分类和牙体预备",
+  "count": 12,
+  "latestYear": 2025,
+  "subjectName": "口腔修复学",
+  "sourceSchools": [],
+  "chapterPaths": {
+   "examSyllabus": [
+    {
+     "id": "f026ea60-7e05-4690-9a2b-798e3b6095fb",
+     "title": "三、牙体缺损的修复",
+     "level": 1
+    }
+   ],
+   "textbook": [
+    {
+     "id": "882033c1-d390-494b-8a20-a9a938f7fd32",
+     "title": "口腔修复学",
+     "level": 1
+    },
+    {
+     "id": "f1fcba26-4988-41ae-89b1-6ded8b0ab231",
+     "title": "第三章 牙体缺损的修复",
+     "level": 2
+    },
+    {
+     "id": "c48e3401-a4ed-4397-9d3f-0c41e3b2d647",
+     "title": "第九节 桩核冠",
+     "level": 3
+    }
+   ]
+  }
+ },
+ {
+  "rank": 17,
+  "knowledgePointId": "0f858482-8909-4fb6-9298-dbc2e54496f1",
+  "title": "牙源性角化囊肿的病理特点及生物学行为",
+  "count": 12,
+  "latestYear": 2024,
+  "subjectName": "口腔组织病理学",
+  "sourceSchools": [],
+  "chapterPaths": {
+   "examSyllabus": [
+    {
+     "id": "87cc2f13-10da-42af-9030-284b172a2e52",
+     "title": "4. 口腔病理学",
+     "level": 1
+    },
+    {
+     "id": "baeb00a4-09c3-4daf-9788-4cec51e2046e",
+     "title": "4.8 牙源性肿瘤及囊肿",
+     "level": 2
+    }
+   ],
+   "textbook": [
+    {
+     "id": "2f761378-3abe-4ca1-9714-48dcb69a83ff",
+     "title": "口腔组织病理学",
+     "level": 1
+    },
+    {
+     "id": "dd293ee2-c186-4c73-a28f-e28aa91a53a9",
+     "title": "第二篇 口腔病理学",
+     "level": 2
+    },
+    {
+     "id": "0722fb18-98bb-414e-b6e0-ae1c65a9e1b1",
+     "title": "第十七章 口腔颌面部囊肿",
+     "level": 3
+    },
+    {
+     "id": "41e1ddb4-a714-429f-80ad-50d5121a6ad5",
+     "title": "第一节 牙源性囊肿",
+     "level": 4
+    }
+   ]
+  }
+ },
+ {
+  "rank": 18,
+  "knowledgePointId": "13695dfc-ea21-4d8a-9497-1e714f1461f4",
+  "title": "根尖周病的临床表现、诊断和鉴别诊断",
+  "count": 11,
+  "latestYear": 2026,
+  "subjectName": "牙体牙髓病学",
+  "sourceSchools": [],
+  "chapterPaths": {
+   "examSyllabus": [
+    {
+     "id": "56e90b7c-695a-4e79-9ffd-08246eb81746",
+     "title": "三、牙髓和根尖周病",
+     "level": 1
+    },
+    {
+     "id": "515529a9-300f-41ca-8db6-01cb26847698",
+     "title": "4. 临床表现和诊断",
+     "level": 2
+    }
+   ],
+   "textbook": [
+    {
+     "id": "00cd60b9-ec11-4020-ac52-240d47f2ded4",
+     "title": "牙体牙髓病学",
+     "level": 1
+    },
+    {
+     "id": "b6b64bc3-da62-4ff1-a032-aeba88d5697e",
+     "title": "第二篇 牙体硬组织非龋性疾病",
+     "level": 2
+    },
+    {
+     "id": "c6068e38-a4f6-4f2d-b22b-9435dedfa5ac",
+     "title": "第八章 牙本质敏感症",
+     "level": 3
+    },
+    {
+     "id": "3b04b2ef-7fb2-455f-9fba-468fcec016ce",
+     "title": "四、临床表现和诊断",
+     "level": 4
+    }
+   ]
+  }
+ },
+ {
+  "rank": 19,
+  "knowledgePointId": "41425228-5b3d-4e5b-9be0-d16b4e84571f",
+  "title": "可复性牙髓炎的临床表现、诊断及鉴别诊断",
+  "count": 11,
+  "latestYear": 2025,
+  "subjectName": "牙体牙髓病学",
+  "sourceSchools": [],
+  "chapterPaths": {
+   "examSyllabus": [
+    {
+     "id": "56e90b7c-695a-4e79-9ffd-08246eb81746",
+     "title": "三、牙髓和根尖周病",
+     "level": 1
+    },
+    {
+     "id": "515529a9-300f-41ca-8db6-01cb26847698",
+     "title": "4. 临床表现和诊断",
+     "level": 2
+    }
+   ],
+   "textbook": [
+    {
+     "id": "00cd60b9-ec11-4020-ac52-240d47f2ded4",
+     "title": "牙体牙髓病学",
+     "level": 1
+    },
+    {
+     "id": "b6b64bc3-da62-4ff1-a032-aeba88d5697e",
+     "title": "第二篇 牙体硬组织非龋性疾病",
+     "level": 2
+    },
+    {
+     "id": "c6068e38-a4f6-4f2d-b22b-9435dedfa5ac",
+     "title": "第八章 牙本质敏感症",
+     "level": 3
+    },
+    {
+     "id": "3b04b2ef-7fb2-455f-9fba-468fcec016ce",
+     "title": "四、临床表现和诊断",
+     "level": 4
+    }
+   ]
+  }
+ },
+ {
+  "rank": 20,
+  "knowledgePointId": "0095e669-2aa1-4d42-b79a-4769cb8be97e",
+  "title": "冠周炎、颌面部诸间隙感染",
+  "count": 11,
+  "latestYear": 2025,
+  "subjectName": "口腔颌面外科学",
+  "sourceSchools": [],
+  "chapterPaths": {
+   "examSyllabus": [
+    {
+     "id": "05b8d043-99e4-44e4-8825-e32f4e833a2f",
+     "title": "第六章 口腔颌面部感染",
+     "level": 1
+    }
+   ],
+   "textbook": [
+    {
+     "id": "48412aea-65f5-49e9-a6c2-9223327c5d82",
+     "title": "口腔颌面外科学",
+     "level": 1
+    },
+    {
+     "id": "caa1d600-fdc2-40d9-b221-007a4783887a",
+     "title": "第六章 口腔颌面部感染",
+     "level": 2
+    },
+    {
+     "id": "450ce7ce-ef48-4865-8ae4-07f88ec701b5",
+     "title": "第三节 口腔颌面部间隙感染",
+     "level": 3
+    }
+   ]
+  }
+ }
+]

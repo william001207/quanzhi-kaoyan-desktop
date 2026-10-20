@@ -1,0 +1,41 @@
+{
+ "overview": {
+  "totalCount": 0,
+  "resolvedCount": 0,
+  "unresolvedCount": 0,
+  "masteryRate": 0
+ },
+ "bySubject": [],
+ "byReason": [],
+ "topWrong": [],
+ "byErrorTags": [
+  {
+   "tag": "concept_confusion",
+   "count": 0
+  },
+  {
+   "tag": "knowledge_forgotten",
+   "count": 0
+  },
+  {
+   "tag": "reading_error",
+   "count": 0
+  },
+  {
+   "tag": "incomplete_answer",
+   "count": 0
+  },
+  {
+   "tag": "understanding_bias",
+   "count": 0
+  },
+  {
+   "tag": "other",
+   "count": 0
+  },
+  {
+   "tag": "unmarked",
+   "count": 0
+  }
+ ]
+}

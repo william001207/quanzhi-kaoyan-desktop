@@ -1,0 +1,1 @@
+import{r as e}from"./rolldown-runtime-hePW80VL.js";import{ut as t}from"./radix-BFu8ltLO.js";var n=e(t()),r=0,i=new Set;function a(){for(let e of i)e(r)}function o(){r+=1,a()}function s(){let[e,t]=(0,n.useState)(r);return(0,n.useEffect)(()=>{let e=e=>t(e);return i.add(e),()=>{i.delete(e)}},[]),e}export{s as n,o as t};

@@ -7,13 +7,10 @@ release/
 dist/
 server/dist/
 
-# 本地数据库/数据
+# 本地数据库/运行数据
 *.pglite/
 pglite-data/
 *.log
-
-# 全量导出数据（含个人学习数据，CI 实时导出，不入 git）
-server/data-export/
 
 # 系统文件
 .DS_Store
@@ -30,3 +27,9 @@ Thumbs.db
 .env
 .env.*
 __pycache__/
+
+# --- 以下内容「有意纳入版本控制」，请勿加回忽略列表 ---
+#   server/data-export/*.json  全量题库数据（约 16MB，构建必需；已核验为无个人学习记录的干净快照）
+#   server/**/*.ts             后端全部源码（构建必需）
+#   client/assets/             前端构建产物（构建必需）
+#   build/icon.png             应用图标（构建必需）

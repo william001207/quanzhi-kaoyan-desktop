@@ -1,0 +1,42 @@
+{
+ "id": "b1060c0a-fc14-462f-902e-e38200ee15a4",
+ "examDate": "2026-12-19",
+ "dailyMinutes": 300,
+ "dailyKpConfig": {
+  "52696978-5ca9-4829-9bac-c84440c99573": 5,
+  "763f5b52-4e21-414e-b4b8-5eab04668227": 5,
+  "a8b2ecbf-b1da-4ca5-a12a-c73e77149653": 5,
+  "cb0aa1a2-0449-4fc1-80bf-52be19c0fc90": 5,
+  "d18cf687-4f5f-429b-a8b2-ee5b5ea12ca3": 5,
+  "f2bdad01-d68e-4c4b-ba33-de63b8d141ea": 5,
+  "fd2b7f0e-a08f-40ed-8cf1-d921a55d9981": 5,
+  "feaa83dc-5010-4677-9a41-dc729332d034": 5
+ },
+ "dailyQuestionConfig": {
+  "52696978-5ca9-4829-9bac-c84440c99573": 5,
+  "763f5b52-4e21-414e-b4b8-5eab04668227": 5,
+  "a8b2ecbf-b1da-4ca5-a12a-c73e77149653": 5,
+  "cb0aa1a2-0449-4fc1-80bf-52be19c0fc90": 5,
+  "d18cf687-4f5f-429b-a8b2-ee5b5ea12ca3": 5,
+  "f2bdad01-d68e-4c4b-ba33-de63b8d141ea": 5,
+  "fd2b7f0e-a08f-40ed-8cf1-d921a55d9981": 5,
+  "feaa83dc-5010-4677-9a41-dc729332d034": 5
+ },
+ "mockExamScoreConfig": {
+  "essay": 20,
+  "short_answer": 12,
+  "noun_explanation": 6
+ },
+ "examMode": false,
+ "kpWeightSyllabus": 20,
+ "kpWeightExamFreq": 30,
+ "kpWeightMastery": 20,
+ "kpWeightForgetting": 15,
+ "kpWeightWrong": 10,
+ "kpWeightOverdue": 5,
+ "qWeightExamFreq": 40,
+ "qWeightMastery": 20,
+ "qWeightWrong": 20,
+ "qWeightOverdue": 10,
+ "qWeightDifficulty": 10
+}

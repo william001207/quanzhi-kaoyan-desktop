@@ -10,7 +10,7 @@ export class GlobalExceptionFilter implements ExceptionFilter {
   catch(exception: unknown, host: ArgumentsHost) {
     const ctx = host.switchToHttp();
     const response = ctx.getResponse<Response>();
-
+     
     // 如果响应头已发送，则不处理
     if (response.headersSent) {
       return;

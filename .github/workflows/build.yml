@@ -1,0 +1,139 @@
+# 桌面应用构建与发布（macOS + Windows）
+#
+# 设计原则：本工作流**不下载任何外部资源**。
+# 源码、题库数据、前端构建产物、图标全部在仓库里，克隆下来就能构建，
+# 因此不会因为某个 CDN 链接失效或签名过期而构建失败。
+#
+# 触发方式：
+#   1. 推送形如 v1.0.1 的 tag  → 构建并自动创建/更新 GitHub Release
+#   2. 在 Actions 页面手动 Run workflow → 只产出可下载的 artifact，不发布
+#
+# 产物文件名：quanzhi-kaoyan-<版本>-<平台>-<架构>.dmg / .exe
+#   版本号自动取自 package.json 的 version 字段，不需要在任何地方手写。
+
+name: build
+
+on:
+  workflow_dispatch:
+  push:
+    tags:
+      - 'v*'
+
+permissions:
+  contents: write
+
+jobs:
+  build:
+    strategy:
+      fail-fast: false
+      matrix:
+        include:
+          - os: macos-latest
+            platform: mac
+            artifact: macos-dmg
+          - os: windows-latest
+            platform: win
+            artifact: windows-installer
+
+    runs-on: ${{ matrix.os }}
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+
+      # 有 lockfile 时用 npm ci（严格按锁文件安装，结果可复现）；
+      # 没有锁文件时退回 npm install，避免直接卡死构建。
+      - name: Install root deps
+        shell: bash
+        run: |
+          if [ -f package-lock.json ]; then
+            npm ci --no-audit --no-fund
+          else
+            echo "::warning::缺少 package-lock.json，本次使用 npm install（依赖版本可能漂移）"
+            npm install --no-audit --no-fund
+          fi
+
+      - name: Install server deps
+        shell: bash
+        working-directory: server
+        run: |
+          if [ -f package-lock.json ]; then
+            npm ci --no-audit --no-fund
+          else
+            echo "::warning::缺少 server/package-lock.json，本次使用 npm install"
+            npm install --no-audit --no-fund
+          fi
+
+      # 构建前做一次完整性自检，缺文件就直接失败并说明缺什么，
+      # 而不是等到打包出问题才发现
+      - name: Verify repo completeness
+        shell: bash
+        run: python3 scripts/verify_repo.py || python scripts/verify_repo.py
+
+      - name: Build server (tsc)
+        working-directory: server
+        run: npm run build
+
+      # ---- macOS：先打 .app，再 ad-hoc 签名，最后手工封装 dmg ----
+      # macOS 新版本对完全无签名的 arm64 应用会直接判定 malware 且无法绕过；
+      # ad-hoc 签名后系统提示「无法验证开发者」，右键打开即可。
+      - name: Package macOS
+        if: matrix.platform == 'mac'
+        shell: bash
+        run: |
+          set -euo pipefail
+          CSC_IDENTITY_AUTO_DISCOVERY=false npx electron-builder --mac dir \
+            --config build/electron-builder.yml --publish never
+
+          APP_PATH=$(ls -d release/mac*/全职高手考研系统.app | head -1)
+          echo "app: $APP_PATH"
+
+          codesign --force --deep --sign - "$APP_PATH"
+          codesign --verify --deep --strict --verbose=2 "$APP_PATH" || echo "verify warning (non-fatal)"
+
+          VERSION=$(node -p "require('./package.json').version")
+          ARCH=$(node -p "process.arch")
+          DMG="release/quanzhi-kaoyan-${VERSION}-mac-${ARCH}.dmg"
+
+          mkdir -p release/dmg-staging
+          cp -R "$APP_PATH" release/dmg-staging/
+          ln -s /Applications release/dmg-staging/Applications
+          hdiutil create -volname "全职高手考研系统" -srcfolder release/dmg-staging \
+            -ov -format UDZO "$DMG"
+
+          ls -lh release/
+
+      - name: Package Windows
+        if: matrix.platform == 'win'
+        run: npx electron-builder --win --config build/electron-builder.yml --publish never
+
+      - name: Upload to GitHub Release (仅 tag 触发时)
+        if: startsWith(github.ref, 'refs/tags/v')
+        uses: softprops/action-gh-release@v2
+        with:
+          files: |
+            release/*.dmg
+            release/*.exe
+          fail_on_unmatched_files: false
+          generate_release_notes: true
+          body: |
+            安装包在下方 Assets 中。
+
+            首次打开若被系统拦截：
+            - macOS：右键点应用 → 选择「打开」→ 再点「打开」；或执行
+              `xattr -dr com.apple.quarantine "/Applications/全职高手考研系统.app"`
+            - Windows：SmartScreen 提示时点「更多信息」→「仍要运行」
+
+            **升级不会丢失学习进度**（掌握度、错题本、复习记录、设置均保留）。
+
+      - name: Upload artifact (手动触发时)
+        uses: actions/upload-artifact@v4
+        with:
+          name: ${{ matrix.artifact }}
+          path: |
+            release/*.dmg
+            release/*.exe
+          if-no-files-found: error

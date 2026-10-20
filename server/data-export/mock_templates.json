@@ -1,0 +1,41 @@
+{
+ "items": [
+  {
+   "id": "da6e949f-1c03-40f4-8a86-6170cf750cb9",
+   "name": "深大模拟卷",
+   "mode": "custom",
+   "subjectIds": [
+    "a8b2ecbf-b1da-4ca5-a12a-c73e77149653",
+    "feaa83dc-5010-4677-9a41-dc729332d034",
+    "cb0aa1a2-0449-4fc1-80bf-52be19c0fc90",
+    "f2bdad01-d68e-4c4b-ba33-de63b8d141ea",
+    "52696978-5ca9-4829-9bac-c84440c99573",
+    "fd2b7f0e-a08f-40ed-8cf1-d921a55d9981",
+    "763f5b52-4e21-414e-b4b8-5eab04668227",
+    "d18cf687-4f5f-429b-a8b2-ee5b5ea12ca3"
+   ],
+   "source": null,
+   "yearStart": null,
+   "yearEnd": null,
+   "questionTypes": [
+    "noun_explanation",
+    "short_answer",
+    "essay"
+   ],
+   "questionCounts": {
+    "essay": 5,
+    "short_answer": 4,
+    "noun_explanation": 6
+   },
+   "scoreConfig": {
+    "essay": 20,
+    "short_answer": 12,
+    "noun_explanation": 6
+   },
+   "createdAt": "2026-10-19T11:52:06.698Z"
+  }
+ ],
+ "total": 1,
+ "page": 1,
+ "pageSize": 10
+}

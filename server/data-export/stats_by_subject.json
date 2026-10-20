@@ -1,0 +1,82 @@
+[
+ {
+  "subjectId": "d18cf687-4f5f-429b-a8b2-ee5b5ea12ca3",
+  "subjectName": "口腔修复学",
+  "totalPoints": 154,
+  "startedPoints": 0,
+  "masteredPoints": 0,
+  "avgMasteryScore": 0,
+  "questionAccuracy": 0,
+  "weakPointCount": 0
+ },
+ {
+  "subjectId": "f2bdad01-d68e-4c4b-ba33-de63b8d141ea",
+  "subjectName": "口腔正畸学",
+  "totalPoints": 95,
+  "startedPoints": 0,
+  "masteredPoints": 0,
+  "avgMasteryScore": 0,
+  "questionAccuracy": 0,
+  "weakPointCount": 0
+ },
+ {
+  "subjectId": "fd2b7f0e-a08f-40ed-8cf1-d921a55d9981",
+  "subjectName": "口腔组织病理学",
+  "totalPoints": 124,
+  "startedPoints": 0,
+  "masteredPoints": 0,
+  "avgMasteryScore": 0,
+  "questionAccuracy": 0,
+  "weakPointCount": 0
+ },
+ {
+  "subjectId": "52696978-5ca9-4829-9bac-c84440c99573",
+  "subjectName": "口腔解剖生理学",
+  "totalPoints": 164,
+  "startedPoints": 0,
+  "masteredPoints": 0,
+  "avgMasteryScore": 0,
+  "questionAccuracy": 0,
+  "weakPointCount": 0
+ },
+ {
+  "subjectId": "763f5b52-4e21-414e-b4b8-5eab04668227",
+  "subjectName": "口腔颌面外科学",
+  "totalPoints": 255,
+  "startedPoints": 0,
+  "masteredPoints": 0,
+  "avgMasteryScore": 0,
+  "questionAccuracy": 0,
+  "weakPointCount": 0
+ },
+ {
+  "subjectId": "cb0aa1a2-0449-4fc1-80bf-52be19c0fc90",
+  "subjectName": "口腔黏膜病学",
+  "totalPoints": 36,
+  "startedPoints": 0,
+  "masteredPoints": 0,
+  "avgMasteryScore": 0,
+  "questionAccuracy": 0,
+  "weakPointCount": 0
+ },
+ {
+  "subjectId": "a8b2ecbf-b1da-4ca5-a12a-c73e77149653",
+  "subjectName": "牙体牙髓病学",
+  "totalPoints": 183,
+  "startedPoints": 0,
+  "masteredPoints": 0,
+  "avgMasteryScore": 0,
+  "questionAccuracy": 0,
+  "weakPointCount": 0
+ },
+ {
+  "subjectId": "feaa83dc-5010-4677-9a41-dc729332d034",
+  "subjectName": "牙周病学",
+  "totalPoints": 120,
+  "startedPoints": 0,
+  "masteredPoints": 0,
+  "avgMasteryScore": 0,
+  "questionAccuracy": 0,
+  "weakPointCount": 0
+ }
+]

@@ -1,0 +1,4918 @@
+{
+ "id": "acdd5078-3d41-41d2-a10f-7479ab9f18cc",
+ "planDate": "2026-10-20",
+ "generatedAt": "2026-10-20T02:32:38.435Z",
+ "status": "active",
+ "totalEstimatedMinutes": 1393,
+ "completedMinutes": 0,
+ "totalItems": 80,
+ "completedItems": 0,
+ "items": [
+  {
+   "id": "9c677a43-6faf-4715-afb0-00e6458cb057",
+   "dailyPlanId": "acdd5078-3d41-41d2-a10f-7479ab9f18cc",
+   "itemType": "question_test",
+   "knowledgePointId": "6a104e66-42d0-43b7-b1b5-f2454bbf29d9",
+   "questionId": "dcf42376-bece-4987-b8da-35f573618816",
+   "priorityScore": 64,
+   "estimatedMinutes": 15,
+   "completed": false,
+   "completedAt": null,
+   "sortOrder": 0,
+   "reason": "高频题 · 48次考频 · 难度3",
+   "knowledgePointTitle": "全口义齿的固位和稳定",
+   "requirementLevel": "unmarked",
+   "examFrequency": 48,
+   "masteryScore": 0,
+   "lastReviewedAt": null,
+   "subjectName": "口腔修复学",
+   "chapterPath": [
+    "六、全口义齿"
+   ],
+   "chapterPaths": {
+    "examSyllabus": [
+     {
+      "id": "650006b5-ba73-4866-9535-0955a76f869c",
+      "title": "六、全口义齿",
+      "level": 1
+     }
+    ],
+    "textbook": [
+     {
+      "id": "882033c1-d390-494b-8a20-a9a938f7fd32",
+      "title": "口腔修复学",
+      "level": 1
+     },
+     {
+      "id": "a75281f6-8764-445c-8847-f5995bc65466",
+      "title": "第六章 牙列缺失的全口义齿修复",
+      "level": 2
+     },
+     {
+      "id": "74fa3365-00f7-48d9-985c-855e8cdad1ae",
+      "title": "第三节 全口义齿的固位和稳定",
+      "level": 3
+     }
+    ]
+   },
+   "syllabusTitle": "全口义齿的固位和稳定",
+   "examYears": [
+    2026,
+    2025,
+    2024,
+    2023,
+    2022
+   ],
+   "latestExamYear": 2023,
+   "pendingQuestionCount": 5,
+   "pendingWrongCount": 0,
+   "isWeakMarked": false,
+   "questionText": "无牙颌弓的大小形态对全口义齿制作的指导意义",
+   "questionType": "short_answer",
+   "questionSource": "南京大学",
+   "questionDifficulty": 3,
+   "questionAnswerCount": 0
+  },
+  {
+   "id": "77db0536-68d2-468b-8217-4842816664ab",
+   "dailyPlanId": "acdd5078-3d41-41d2-a10f-7479ab9f18cc",
+   "itemType": "question_test",
+   "knowledgePointId": "6a104e66-42d0-43b7-b1b5-f2454bbf29d9",
+   "questionId": "5aa7abe0-d921-4c4a-b9f8-4511c321cb66",
+   "priorityScore": 64,
+   "estimatedMinutes": 15,
+   "completed": false,
+   "completedAt": null,
+   "sortOrder": 1,
+   "reason": "高频题 · 48次考频 · 难度3",
+   "knowledgePointTitle": "全口义齿的固位和稳定",
+   "requirementLevel": "unmarked",
+   "examFrequency": 48,
+   "masteryScore": 0,
+   "lastReviewedAt": null,
+   "subjectName": "口腔修复学",
+   "chapterPath": [
+    "六、全口义齿"
+   ],
+   "chapterPaths": {
+    "examSyllabus": [
+     {
+      "id": "650006b5-ba73-4866-9535-0955a76f869c",
+      "title": "六、全口义齿",
+      "level": 1
+     }
+    ],
+    "textbook": [
+     {
+      "id": "882033c1-d390-494b-8a20-a9a938f7fd32",
+      "title": "口腔修复学",
+      "level": 1
+     },
+     {
+      "id": "a75281f6-8764-445c-8847-f5995bc65466",
+      "title": "第六章 牙列缺失的全口义齿修复",
+      "level": 2
+     },
+     {
+      "id": "74fa3365-00f7-48d9-985c-855e8cdad1ae",
+      "title": "第三节 全口义齿的固位和稳定",
+      "level": 3
+     }
+    ]
+   },
+   "syllabusTitle": "全口义齿的固位和稳定",
+   "examYears": [
+    2026,
+    2025,
+    2024,
+    2023,
+    2022
+   ],
+   "latestExamYear": 2025,
+   "pendingQuestionCount": 5,
+   "pendingWrongCount": 0,
+   "isWeakMarked": false,
+   "questionText": "磨牙后垫在全口义齿修复中的作用",
+   "questionType": "short_answer",
+   "questionSource": "广州医科大学",
+   "questionDifficulty": 3,
+   "questionAnswerCount": 0
+  },
+  {
+   "id": "597f5ee7-cc48-4da8-90f4-a84c140e6aff",
+   "dailyPlanId": "acdd5078-3d41-41d2-a10f-7479ab9f18cc",
+   "itemType": "question_test",
+   "knowledgePointId": "6a104e66-42d0-43b7-b1b5-f2454bbf29d9",
+   "questionId": "df522aee-8812-48b3-bcf8-b75395634ce5",
+   "priorityScore": 64,
+   "estimatedMinutes": 8,
+   "completed": false,
+   "completedAt": null,
+   "sortOrder": 2,
+   "reason": "高频题 · 48次考频 · 难度3",
+   "knowledgePointTitle": "全口义齿的固位和稳定",
+   "requirementLevel": "unmarked",
+   "examFrequency": 48,
+   "masteryScore": 0,
+   "lastReviewedAt": null,
+   "subjectName": "口腔修复学",
+   "chapterPath": [
+    "六、全口义齿"
+   ],
+   "chapterPaths": {
+    "examSyllabus": [
+     {
+      "id": "650006b5-ba73-4866-9535-0955a76f869c",
+      "title": "六、全口义齿",
+      "level": 1
+     }
+    ],
+    "textbook": [
+     {
+      "id": "882033c1-d390-494b-8a20-a9a938f7fd32",
+      "title": "口腔修复学",
+      "level": 1
+     },
+     {
+      "id": "a75281f6-8764-445c-8847-f5995bc65466",
+      "title": "第六章 牙列缺失的全口义齿修复",
+      "level": 2
+     },
+     {
+      "id": "74fa3365-00f7-48d9-985c-855e8cdad1ae",
+      "title": "第三节 全口义齿的固位和稳定",
+      "level": 3
+     }
+    ]
+   },
+   "syllabusTitle": "全口义齿的固位和稳定",
+   "examYears": [
+    2026,
+    2025,
+    2024,
+    2023,
+    2022
+   ],
+   "latestExamYear": 2025,
+   "pendingQuestionCount": 5,
+   "pendingWrongCount": 0,
+   "isWeakMarked": false,
+   "questionText": "覆盖义齿（overdenture）",
+   "questionType": "noun_explanation",
+   "questionSource": "深圳大学",
+   "questionDifficulty": 3,
+   "questionAnswerCount": 0
+  },
+  {
+   "id": "d8866ebb-3edf-4043-acf1-bca6c4c6540b",
+   "dailyPlanId": "acdd5078-3d41-41d2-a10f-7479ab9f18cc",
+   "itemType": "question_test",
+   "knowledgePointId": "6a104e66-42d0-43b7-b1b5-f2454bbf29d9",
+   "questionId": "15a3a684-c154-4992-8577-7b1576e25177",
+   "priorityScore": 64,
+   "estimatedMinutes": 15,
+   "completed": false,
+   "completedAt": null,
+   "sortOrder": 3,
+   "reason": "高频题 · 48次考频 · 难度3",
+   "knowledgePointTitle": "全口义齿的固位和稳定",
+   "requirementLevel": "unmarked",
+   "examFrequency": 48,
+   "masteryScore": 0,
+   "lastReviewedAt": null,
+   "subjectName": "口腔修复学",
+   "chapterPath": [
+    "六、全口义齿"
+   ],
+   "chapterPaths": {
+    "examSyllabus": [
+     {
+      "id": "650006b5-ba73-4866-9535-0955a76f869c",
+      "title": "六、全口义齿",
+      "level": 1
+     }
+    ],
+    "textbook": [
+     {
+      "id": "882033c1-d390-494b-8a20-a9a938f7fd32",
+      "title": "口腔修复学",
+      "level": 1
+     },
+     {
+      "id": "a75281f6-8764-445c-8847-f5995bc65466",
+      "title": "第六章 牙列缺失的全口义齿修复",
+      "level": 2
+     },
+     {
+      "id": "74fa3365-00f7-48d9-985c-855e8cdad1ae",
+      "title": "第三节 全口义齿的固位和稳定",
+      "level": 3
+     }
+    ]
+   },
+   "syllabusTitle": "全口义齿的固位和稳定",
+   "examYears": [
+    2026,
+    2025,
+    2024,
+    2023,
+    2022
+   ],
+   "latestExamYear": 2026,
+   "pendingQuestionCount": 5,
+   "pendingWrongCount": 0,
+   "isWeakMarked": false,
+   "questionText": "传统全口义齿和种植全口义齿选择要考虑的因素",
+   "questionType": "short_answer",
+   "questionSource": "暨南大学",
+   "questionDifficulty": 3,
+   "questionAnswerCount": 0
+  },
+  {
+   "id": "f65b9930-14f7-4778-8595-97d4622c7d73",
+   "dailyPlanId": "acdd5078-3d41-41d2-a10f-7479ab9f18cc",
+   "itemType": "question_test",
+   "knowledgePointId": "6a104e66-42d0-43b7-b1b5-f2454bbf29d9",
+   "questionId": "01631a28-a7c9-4d5b-a208-f421c4fe1538",
+   "priorityScore": 64,
+   "estimatedMinutes": 15,
+   "completed": false,
+   "completedAt": null,
+   "sortOrder": 4,
+   "reason": "高频题 · 48次考频 · 难度3",
+   "knowledgePointTitle": "全口义齿的固位和稳定",
+   "requirementLevel": "unmarked",
+   "examFrequency": 48,
+   "masteryScore": 0,
+   "lastReviewedAt": null,
+   "subjectName": "口腔修复学",
+   "chapterPath": [
+    "六、全口义齿"
+   ],
+   "chapterPaths": {
+    "examSyllabus": [
+     {
+      "id": "650006b5-ba73-4866-9535-0955a76f869c",
+      "title": "六、全口义齿",
+      "level": 1
+     }
+    ],
+    "textbook": [
+     {
+      "id": "882033c1-d390-494b-8a20-a9a938f7fd32",
+      "title": "口腔修复学",
+      "level": 1
+     },
+     {
+      "id": "a75281f6-8764-445c-8847-f5995bc65466",
+      "title": "第六章 牙列缺失的全口义齿修复",
+      "level": 2
+     },
+     {
+      "id": "74fa3365-00f7-48d9-985c-855e8cdad1ae",
+      "title": "第三节 全口义齿的固位和稳定",
+      "level": 3
+     }
+    ]
+   },
+   "syllabusTitle": "全口义齿的固位和稳定",
+   "examYears": [
+    2026,
+    2025,
+    2024,
+    2023,
+    2022
+   ],
+   "latestExamYear": 2025,
+   "pendingQuestionCount": 5,
+   "pendingWrongCount": 0,
+   "isWeakMarked": false,
+   "questionText": "全口义齿垂直距离过高造成的不良后果",
+   "questionType": "short_answer",
+   "questionSource": "重庆医科大学",
+   "questionDifficulty": 3,
+   "questionAnswerCount": 0
+  },
+  {
+   "id": "e45bda5c-5ba1-4c73-aff3-54bad202d3d7",
+   "dailyPlanId": "acdd5078-3d41-41d2-a10f-7479ab9f18cc",
+   "itemType": "question_test",
+   "knowledgePointId": "68c81bad-9430-4da1-98d7-ffacd3f68de7",
+   "questionId": "838e5488-c73b-4264-9ea0-0ce913e169b9",
+   "priorityScore": 44,
+   "estimatedMinutes": 15,
+   "completed": false,
+   "completedAt": null,
+   "sortOrder": 5,
+   "reason": "高频题 · 22次考频 · 难度3",
+   "knowledgePointTitle": "颌骨骨折的诊断、处理原则",
+   "requirementLevel": "unmarked",
+   "examFrequency": 22,
+   "masteryScore": 0,
+   "lastReviewedAt": null,
+   "subjectName": "口腔颌面外科学",
+   "chapterPath": [
+    "第七章 口腔颌面部损伤"
+   ],
+   "chapterPaths": {
+    "examSyllabus": [
+     {
+      "id": "ba25ec01-e770-4d1b-bc8e-17014c29b754",
+      "title": "第七章 口腔颌面部损伤",
+      "level": 1
+     }
+    ],
+    "textbook": [
+     {
+      "id": "48412aea-65f5-49e9-a6c2-9223327c5d82",
+      "title": "口腔颌面外科学",
+      "level": 1
+     },
+     {
+      "id": "bcf30599-540d-4378-996f-b23f1e37b0ac",
+      "title": "第七章 口腔颌面部损伤",
+      "level": 2
+     },
+     {
+      "id": "59719ba3-39dc-44ae-98f0-9e4dceba6681",
+      "title": "第五节 颌骨骨折",
+      "level": 3
+     }
+    ]
+   },
+   "syllabusTitle": "颌骨骨折的诊断、处理原则",
+   "examYears": [
+    2026,
+    2025,
+    2024,
+    2023,
+    2022
+   ],
+   "latestExamYear": 2025,
+   "pendingQuestionCount": 5,
+   "pendingWrongCount": 0,
+   "isWeakMarked": false,
+   "questionText": "颌骨骨折的主要复位方法及适应症",
+   "questionType": "short_answer",
+   "questionSource": "复旦大学",
+   "questionDifficulty": 3,
+   "questionAnswerCount": 0
+  },
+  {
+   "id": "94b167c8-b2ae-4d9b-bd89-bfa99311ee3a",
+   "dailyPlanId": "acdd5078-3d41-41d2-a10f-7479ab9f18cc",
+   "itemType": "question_test",
+   "knowledgePointId": "68c81bad-9430-4da1-98d7-ffacd3f68de7",
+   "questionId": "04a840c2-461f-439c-ad20-ed2905d51e78",
+   "priorityScore": 44,
+   "estimatedMinutes": 15,
+   "completed": false,
+   "completedAt": null,
+   "sortOrder": 6,
+   "reason": "高频题 · 22次考频 · 难度3",
+   "knowledgePointTitle": "颌骨骨折的诊断、处理原则",
+   "requirementLevel": "unmarked",
+   "examFrequency": 22,
+   "masteryScore": 0,
+   "lastReviewedAt": null,
+   "subjectName": "口腔颌面外科学",
+   "chapterPath": [
+    "第七章 口腔颌面部损伤"
+   ],
+   "chapterPaths": {
+    "examSyllabus": [
+     {
+      "id": "ba25ec01-e770-4d1b-bc8e-17014c29b754",
+      "title": "第七章 口腔颌面部损伤",
+      "level": 1
+     }
+    ],
+    "textbook": [
+     {
+      "id": "48412aea-65f5-49e9-a6c2-9223327c5d82",
+      "title": "口腔颌面外科学",
+      "level": 1
+     },
+     {
+      "id": "bcf30599-540d-4378-996f-b23f1e37b0ac",
+      "title": "第七章 口腔颌面部损伤",
+      "level": 2
+     },
+     {
+      "id": "59719ba3-39dc-44ae-98f0-9e4dceba6681",
+      "title": "第五节 颌骨骨折",
+      "level": 3
+     }
+    ]
+   },
+   "syllabusTitle": "颌骨骨折的诊断、处理原则",
+   "examYears": [
+    2026,
+    2025,
+    2024,
+    2023,
+    2022
+   ],
+   "latestExamYear": 2024,
+   "pendingQuestionCount": 5,
+   "pendingWrongCount": 0,
+   "isWeakMarked": false,
+   "questionText": "简述上颌骨骨折的分类",
+   "questionType": "short_answer",
+   "questionSource": "郑州大学",
+   "questionDifficulty": 3,
+   "questionAnswerCount": 0
+  },
+  {
+   "id": "42322963-e562-47c9-9944-030aed523632",
+   "dailyPlanId": "acdd5078-3d41-41d2-a10f-7479ab9f18cc",
+   "itemType": "question_test",
+   "knowledgePointId": "68c81bad-9430-4da1-98d7-ffacd3f68de7",
+   "questionId": "38f4f9a2-1269-4166-83bd-360d6beb9522",
+   "priorityScore": 44,
+   "estimatedMinutes": 15,
+   "completed": false,
+   "completedAt": null,
+   "sortOrder": 7,
+   "reason": "高频题 · 22次考频 · 难度3",
+   "knowledgePointTitle": "颌骨骨折的诊断、处理原则",
+   "requirementLevel": "unmarked",
+   "examFrequency": 22,
+   "masteryScore": 0,
+   "lastReviewedAt": null,
+   "subjectName": "口腔颌面外科学",
+   "chapterPath": [
+    "第七章 口腔颌面部损伤"
+   ],
+   "chapterPaths": {
+    "examSyllabus": [
+     {
+      "id": "ba25ec01-e770-4d1b-bc8e-17014c29b754",
+      "title": "第七章 口腔颌面部损伤",
+      "level": 1
+     }
+    ],
+    "textbook": [
+     {
+      "id": "48412aea-65f5-49e9-a6c2-9223327c5d82",
+      "title": "口腔颌面外科学",
+      "level": 1
+     },
+     {
+      "id": "bcf30599-540d-4378-996f-b23f1e37b0ac",
+      "title": "第七章 口腔颌面部损伤",
+      "level": 2
+     },
+     {
+      "id": "59719ba3-39dc-44ae-98f0-9e4dceba6681",
+      "title": "第五节 颌骨骨折",
+      "level": 3
+     }
+    ]
+   },
+   "syllabusTitle": "颌骨骨折的诊断、处理原则",
+   "examYears": [
+    2026,
+    2025,
+    2024,
+    2023,
+    2022
+   ],
+   "latestExamYear": 2024,
+   "pendingQuestionCount": 5,
+   "pendingWrongCount": 0,
+   "isWeakMarked": false,
+   "questionText": "颌骨骨折的临床表现",
+   "questionType": "short_answer",
+   "questionSource": "武汉大学",
+   "questionDifficulty": 3,
+   "questionAnswerCount": 0
+  },
+  {
+   "id": "4c6cc71f-7d9f-47e0-b642-5f77c6275540",
+   "dailyPlanId": "acdd5078-3d41-41d2-a10f-7479ab9f18cc",
+   "itemType": "question_test",
+   "knowledgePointId": "68c81bad-9430-4da1-98d7-ffacd3f68de7",
+   "questionId": "338222f7-978f-4879-bc31-f7ba846d9d44",
+   "priorityScore": 44,
+   "estimatedMinutes": 15,
+   "completed": false,
+   "completedAt": null,
+   "sortOrder": 8,
+   "reason": "高频题 · 22次考频 · 难度3",
+   "knowledgePointTitle": "颌骨骨折的诊断、处理原则",
+   "requirementLevel": "unmarked",
+   "examFrequency": 22,
+   "masteryScore": 0,
+   "lastReviewedAt": null,
+   "subjectName": "口腔颌面外科学",
+   "chapterPath": [
+    "第七章 口腔颌面部损伤"
+   ],
+   "chapterPaths": {
+    "examSyllabus": [
+     {
+      "id": "ba25ec01-e770-4d1b-bc8e-17014c29b754",
+      "title": "第七章 口腔颌面部损伤",
+      "level": 1
+     }
+    ],
+    "textbook": [
+     {
+      "id": "48412aea-65f5-49e9-a6c2-9223327c5d82",
+      "title": "口腔颌面外科学",
+      "level": 1
+     },
+     {
+      "id": "bcf30599-540d-4378-996f-b23f1e37b0ac",
+      "title": "第七章 口腔颌面部损伤",
+      "level": 2
+     },
+     {
+      "id": "59719ba3-39dc-44ae-98f0-9e4dceba6681",
+      "title": "第五节 颌骨骨折",
+      "level": 3
+     }
+    ]
+   },
+   "syllabusTitle": "颌骨骨折的诊断、处理原则",
+   "examYears": [
+    2026,
+    2025,
+    2024,
+    2023,
+    2022
+   ],
+   "latestExamYear": 2022,
+   "pendingQuestionCount": 5,
+   "pendingWrongCount": 0,
+   "isWeakMarked": false,
+   "questionText": "上颌骨骨折的临床表现",
+   "questionType": "short_answer",
+   "questionSource": "右江民族医学院",
+   "questionDifficulty": 3,
+   "questionAnswerCount": 0
+  },
+  {
+   "id": "fb6492bc-3f35-4990-b9f5-369fd19d1e8e",
+   "dailyPlanId": "acdd5078-3d41-41d2-a10f-7479ab9f18cc",
+   "itemType": "question_test",
+   "knowledgePointId": "68c81bad-9430-4da1-98d7-ffacd3f68de7",
+   "questionId": "34704459-d15d-4095-9dee-1871b0683829",
+   "priorityScore": 44,
+   "estimatedMinutes": 15,
+   "completed": false,
+   "completedAt": null,
+   "sortOrder": 9,
+   "reason": "高频题 · 22次考频 · 难度3",
+   "knowledgePointTitle": "颌骨骨折的诊断、处理原则",
+   "requirementLevel": "unmarked",
+   "examFrequency": 22,
+   "masteryScore": 0,
+   "lastReviewedAt": null,
+   "subjectName": "口腔颌面外科学",
+   "chapterPath": [
+    "第七章 口腔颌面部损伤"
+   ],
+   "chapterPaths": {
+    "examSyllabus": [
+     {
+      "id": "ba25ec01-e770-4d1b-bc8e-17014c29b754",
+      "title": "第七章 口腔颌面部损伤",
+      "level": 1
+     }
+    ],
+    "textbook": [
+     {
+      "id": "48412aea-65f5-49e9-a6c2-9223327c5d82",
+      "title": "口腔颌面外科学",
+      "level": 1
+     },
+     {
+      "id": "bcf30599-540d-4378-996f-b23f1e37b0ac",
+      "title": "第七章 口腔颌面部损伤",
+      "level": 2
+     },
+     {
+      "id": "59719ba3-39dc-44ae-98f0-9e4dceba6681",
+      "title": "第五节 颌骨骨折",
+      "level": 3
+     }
+    ]
+   },
+   "syllabusTitle": "颌骨骨折的诊断、处理原则",
+   "examYears": [
+    2026,
+    2025,
+    2024,
+    2023,
+    2022
+   ],
+   "latestExamYear": 2022,
+   "pendingQuestionCount": 5,
+   "pendingWrongCount": 0,
+   "isWeakMarked": false,
+   "questionText": "颌骨骨折治疗原则",
+   "questionType": "short_answer",
+   "questionSource": "首都医科大学",
+   "questionDifficulty": 3,
+   "questionAnswerCount": 0
+  },
+  {
+   "id": "eda9f21a-bbad-48ca-b4d3-efd1ab92895c",
+   "dailyPlanId": "acdd5078-3d41-41d2-a10f-7479ab9f18cc",
+   "itemType": "question_test",
+   "knowledgePointId": "08c3c662-7dbd-42a6-97ef-5d3c3f6188b2",
+   "questionId": "6050a1ec-adf1-48a4-ab40-a7775fb0930c",
+   "priorityScore": 44,
+   "estimatedMinutes": 15,
+   "completed": false,
+   "completedAt": null,
+   "sortOrder": 10,
+   "reason": "高频题 · 23次考频 · 难度3",
+   "knowledgePointTitle": "牙周病的局部促进因素",
+   "requirementLevel": "unmarked",
+   "examFrequency": 23,
+   "masteryScore": 0,
+   "lastReviewedAt": null,
+   "subjectName": "牙周病学",
+   "chapterPath": [
+    "二、牙周病的病因学及发病机制",
+    "2. 局部促进因素、全身易感因素"
+   ],
+   "chapterPaths": {
+    "examSyllabus": [
+     {
+      "id": "96b91d0d-04d3-483d-9814-2d5f12959377",
+      "title": "二、牙周病的病因学及发病机制",
+      "level": 1
+     },
+     {
+      "id": "55282924-e8e7-4732-99f1-0aa6d967b580",
+      "title": "2. 局部促进因素、全身易感因素",
+      "level": 2
+     }
+    ],
+    "textbook": [
+     {
+      "id": "43f03d75-a008-4423-a078-f9c9e0f81613",
+      "title": "第六章牙周病宿主的免疫炎症反应和促进因素",
+      "level": 2
+     },
+     {
+      "id": "6b60dd9d-2b64-4adc-bbee-3033bc66d50c",
+      "title": "第四节 牙周病的全身促进因素",
+      "level": 3
+     }
+    ]
+   },
+   "syllabusTitle": "2. 局部促进因素、全身易感因素",
+   "examYears": [
+    2025,
+    2024,
+    2023,
+    2022
+   ],
+   "latestExamYear": 2025,
+   "pendingQuestionCount": 4,
+   "pendingWrongCount": 0,
+   "isWeakMarked": false,
+   "questionText": "牙体牙髓病和牙周病的关系和对口腔健康影响",
+   "questionType": "short_answer",
+   "questionSource": "苏州大学",
+   "questionDifficulty": 3,
+   "questionAnswerCount": 0
+  },
+  {
+   "id": "0f83d10a-bfb7-404e-aae5-208260478a28",
+   "dailyPlanId": "acdd5078-3d41-41d2-a10f-7479ab9f18cc",
+   "itemType": "question_test",
+   "knowledgePointId": "08c3c662-7dbd-42a6-97ef-5d3c3f6188b2",
+   "questionId": "8bd0877d-ac6d-4ebf-8c3b-2cc84c13f0b3",
+   "priorityScore": 44,
+   "estimatedMinutes": 15,
+   "completed": false,
+   "completedAt": null,
+   "sortOrder": 11,
+   "reason": "高频题 · 23次考频 · 难度3",
+   "knowledgePointTitle": "牙周病的局部促进因素",
+   "requirementLevel": "unmarked",
+   "examFrequency": 23,
+   "masteryScore": 0,
+   "lastReviewedAt": null,
+   "subjectName": "牙周病学",
+   "chapterPath": [
+    "二、牙周病的病因学及发病机制",
+    "2. 局部促进因素、全身易感因素"
+   ],
+   "chapterPaths": {
+    "examSyllabus": [
+     {
+      "id": "96b91d0d-04d3-483d-9814-2d5f12959377",
+      "title": "二、牙周病的病因学及发病机制",
+      "level": 1
+     },
+     {
+      "id": "55282924-e8e7-4732-99f1-0aa6d967b580",
+      "title": "2. 局部促进因素、全身易感因素",
+      "level": 2
+     }
+    ],
+    "textbook": [
+     {
+      "id": "43f03d75-a008-4423-a078-f9c9e0f81613",
+      "title": "第六章牙周病宿主的免疫炎症反应和促进因素",
+      "level": 2
+     },
+     {
+      "id": "6b60dd9d-2b64-4adc-bbee-3033bc66d50c",
+      "title": "第四节 牙周病的全身促进因素",
+      "level": 3
+     }
+    ]
+   },
+   "syllabusTitle": "2. 局部促进因素、全身易感因素",
+   "examYears": [
+    2025,
+    2024,
+    2023,
+    2022
+   ],
+   "latestExamYear": 2025,
+   "pendingQuestionCount": 4,
+   "pendingWrongCount": 0,
+   "isWeakMarked": false,
+   "questionText": "牙周病转归危险因素",
+   "questionType": "short_answer",
+   "questionSource": "石河子大学",
+   "questionDifficulty": 3,
+   "questionAnswerCount": 0
+  },
+  {
+   "id": "62786846-45c6-41aa-93bf-49eb23479aac",
+   "dailyPlanId": "acdd5078-3d41-41d2-a10f-7479ab9f18cc",
+   "itemType": "question_test",
+   "knowledgePointId": "08c3c662-7dbd-42a6-97ef-5d3c3f6188b2",
+   "questionId": "8faf9646-9dd3-46df-8294-75ed5c64e708",
+   "priorityScore": 44,
+   "estimatedMinutes": 15,
+   "completed": false,
+   "completedAt": null,
+   "sortOrder": 12,
+   "reason": "高频题 · 23次考频 · 难度3",
+   "knowledgePointTitle": "牙周病的局部促进因素",
+   "requirementLevel": "unmarked",
+   "examFrequency": 23,
+   "masteryScore": 0,
+   "lastReviewedAt": null,
+   "subjectName": "牙周病学",
+   "chapterPath": [
+    "二、牙周病的病因学及发病机制",
+    "2. 局部促进因素、全身易感因素"
+   ],
+   "chapterPaths": {
+    "examSyllabus": [
+     {
+      "id": "96b91d0d-04d3-483d-9814-2d5f12959377",
+      "title": "二、牙周病的病因学及发病机制",
+      "level": 1
+     },
+     {
+      "id": "55282924-e8e7-4732-99f1-0aa6d967b580",
+      "title": "2. 局部促进因素、全身易感因素",
+      "level": 2
+     }
+    ],
+    "textbook": [
+     {
+      "id": "43f03d75-a008-4423-a078-f9c9e0f81613",
+      "title": "第六章牙周病宿主的免疫炎症反应和促进因素",
+      "level": 2
+     },
+     {
+      "id": "6b60dd9d-2b64-4adc-bbee-3033bc66d50c",
+      "title": "第四节 牙周病的全身促进因素",
+      "level": 3
+     }
+    ]
+   },
+   "syllabusTitle": "2. 局部促进因素、全身易感因素",
+   "examYears": [
+    2025,
+    2024,
+    2023,
+    2022
+   ],
+   "latestExamYear": 2025,
+   "pendingQuestionCount": 4,
+   "pendingWrongCount": 0,
+   "isWeakMarked": false,
+   "questionText": "牙周病基础治疗",
+   "questionType": "short_answer",
+   "questionSource": "皖南医学院",
+   "questionDifficulty": 3,
+   "questionAnswerCount": 0
+  },
+  {
+   "id": "2aa66911-4ba1-4dc8-bccd-92bec7327f3d",
+   "dailyPlanId": "acdd5078-3d41-41d2-a10f-7479ab9f18cc",
+   "itemType": "question_test",
+   "knowledgePointId": "08c3c662-7dbd-42a6-97ef-5d3c3f6188b2",
+   "questionId": "94f71aa7-0f4f-4562-940d-5cd1695fed87",
+   "priorityScore": 44,
+   "estimatedMinutes": 15,
+   "completed": false,
+   "completedAt": null,
+   "sortOrder": 13,
+   "reason": "高频题 · 23次考频 · 难度3",
+   "knowledgePointTitle": "牙周病的局部促进因素",
+   "requirementLevel": "unmarked",
+   "examFrequency": 23,
+   "masteryScore": 0,
+   "lastReviewedAt": null,
+   "subjectName": "牙周病学",
+   "chapterPath": [
+    "二、牙周病的病因学及发病机制",
+    "2. 局部促进因素、全身易感因素"
+   ],
+   "chapterPaths": {
+    "examSyllabus": [
+     {
+      "id": "96b91d0d-04d3-483d-9814-2d5f12959377",
+      "title": "二、牙周病的病因学及发病机制",
+      "level": 1
+     },
+     {
+      "id": "55282924-e8e7-4732-99f1-0aa6d967b580",
+      "title": "2. 局部促进因素、全身易感因素",
+      "level": 2
+     }
+    ],
+    "textbook": [
+     {
+      "id": "43f03d75-a008-4423-a078-f9c9e0f81613",
+      "title": "第六章牙周病宿主的免疫炎症反应和促进因素",
+      "level": 2
+     },
+     {
+      "id": "6b60dd9d-2b64-4adc-bbee-3033bc66d50c",
+      "title": "第四节 牙周病的全身促进因素",
+      "level": 3
+     }
+    ]
+   },
+   "syllabusTitle": "2. 局部促进因素、全身易感因素",
+   "examYears": [
+    2025,
+    2024,
+    2023,
+    2022
+   ],
+   "latestExamYear": 2025,
+   "pendingQuestionCount": 4,
+   "pendingWrongCount": 0,
+   "isWeakMarked": false,
+   "questionText": "牙周病与全身疾病和健康",
+   "questionType": "short_answer",
+   "questionSource": "贵州医科大学",
+   "questionDifficulty": 3,
+   "questionAnswerCount": 0
+  },
+  {
+   "id": "b66772a3-2702-4254-8c15-3e9c56354be5",
+   "dailyPlanId": "acdd5078-3d41-41d2-a10f-7479ab9f18cc",
+   "itemType": "question_test",
+   "knowledgePointId": "08c3c662-7dbd-42a6-97ef-5d3c3f6188b2",
+   "questionId": "994bfea2-5833-45e5-9cf1-eae70cd0d4d5",
+   "priorityScore": 44,
+   "estimatedMinutes": 15,
+   "completed": false,
+   "completedAt": null,
+   "sortOrder": 14,
+   "reason": "高频题 · 23次考频 · 难度3",
+   "knowledgePointTitle": "牙周病的局部促进因素",
+   "requirementLevel": "unmarked",
+   "examFrequency": 23,
+   "masteryScore": 0,
+   "lastReviewedAt": null,
+   "subjectName": "牙周病学",
+   "chapterPath": [
+    "二、牙周病的病因学及发病机制",
+    "2. 局部促进因素、全身易感因素"
+   ],
+   "chapterPaths": {
+    "examSyllabus": [
+     {
+      "id": "96b91d0d-04d3-483d-9814-2d5f12959377",
+      "title": "二、牙周病的病因学及发病机制",
+      "level": 1
+     },
+     {
+      "id": "55282924-e8e7-4732-99f1-0aa6d967b580",
+      "title": "2. 局部促进因素、全身易感因素",
+      "level": 2
+     }
+    ],
+    "textbook": [
+     {
+      "id": "43f03d75-a008-4423-a078-f9c9e0f81613",
+      "title": "第六章牙周病宿主的免疫炎症反应和促进因素",
+      "level": 2
+     },
+     {
+      "id": "6b60dd9d-2b64-4adc-bbee-3033bc66d50c",
+      "title": "第四节 牙周病的全身促进因素",
+      "level": 3
+     }
+    ]
+   },
+   "syllabusTitle": "2. 局部促进因素、全身易感因素",
+   "examYears": [
+    2025,
+    2024,
+    2023,
+    2022
+   ],
+   "latestExamYear": 2025,
+   "pendingQuestionCount": 4,
+   "pendingWrongCount": 0,
+   "isWeakMarked": false,
+   "questionText": "牙周病治疗的总体目标和治疗程序",
+   "questionType": "short_answer",
+   "questionSource": "重庆医科大学",
+   "questionDifficulty": 3,
+   "questionAnswerCount": 0
+  },
+  {
+   "id": "e2f45bb7-c34f-4bbe-b0ff-27dadad83e75",
+   "dailyPlanId": "acdd5078-3d41-41d2-a10f-7479ab9f18cc",
+   "itemType": "new_learning",
+   "knowledgePointId": "88ea04cc-ecb9-4c00-bde8-65e4873e30cb",
+   "questionId": null,
+   "priorityScore": 38,
+   "estimatedMinutes": 20,
+   "completed": false,
+   "completedAt": null,
+   "sortOrder": 15,
+   "reason": "大纲要求\"未标注\" · 5次真题",
+   "knowledgePointTitle": "早期矫治",
+   "requirementLevel": "unmarked",
+   "examFrequency": 5,
+   "masteryScore": 0,
+   "lastReviewedAt": null,
+   "subjectName": "口腔正畸学",
+   "chapterPath": [
+    "8. 常见错牙合畸形的治疗及保持",
+    "8.1 常见错牙合畸形的治疗"
+   ],
+   "chapterPaths": {
+    "examSyllabus": [
+     {
+      "id": "aa0a166b-96e5-41ee-8436-17f5ae827522",
+      "title": "8. 常见错牙合畸形的治疗及保持",
+      "level": 1
+     },
+     {
+      "id": "6f74d368-4430-495f-b1a7-fa770cb89cc5",
+      "title": "8.1 常见错牙合畸形的治疗",
+      "level": 2
+     }
+    ],
+    "textbook": [
+     {
+      "id": "e5df76d0-6c01-4adf-b055-cc0d69f64aea",
+      "title": "口腔正畸学",
+      "level": 1
+     },
+     {
+      "id": "56cd8f00-e663-48e9-9301-7f386c1f4240",
+      "title": "第八章 错牙合畸形的早期预防和矫治",
+      "level": 2
+     },
+     {
+      "id": "d0ba8fd4-e1eb-4c38-97ed-ab42e2884719",
+      "title": "二、早期预防及预防性矫治",
+      "level": 3
+     }
+    ]
+   },
+   "syllabusTitle": "8.1 常见错牙合畸形的治疗",
+   "examYears": [
+    2025,
+    2022
+   ],
+   "latestExamYear": 2025,
+   "pendingQuestionCount": 2,
+   "pendingWrongCount": 0,
+   "isWeakMarked": false
+  },
+  {
+   "id": "35bac0a8-48d7-4ee2-a2de-ba643f977347",
+   "dailyPlanId": "acdd5078-3d41-41d2-a10f-7479ab9f18cc",
+   "itemType": "new_learning",
+   "knowledgePointId": "f0d1d128-888e-4228-a0eb-d2457d9e2118",
+   "questionId": null,
+   "priorityScore": 37,
+   "estimatedMinutes": 20,
+   "completed": false,
+   "completedAt": null,
+   "sortOrder": 16,
+   "reason": "大纲要求\"未标注\" · 3次真题",
+   "knowledgePointTitle": "口腔修复学的定义与任务、工作内容、发展趋势",
+   "requirementLevel": "unmarked",
+   "examFrequency": 3,
+   "masteryScore": 0,
+   "lastReviewedAt": null,
+   "subjectName": "口腔修复学",
+   "chapterPath": [
+    "一、口腔修复学总论"
+   ],
+   "chapterPaths": {
+    "examSyllabus": [
+     {
+      "id": "cca8282e-e1fc-404d-81e7-cffb5117215c",
+      "title": "一、口腔修复学总论",
+      "level": 1
+     }
+    ],
+    "textbook": [
+     {
+      "id": "882033c1-d390-494b-8a20-a9a938f7fd32",
+      "title": "口腔修复学",
+      "level": 1
+     },
+     {
+      "id": "beac3b46-552b-43b5-b50b-4b55ccdfbc01",
+      "title": "第一章 绪论",
+      "level": 2
+     },
+     {
+      "id": "2a138888-6971-45ed-b531-fccefa9320ae",
+      "title": "第二节 口腔修复学的发展和展望",
+      "level": 3
+     }
+    ]
+   },
+   "syllabusTitle": "口腔修复学的定义与任务、工作内容、发展趋势",
+   "examYears": [
+    2024,
+    2022
+   ],
+   "latestExamYear": 2024,
+   "pendingQuestionCount": 2,
+   "pendingWrongCount": 0,
+   "isWeakMarked": false
+  },
+  {
+   "id": "a7f3672f-288c-42bc-916d-6f78588603dc",
+   "dailyPlanId": "acdd5078-3d41-41d2-a10f-7479ab9f18cc",
+   "itemType": "new_learning",
+   "knowledgePointId": "4403e028-fd69-4773-8f23-c4043da6ba05",
+   "questionId": null,
+   "priorityScore": 37,
+   "estimatedMinutes": 20,
+   "completed": false,
+   "completedAt": null,
+   "sortOrder": 17,
+   "reason": "大纲要求\"未标注\" · 4次真题",
+   "knowledgePointTitle": "嵌体修复的适应症及牙体预备原则",
+   "requirementLevel": "unmarked",
+   "examFrequency": 4,
+   "masteryScore": 0,
+   "lastReviewedAt": null,
+   "subjectName": "口腔修复学",
+   "chapterPath": [
+    "二、牙体缺损"
+   ],
+   "chapterPaths": {
+    "examSyllabus": [
+     {
+      "id": "524893b3-e361-41d1-9aa0-3bba56292c17",
+      "title": "二、牙体缺损",
+      "level": 1
+     }
+    ],
+    "textbook": [
+     {
+      "id": "882033c1-d390-494b-8a20-a9a938f7fd32",
+      "title": "口腔修复学",
+      "level": 1
+     },
+     {
+      "id": "f1fcba26-4988-41ae-89b1-6ded8b0ab231",
+      "title": "第三章 牙体缺损的修复",
+      "level": 2
+     },
+     {
+      "id": "b018a28d-115f-49b6-8baa-0ce181a6204c",
+      "title": "第二节 牙体缺损的修复原则",
+      "level": 3
+     }
+    ]
+   },
+   "examYears": [
+    2025,
+    2023,
+    2022
+   ],
+   "latestExamYear": 2025,
+   "pendingQuestionCount": 3,
+   "pendingWrongCount": 0,
+   "isWeakMarked": false
+  },
+  {
+   "id": "24f173fd-d299-4b88-9456-0b00e0db899a",
+   "dailyPlanId": "acdd5078-3d41-41d2-a10f-7479ab9f18cc",
+   "itemType": "new_learning",
+   "knowledgePointId": "dbbf73da-097d-41a3-939e-a2f1c1d0ac01",
+   "questionId": null,
+   "priorityScore": 37,
+   "estimatedMinutes": 20,
+   "completed": false,
+   "completedAt": null,
+   "sortOrder": 18,
+   "reason": "大纲要求\"未标注\" · 3次真题",
+   "knowledgePointTitle": "可摘局部义齿共同就位道的选择原则",
+   "requirementLevel": "unmarked",
+   "examFrequency": 3,
+   "masteryScore": 0,
+   "lastReviewedAt": null,
+   "subjectName": "口腔修复学",
+   "chapterPath": [
+    "五、可摘局部义齿"
+   ],
+   "chapterPaths": {
+    "examSyllabus": [
+     {
+      "id": "663b2d44-b7de-4ffd-8ec8-0d6b0dc92d83",
+      "title": "五、可摘局部义齿",
+      "level": 1
+     }
+    ],
+    "textbook": [
+     {
+      "id": "882033c1-d390-494b-8a20-a9a938f7fd32",
+      "title": "口腔修复学",
+      "level": 1
+     },
+     {
+      "id": "09dce94c-1515-4390-a57a-609a4c62e3af",
+      "title": "第五章 牙列缺损的可摘局部义齿修复",
+      "level": 2
+     },
+     {
+      "id": "4169c09b-d7c7-4e74-b7b0-3afc12f82c9e",
+      "title": "第五节 可摘局部义齿的设计",
+      "level": 3
+     }
+    ]
+   },
+   "examYears": [
+    2023,
+    2022
+   ],
+   "latestExamYear": 2023,
+   "pendingQuestionCount": 2,
+   "pendingWrongCount": 0,
+   "isWeakMarked": false
+  },
+  {
+   "id": "d4fba84e-7a86-4896-a228-ef6e9978be57",
+   "dailyPlanId": "acdd5078-3d41-41d2-a10f-7479ab9f18cc",
+   "itemType": "new_learning",
+   "knowledgePointId": "ee7530b2-0a98-41f1-a68e-403eacfa04ab",
+   "questionId": null,
+   "priorityScore": 37,
+   "estimatedMinutes": 20,
+   "completed": false,
+   "completedAt": null,
+   "sortOrder": 19,
+   "reason": "大纲要求\"未标注\" · 3次真题",
+   "knowledgePointTitle": "义齿性口炎的病因、临床表现及治疗原则",
+   "requirementLevel": "unmarked",
+   "examFrequency": 3,
+   "masteryScore": 0,
+   "lastReviewedAt": null,
+   "subjectName": "口腔修复学",
+   "chapterPath": [
+    "六、全口义齿"
+   ],
+   "chapterPaths": {
+    "examSyllabus": [
+     {
+      "id": "650006b5-ba73-4866-9535-0955a76f869c",
+      "title": "六、全口义齿",
+      "level": 1
+     }
+    ],
+    "textbook": [
+     {
+      "id": "882033c1-d390-494b-8a20-a9a938f7fd32",
+      "title": "口腔修复学",
+      "level": 1
+     },
+     {
+      "id": "09dce94c-1515-4390-a57a-609a4c62e3af",
+      "title": "第五章 牙列缺损的可摘局部义齿修复",
+      "level": 2
+     }
+    ]
+   },
+   "examYears": [
+    2025,
+    2024,
+    2023
+   ],
+   "latestExamYear": 2025,
+   "pendingQuestionCount": 3,
+   "pendingWrongCount": 0,
+   "isWeakMarked": false
+  },
+  {
+   "id": "11912ad5-c6be-443b-86c6-00c93faebe37",
+   "dailyPlanId": "acdd5078-3d41-41d2-a10f-7479ab9f18cc",
+   "itemType": "new_learning",
+   "knowledgePointId": "916716c7-328d-43c6-b1d7-617f44e87d78",
+   "questionId": null,
+   "priorityScore": 37,
+   "estimatedMinutes": 20,
+   "completed": false,
+   "completedAt": null,
+   "sortOrder": 20,
+   "reason": "大纲要求\"未标注\" · 3次真题",
+   "knowledgePointTitle": "可摘义齿就位道选择的模型倾斜方法",
+   "requirementLevel": "unmarked",
+   "examFrequency": 3,
+   "masteryScore": 0,
+   "lastReviewedAt": null,
+   "subjectName": "口腔修复学",
+   "chapterPath": [
+    "五、可摘局部义齿"
+   ],
+   "chapterPaths": {
+    "examSyllabus": [
+     {
+      "id": "663b2d44-b7de-4ffd-8ec8-0d6b0dc92d83",
+      "title": "五、可摘局部义齿",
+      "level": 1
+     }
+    ],
+    "textbook": [
+     {
+      "id": "882033c1-d390-494b-8a20-a9a938f7fd32",
+      "title": "口腔修复学",
+      "level": 1
+     },
+     {
+      "id": "09dce94c-1515-4390-a57a-609a4c62e3af",
+      "title": "第五章 牙列缺损的可摘局部义齿修复",
+      "level": 2
+     },
+     {
+      "id": "4df55303-c2d5-4d0b-bd4e-ac3ececb3df8",
+      "title": "第三节 可摘局部义齿的模型观测",
+      "level": 3
+     }
+    ]
+   },
+   "examYears": [
+    2025,
+    2024,
+    2022
+   ],
+   "latestExamYear": 2025,
+   "pendingQuestionCount": 3,
+   "pendingWrongCount": 0,
+   "isWeakMarked": false
+  },
+  {
+   "id": "434137aa-ddc6-41d0-8264-cb465e90ff9b",
+   "dailyPlanId": "acdd5078-3d41-41d2-a10f-7479ab9f18cc",
+   "itemType": "new_learning",
+   "knowledgePointId": "d4767edc-e0d6-408a-b647-b434f98c10dd",
+   "questionId": null,
+   "priorityScore": 37,
+   "estimatedMinutes": 20,
+   "completed": false,
+   "completedAt": null,
+   "sortOrder": 21,
+   "reason": "大纲要求\"未标注\" · 4次真题",
+   "knowledgePointTitle": "下颌骨骨折的临床表现",
+   "requirementLevel": "unmarked",
+   "examFrequency": 4,
+   "masteryScore": 0,
+   "lastReviewedAt": null,
+   "subjectName": "口腔颌面外科学",
+   "chapterPath": [
+    "第七章 口腔颌面部损伤"
+   ],
+   "chapterPaths": {
+    "examSyllabus": [
+     {
+      "id": "ba25ec01-e770-4d1b-bc8e-17014c29b754",
+      "title": "第七章 口腔颌面部损伤",
+      "level": 1
+     }
+    ],
+    "textbook": [
+     {
+      "id": "48412aea-65f5-49e9-a6c2-9223327c5d82",
+      "title": "口腔颌面外科学",
+      "level": 1
+     },
+     {
+      "id": "bcf30599-540d-4378-996f-b23f1e37b0ac",
+      "title": "第七章 口腔颌面部损伤",
+      "level": 2
+     },
+     {
+      "id": "59719ba3-39dc-44ae-98f0-9e4dceba6681",
+      "title": "第五节 颌骨骨折",
+      "level": 3
+     }
+    ]
+   },
+   "examYears": [
+    2025,
+    2022
+   ],
+   "latestExamYear": 2025,
+   "pendingQuestionCount": 2,
+   "pendingWrongCount": 0,
+   "isWeakMarked": false
+  },
+  {
+   "id": "0c8f4b26-2613-4843-a5f0-03b5d8afe67b",
+   "dailyPlanId": "acdd5078-3d41-41d2-a10f-7479ab9f18cc",
+   "itemType": "new_learning",
+   "knowledgePointId": "cd200c19-901e-471f-aeb1-ca2ffeb46ac8",
+   "questionId": null,
+   "priorityScore": 37,
+   "estimatedMinutes": 20,
+   "completed": false,
+   "completedAt": null,
+   "sortOrder": 22,
+   "reason": "大纲要求\"未标注\" · 4次真题",
+   "knowledgePointTitle": "感染创口的处理原则",
+   "requirementLevel": "unmarked",
+   "examFrequency": 4,
+   "masteryScore": 0,
+   "lastReviewedAt": null,
+   "subjectName": "口腔颌面外科学",
+   "chapterPath": [
+    "第六章 口腔颌面部感染"
+   ],
+   "chapterPaths": {
+    "examSyllabus": [
+     {
+      "id": "05b8d043-99e4-44e4-8825-e32f4e833a2f",
+      "title": "第六章 口腔颌面部感染",
+      "level": 1
+     }
+    ],
+    "textbook": [
+     {
+      "id": "48412aea-65f5-49e9-a6c2-9223327c5d82",
+      "title": "口腔颌面外科学",
+      "level": 1
+     },
+     {
+      "id": "6c91793c-c439-4af2-9eed-5b8e3eee016b",
+      "title": "第二章 口腔颌面外科基础知识与基本操作",
+      "level": 2
+     },
+     {
+      "id": "47df8f60-0808-4323-a652-4220bc221c7e",
+      "title": "第五节 创口处理",
+      "level": 3
+     }
+    ]
+   },
+   "examYears": [
+    2025,
+    2023,
+    2022
+   ],
+   "latestExamYear": 2025,
+   "pendingQuestionCount": 3,
+   "pendingWrongCount": 0,
+   "isWeakMarked": false
+  },
+  {
+   "id": "8beb25bd-5abb-4765-955d-54b6a5d62d48",
+   "dailyPlanId": "acdd5078-3d41-41d2-a10f-7479ab9f18cc",
+   "itemType": "new_learning",
+   "knowledgePointId": "b5fb3654-777a-47e7-8c5d-71b73cc1e5c2",
+   "questionId": null,
+   "priorityScore": 37,
+   "estimatedMinutes": 20,
+   "completed": false,
+   "completedAt": null,
+   "sortOrder": 23,
+   "reason": "大纲要求\"未标注\" · 3次真题",
+   "knowledgePointTitle": "拔牙术后继发性出血的原因及防治",
+   "requirementLevel": "unmarked",
+   "examFrequency": 3,
+   "masteryScore": 0,
+   "lastReviewedAt": null,
+   "subjectName": "口腔颌面外科学",
+   "chapterPath": [
+    "第四章 牙及牙槽外科"
+   ],
+   "chapterPaths": {
+    "examSyllabus": [
+     {
+      "id": "c993482d-b4e2-4a42-8892-7dc3ce39c5a7",
+      "title": "第四章 牙及牙槽外科",
+      "level": 1
+     }
+    ],
+    "textbook": [
+     {
+      "id": "48412aea-65f5-49e9-a6c2-9223327c5d82",
+      "title": "口腔颌面外科学",
+      "level": 1
+     },
+     {
+      "id": "8c974e71-632b-4e89-8b04-d081b1c10c8b",
+      "title": "第四章 牙及牙槽外科",
+      "level": 2
+     }
+    ]
+   },
+   "examYears": [
+    2025,
+    2022
+   ],
+   "latestExamYear": 2025,
+   "pendingQuestionCount": 2,
+   "pendingWrongCount": 0,
+   "isWeakMarked": false
+  },
+  {
+   "id": "e0dfbbcd-21bc-4b21-ba7a-80ab8d529e84",
+   "dailyPlanId": "acdd5078-3d41-41d2-a10f-7479ab9f18cc",
+   "itemType": "new_learning",
+   "knowledgePointId": "d7c95649-5baf-49e0-8335-19f3c12f7587",
+   "questionId": null,
+   "priorityScore": 37,
+   "estimatedMinutes": 20,
+   "completed": false,
+   "completedAt": null,
+   "sortOrder": 24,
+   "reason": "大纲要求\"未标注\" · 4次真题",
+   "knowledgePointTitle": "成釉细胞瘤与牙源性颌骨囊肿的鉴别要点",
+   "requirementLevel": "unmarked",
+   "examFrequency": 4,
+   "masteryScore": 0,
+   "lastReviewedAt": null,
+   "subjectName": "口腔颌面外科学",
+   "chapterPath": [
+    "第八章 口腔颌面部肿瘤"
+   ],
+   "chapterPaths": {
+    "examSyllabus": [
+     {
+      "id": "b92976bf-abe7-4d89-aa8f-a2516d349ce4",
+      "title": "第八章 口腔颌面部肿瘤",
+      "level": 1
+     }
+    ],
+    "textbook": [
+     {
+      "id": "48412aea-65f5-49e9-a6c2-9223327c5d82",
+      "title": "口腔颌面外科学",
+      "level": 1
+     },
+     {
+      "id": "645b606d-1716-46a6-8f42-94778d9ed183",
+      "title": "第八章 口腔颌面部肿瘤",
+      "level": 2
+     }
+    ]
+   },
+   "examYears": [
+    2025,
+    2022
+   ],
+   "latestExamYear": 2025,
+   "pendingQuestionCount": 2,
+   "pendingWrongCount": 0,
+   "isWeakMarked": false
+  },
+  {
+   "id": "b954166e-9e3b-4faf-a179-436df46dea21",
+   "dailyPlanId": "acdd5078-3d41-41d2-a10f-7479ab9f18cc",
+   "itemType": "new_learning",
+   "knowledgePointId": "3181000c-91ed-422a-9841-53d353b1aed7",
+   "questionId": null,
+   "priorityScore": 37,
+   "estimatedMinutes": 20,
+   "completed": false,
+   "completedAt": null,
+   "sortOrder": 25,
+   "reason": "大纲要求\"未标注\" · 4次真题",
+   "knowledgePointTitle": "双侧髁突颈部骨折的临床表现",
+   "requirementLevel": "unmarked",
+   "examFrequency": 4,
+   "masteryScore": 0,
+   "lastReviewedAt": null,
+   "subjectName": "口腔颌面外科学",
+   "chapterPath": [
+    "第七章 口腔颌面部损伤"
+   ],
+   "chapterPaths": {
+    "examSyllabus": [
+     {
+      "id": "ba25ec01-e770-4d1b-bc8e-17014c29b754",
+      "title": "第七章 口腔颌面部损伤",
+      "level": 1
+     }
+    ],
+    "textbook": [
+     {
+      "id": "48412aea-65f5-49e9-a6c2-9223327c5d82",
+      "title": "口腔颌面外科学",
+      "level": 1
+     },
+     {
+      "id": "bcf30599-540d-4378-996f-b23f1e37b0ac",
+      "title": "第七章 口腔颌面部损伤",
+      "level": 2
+     }
+    ]
+   },
+   "examYears": [
+    2025,
+    2022
+   ],
+   "latestExamYear": 2025,
+   "pendingQuestionCount": 2,
+   "pendingWrongCount": 0,
+   "isWeakMarked": false
+  },
+  {
+   "id": "cd4317a0-f1ed-46d2-8b98-e0d51b971c17",
+   "dailyPlanId": "acdd5078-3d41-41d2-a10f-7479ab9f18cc",
+   "itemType": "new_learning",
+   "knowledgePointId": "ebc76968-ec98-4cc6-96c9-d7965f52033f",
+   "questionId": null,
+   "priorityScore": 37,
+   "estimatedMinutes": 20,
+   "completed": false,
+   "completedAt": null,
+   "sortOrder": 26,
+   "reason": "大纲要求\"未标注\" · 4次真题",
+   "knowledgePointTitle": "充填治疗后继发龋产生的原因",
+   "requirementLevel": "unmarked",
+   "examFrequency": 4,
+   "masteryScore": 0,
+   "lastReviewedAt": null,
+   "subjectName": "牙体牙髓病学",
+   "chapterPath": [
+    "一、龋病",
+    "3. 治疗"
+   ],
+   "chapterPaths": {
+    "examSyllabus": [
+     {
+      "id": "1c02c98a-6c7a-47d2-9d51-184f812f8875",
+      "title": "一、龋病",
+      "level": 1
+     },
+     {
+      "id": "aabc0be8-8ae1-4145-8a18-5aad918fcad8",
+      "title": "3. 治疗",
+      "level": 2
+     }
+    ],
+    "textbook": [
+     {
+      "id": "9046fd49-5eb4-45de-a4a7-9b34fde62479",
+      "title": "第十三章 深龋治疗与盖髓术",
+      "level": 3
+     },
+     {
+      "id": "3ea8ed41-645a-4710-9b0c-7ebc627b60d2",
+      "title": "第一节 深龋的治疗",
+      "level": 4
+     }
+    ]
+   },
+   "syllabusTitle": "3. 治疗",
+   "examYears": [
+    2025,
+    2021
+   ],
+   "latestExamYear": 2025,
+   "pendingQuestionCount": 2,
+   "pendingWrongCount": 0,
+   "isWeakMarked": false
+  },
+  {
+   "id": "8280eb42-cea7-4108-9eac-7b9a218b8259",
+   "dailyPlanId": "acdd5078-3d41-41d2-a10f-7479ab9f18cc",
+   "itemType": "new_learning",
+   "knowledgePointId": "4f07ed47-e3bb-4733-a27f-fd40c26281fe",
+   "questionId": null,
+   "priorityScore": 37,
+   "estimatedMinutes": 20,
+   "completed": false,
+   "completedAt": null,
+   "sortOrder": 27,
+   "reason": "大纲要求\"未标注\" · 3次真题",
+   "knowledgePointTitle": "楔状缺损的病因及防治原则",
+   "requirementLevel": "unmarked",
+   "examFrequency": 3,
+   "masteryScore": 0,
+   "lastReviewedAt": null,
+   "subjectName": "牙体牙髓病学",
+   "chapterPath": [
+    "二、牙体硬组织非龋性疾病",
+    "3. 牙慢性损伤"
+   ],
+   "chapterPaths": {
+    "examSyllabus": [
+     {
+      "id": "b70901a7-cabc-4f59-870a-9479dcabc992",
+      "title": "二、牙体硬组织非龋性疾病",
+      "level": 1
+     },
+     {
+      "id": "61a5fd54-e2d2-436b-ba90-e05a75dbed53",
+      "title": "3. 牙慢性损伤",
+      "level": 2
+     }
+    ],
+    "textbook": [
+     {
+      "id": "36e9152b-2c2c-4118-b36c-906a739a653e",
+      "title": "第七章 牙慢性损伤",
+      "level": 3
+     },
+     {
+      "id": "f7d70cb2-a4f1-475b-83cb-b403d2a41ea8",
+      "title": "第三节 楔状缺损",
+      "level": 4
+     }
+    ]
+   },
+   "syllabusTitle": "3. 牙慢性损伤",
+   "examYears": [
+    2025,
+    2022
+   ],
+   "latestExamYear": 2025,
+   "pendingQuestionCount": 2,
+   "pendingWrongCount": 0,
+   "isWeakMarked": false
+  },
+  {
+   "id": "aa551b2b-54b9-4483-b392-0af873fd1dd4",
+   "dailyPlanId": "acdd5078-3d41-41d2-a10f-7479ab9f18cc",
+   "itemType": "new_learning",
+   "knowledgePointId": "5f89dc59-a534-40f8-86f2-1b8e4544586e",
+   "questionId": null,
+   "priorityScore": 37,
+   "estimatedMinutes": 20,
+   "completed": false,
+   "completedAt": null,
+   "sortOrder": 28,
+   "reason": "大纲要求\"未标注\" · 3次真题",
+   "knowledgePointTitle": "龋病修复治疗：窝洞预备原则、方法和充填",
+   "requirementLevel": "unmarked",
+   "examFrequency": 3,
+   "masteryScore": 0,
+   "lastReviewedAt": null,
+   "subjectName": "牙体牙髓病学",
+   "chapterPath": [
+    "一、龋病",
+    "3. 治疗"
+   ],
+   "chapterPaths": {
+    "examSyllabus": [
+     {
+      "id": "1c02c98a-6c7a-47d2-9d51-184f812f8875",
+      "title": "一、龋病",
+      "level": 1
+     },
+     {
+      "id": "aabc0be8-8ae1-4145-8a18-5aad918fcad8",
+      "title": "3. 治疗",
+      "level": 2
+     }
+    ],
+    "textbook": [
+     {
+      "id": "c6068e38-a4f6-4f2d-b22b-9435dedfa5ac",
+      "title": "第八章 牙本质敏感症",
+      "level": 3
+     },
+     {
+      "id": "f7b7edd7-1b83-4d6d-b97b-91e7cf4ee8f4",
+      "title": "五、治疗原则和方法",
+      "level": 4
+     }
+    ]
+   },
+   "syllabusTitle": "3. 治疗",
+   "examYears": [
+    2024,
+    2023,
+    2022
+   ],
+   "latestExamYear": 2024,
+   "pendingQuestionCount": 3,
+   "pendingWrongCount": 0,
+   "isWeakMarked": false
+  },
+  {
+   "id": "9a67aac4-bebe-445f-aeb5-8b27f6e9570a",
+   "dailyPlanId": "acdd5078-3d41-41d2-a10f-7479ab9f18cc",
+   "itemType": "new_learning",
+   "knowledgePointId": "e6ba3e29-925b-4614-b521-5492cda40d18",
+   "questionId": null,
+   "priorityScore": 37,
+   "estimatedMinutes": 20,
+   "completed": false,
+   "completedAt": null,
+   "sortOrder": 29,
+   "reason": "大纲要求\"未标注\" · 3次真题",
+   "knowledgePointTitle": "根管再治疗的适应证、操作步骤、预后及疗效判断",
+   "requirementLevel": "unmarked",
+   "examFrequency": 3,
+   "masteryScore": 0,
+   "lastReviewedAt": null,
+   "subjectName": "牙体牙髓病学",
+   "chapterPath": [
+    "三、牙髓和根尖周病",
+    "6. 根管治疗术"
+   ],
+   "chapterPaths": {
+    "examSyllabus": [
+     {
+      "id": "56e90b7c-695a-4e79-9ffd-08246eb81746",
+      "title": "三、牙髓和根尖周病",
+      "level": 1
+     },
+     {
+      "id": "c6e38daf-4fb8-44c1-85c9-f16db02a7299",
+      "title": "6. 根管治疗术",
+      "level": 2
+     }
+    ],
+    "textbook": [
+     {
+      "id": "317d30f0-3a3b-4a0b-947c-bdd46829dd54",
+      "title": "第二十五章 根管治疗并发症及根管再治疗",
+      "level": 3
+     },
+     {
+      "id": "86b699c9-6b10-4203-aae2-764245163300",
+      "title": "第二节 根管再治疗",
+      "level": 4
+     }
+    ]
+   },
+   "syllabusTitle": "6. 根管治疗术",
+   "examYears": [
+    2025,
+    2023,
+    2022
+   ],
+   "latestExamYear": 2025,
+   "pendingQuestionCount": 3,
+   "pendingWrongCount": 0,
+   "isWeakMarked": false
+  },
+  {
+   "id": "c28fe05d-d2f2-4cf8-a72e-eaca44231ab6",
+   "dailyPlanId": "acdd5078-3d41-41d2-a10f-7479ab9f18cc",
+   "itemType": "new_learning",
+   "knowledgePointId": "9764dba7-f510-4df2-b71e-21f6d79eab7b",
+   "questionId": null,
+   "priorityScore": 37,
+   "estimatedMinutes": 20,
+   "completed": false,
+   "completedAt": null,
+   "sortOrder": 30,
+   "reason": "大纲要求\"未标注\" · 3次真题",
+   "knowledgePointTitle": "根尖片检测根充物质量及影像分类",
+   "requirementLevel": "unmarked",
+   "examFrequency": 3,
+   "masteryScore": 0,
+   "lastReviewedAt": null,
+   "subjectName": "牙体牙髓病学",
+   "chapterPath": [
+    "三、牙髓和根尖周病",
+    "3. 分类"
+   ],
+   "chapterPaths": {
+    "examSyllabus": [
+     {
+      "id": "56e90b7c-695a-4e79-9ffd-08246eb81746",
+      "title": "三、牙髓和根尖周病",
+      "level": 1
+     },
+     {
+      "id": "1f180af3-a605-49de-b9da-1602ee0efc38",
+      "title": "3. 分类",
+      "level": 2
+     }
+    ],
+    "textbook": [
+     {
+      "id": "e566ea25-7724-4053-b1ac-ca9aa2fdbfb4",
+      "title": "第十六章 牙髓病的临床表现及诊断",
+      "level": 3
+     },
+     {
+      "id": "f32e167c-8905-45aa-ba64-d04b7a0cd46d",
+      "title": "第一节 分类",
+      "level": 4
+     }
+    ]
+   },
+   "syllabusTitle": "3. 分类",
+   "examYears": [
+    2024,
+    2023
+   ],
+   "latestExamYear": 2024,
+   "pendingQuestionCount": 2,
+   "pendingWrongCount": 0,
+   "isWeakMarked": false
+  },
+  {
+   "id": "b3b3811d-63e0-43f3-918c-31b63178a3cb",
+   "dailyPlanId": "acdd5078-3d41-41d2-a10f-7479ab9f18cc",
+   "itemType": "new_learning",
+   "knowledgePointId": "7ffeda20-3d7d-4f6e-8393-b8d87db3c60d",
+   "questionId": null,
+   "priorityScore": 37,
+   "estimatedMinutes": 20,
+   "completed": false,
+   "completedAt": null,
+   "sortOrder": 31,
+   "reason": "大纲要求\"未标注\" · 3次真题",
+   "knowledgePointTitle": "牙尖交错位的特点及影响因素",
+   "requirementLevel": "unmarked",
+   "examFrequency": 3,
+   "masteryScore": 0,
+   "lastReviewedAt": null,
+   "subjectName": "口腔解剖生理学",
+   "chapterPath": [
+    "第三章 牙列、牙合与颌位"
+   ],
+   "chapterPaths": {
+    "examSyllabus": [
+     {
+      "id": "f856ef9b-4662-4865-bae1-0c6e20fde3a8",
+      "title": "第三章 牙列、牙合与颌位",
+      "level": 1
+     }
+    ],
+    "textbook": [
+     {
+      "id": "85e56f0a-94a2-485f-8c4b-fcef5e8aad33",
+      "title": "口腔解剖生理学",
+      "level": 1
+     },
+     {
+      "id": "eb975db1-5939-4ad6-92f9-8d12f92c1dea",
+      "title": "第三章 牙列、牙合与颌位",
+      "level": 2
+     }
+    ]
+   },
+   "syllabusTitle": "第三章 牙列、牙合与颌位",
+   "examYears": [
+    2026,
+    2023,
+    2022
+   ],
+   "latestExamYear": 2026,
+   "pendingQuestionCount": 3,
+   "pendingWrongCount": 0,
+   "isWeakMarked": false
+  },
+  {
+   "id": "c01a0088-d9ee-4461-85d4-6d3155edcd89",
+   "dailyPlanId": "acdd5078-3d41-41d2-a10f-7479ab9f18cc",
+   "itemType": "new_learning",
+   "knowledgePointId": "cccf1f1d-4121-40ea-9b22-9887bda349f1",
+   "questionId": null,
+   "priorityScore": 37,
+   "estimatedMinutes": 20,
+   "completed": false,
+   "completedAt": null,
+   "sortOrder": 32,
+   "reason": "大纲要求\"未标注\" · 3次真题",
+   "knowledgePointTitle": "腮腺淋巴回流及颈淋巴干",
+   "requirementLevel": "unmarked",
+   "examFrequency": 3,
+   "masteryScore": 0,
+   "lastReviewedAt": null,
+   "subjectName": "口腔解剖生理学",
+   "chapterPath": [
+    "第四章 第六节 淋巴结和淋巴管"
+   ],
+   "chapterPaths": {
+    "examSyllabus": [
+     {
+      "id": "78e35d34-8a5f-41c0-8772-5606ded72c98",
+      "title": "第四章 第六节 淋巴结和淋巴管",
+      "level": 1
+     }
+    ],
+    "textbook": [
+     {
+      "id": "85e56f0a-94a2-485f-8c4b-fcef5e8aad33",
+      "title": "口腔解剖生理学",
+      "level": 1
+     },
+     {
+      "id": "f89df732-329c-477f-b024-4949e54e04fb",
+      "title": "第四章 口腔颌面颈部系统解剖",
+      "level": 2
+     }
+    ]
+   },
+   "syllabusTitle": "第四章 第六节 淋巴结和淋巴管",
+   "examYears": [
+    2025,
+    2024,
+    2022
+   ],
+   "latestExamYear": 2025,
+   "pendingQuestionCount": 3,
+   "pendingWrongCount": 0,
+   "isWeakMarked": false
+  },
+  {
+   "id": "171b883e-6d49-4b58-a2c4-13868309c80d",
+   "dailyPlanId": "acdd5078-3d41-41d2-a10f-7479ab9f18cc",
+   "itemType": "new_learning",
+   "knowledgePointId": "90bed7eb-ecc1-4af2-a951-a94762bbf5aa",
+   "questionId": null,
+   "priorityScore": 37,
+   "estimatedMinutes": 20,
+   "completed": false,
+   "completedAt": null,
+   "sortOrder": 33,
+   "reason": "大纲要求\"未标注\" · 4次真题",
+   "knowledgePointTitle": "颞下颌关节的构成、血供及神经支配",
+   "requirementLevel": "unmarked",
+   "examFrequency": 4,
+   "masteryScore": 0,
+   "lastReviewedAt": null,
+   "subjectName": "口腔解剖生理学",
+   "chapterPath": [
+    "第四章 第二节 颞下颌关节"
+   ],
+   "chapterPaths": {
+    "examSyllabus": [
+     {
+      "id": "f0c22ddf-2403-4ea1-b4c3-458a818c1228",
+      "title": "第四章 第二节 颞下颌关节",
+      "level": 1
+     }
+    ],
+    "textbook": [
+     {
+      "id": "85e56f0a-94a2-485f-8c4b-fcef5e8aad33",
+      "title": "口腔解剖生理学",
+      "level": 1
+     },
+     {
+      "id": "f89df732-329c-477f-b024-4949e54e04fb",
+      "title": "第四章 口腔颌面颈部系统解剖",
+      "level": 2
+     },
+     {
+      "id": "6857ecc6-6b2f-4ee1-8a2f-3720de70e705",
+      "title": "第二节 颞下颌关节",
+      "level": 3
+     }
+    ]
+   },
+   "syllabusTitle": "第四章 第二节 颞下颌关节",
+   "examYears": [
+    2025,
+    2024
+   ],
+   "latestExamYear": 2025,
+   "pendingQuestionCount": 2,
+   "pendingWrongCount": 0,
+   "isWeakMarked": false
+  },
+  {
+   "id": "f7101f49-3362-4eaa-b7ee-8d22bd10998d",
+   "dailyPlanId": "acdd5078-3d41-41d2-a10f-7479ab9f18cc",
+   "itemType": "new_learning",
+   "knowledgePointId": "6f046399-edff-4d54-8668-fa058b96fa51",
+   "questionId": null,
+   "priorityScore": 37,
+   "estimatedMinutes": 20,
+   "completed": false,
+   "completedAt": null,
+   "sortOrder": 34,
+   "reason": "大纲要求\"未标注\" · 4次真题",
+   "knowledgePointTitle": "口腔白斑的组织病理特点及分级",
+   "requirementLevel": "unmarked",
+   "examFrequency": 4,
+   "masteryScore": 0,
+   "lastReviewedAt": null,
+   "subjectName": "口腔黏膜病学",
+   "chapterPath": [
+    "三、斑纹类疾病",
+    "1. 口腔白斑病"
+   ],
+   "chapterPaths": {
+    "examSyllabus": [
+     {
+      "id": "714f8b87-1330-49d0-a7a1-8e1f98b16657",
+      "title": "三、斑纹类疾病",
+      "level": 1
+     },
+     {
+      "id": "bd1cd77a-de07-447c-9f2c-7764456e35e8",
+      "title": "1. 口腔白斑病",
+      "level": 2
+     }
+    ],
+    "textbook": [
+     {
+      "id": "404dd1f3-5c9d-4629-9ca8-fa09c1874d65",
+      "title": "口腔黏膜病学",
+      "level": 1
+     },
+     {
+      "id": "8102d9b3-f17e-4cde-bc3c-e22751b665d6",
+      "title": "第六章 口腔斑纹类疾病",
+      "level": 2
+     },
+     {
+      "id": "776b63c2-3c7b-4c50-bacd-8fa30e5eb6aa",
+      "title": "第三节 口腔白斑病",
+      "level": 3
+     }
+    ]
+   },
+   "syllabusTitle": "1. 口腔白斑病",
+   "examYears": [
+    2025,
+    2024,
+    2022
+   ],
+   "latestExamYear": 2025,
+   "pendingQuestionCount": 3,
+   "pendingWrongCount": 0,
+   "isWeakMarked": false
+  },
+  {
+   "id": "6ec655f2-d016-4d57-8bf5-1689a8486c3f",
+   "dailyPlanId": "acdd5078-3d41-41d2-a10f-7479ab9f18cc",
+   "itemType": "new_learning",
+   "knowledgePointId": "b55d66fe-3318-4d97-b4f3-40d222d5c6c4",
+   "questionId": null,
+   "priorityScore": 36,
+   "estimatedMinutes": 20,
+   "completed": false,
+   "completedAt": null,
+   "sortOrder": 35,
+   "reason": "大纲要求\"未标注\" · 1次真题",
+   "knowledgePointTitle": "根据翻瓣术的自的选择不同的复位瓣水平位置",
+   "requirementLevel": "unmarked",
+   "examFrequency": 1,
+   "masteryScore": 0,
+   "lastReviewedAt": null,
+   "subjectName": "牙周病学",
+   "chapterPath": [
+    "九、牙周病的手术治疗",
+    "2. 常见牙周手术适应证、禁忌证和方法"
+   ],
+   "chapterPaths": {
+    "examSyllabus": [
+     {
+      "id": "e977b2ff-4d00-457e-8906-f5ee9c696d99",
+      "title": "九、牙周病的手术治疗",
+      "level": 1
+     },
+     {
+      "id": "eee44fe6-25b7-4aa4-884c-205464a05eab",
+      "title": "2. 常见牙周手术适应证、禁忌证和方法",
+      "level": 2
+     }
+    ],
+    "textbook": [
+     {
+      "id": "0de9046e-7bc8-477a-bb67-1f910b18ae5c",
+      "title": "第十七章 牙周病的手术治疗",
+      "level": 2
+     },
+     {
+      "id": "c2c7f49a-9c73-4f70-8ae6-a628c44a60c4",
+      "title": "第三节 翻瓣术",
+      "level": 3
+     }
+    ]
+   },
+   "syllabusTitle": "2. 常见牙周手术适应证、禁忌证和方法",
+   "examYears": [
+    2025
+   ],
+   "latestExamYear": 2025,
+   "pendingQuestionCount": 1,
+   "pendingWrongCount": 0,
+   "isWeakMarked": false
+  },
+  {
+   "id": "4a25c7e0-8cd3-4b8d-8b7e-83c5c0bf9b89",
+   "dailyPlanId": "acdd5078-3d41-41d2-a10f-7479ab9f18cc",
+   "itemType": "new_learning",
+   "knowledgePointId": "a4658653-58b0-4e02-bfe8-bc7a5b445098",
+   "questionId": null,
+   "priorityScore": 36,
+   "estimatedMinutes": 20,
+   "completed": false,
+   "completedAt": null,
+   "sortOrder": 36,
+   "reason": "大纲要求\"未标注\" · 1次真题",
+   "knowledgePointTitle": "牙周炎的概念及特点",
+   "requirementLevel": "unmarked",
+   "examFrequency": 1,
+   "masteryScore": 0,
+   "lastReviewedAt": null,
+   "subjectName": "牙周病学",
+   "chapterPath": [
+    "三、牙周病的分类、临床表现及诊断"
+   ],
+   "chapterPaths": {
+    "examSyllabus": [
+     {
+      "id": "5516b8f2-1c51-4194-89ba-14c676d075f4",
+      "title": "三、牙周病的分类、临床表现及诊断",
+      "level": 1
+     }
+    ],
+    "textbook": [
+     {
+      "id": "46912735-1735-49bc-b56a-1d3e70e4fef2",
+      "title": "第八章 牙周病的检查和诊断",
+      "level": 2
+     },
+     {
+      "id": "005134b1-bbdf-4f0c-bcc9-07bde860c576",
+      "title": "第六节 牙周炎的辅助诊断",
+      "level": 3
+     }
+    ]
+   },
+   "syllabusTitle": "三、牙周病的分类、临床表现及诊断",
+   "examYears": [
+    2025
+   ],
+   "latestExamYear": 2025,
+   "pendingQuestionCount": 1,
+   "pendingWrongCount": 0,
+   "isWeakMarked": false
+  },
+  {
+   "id": "540eb6ce-ede3-4784-ac98-4634c366f5c2",
+   "dailyPlanId": "acdd5078-3d41-41d2-a10f-7479ab9f18cc",
+   "itemType": "new_learning",
+   "knowledgePointId": "f41eb6a8-1483-4776-b46a-82eef3fb850a",
+   "questionId": null,
+   "priorityScore": 36,
+   "estimatedMinutes": 20,
+   "completed": false,
+   "completedAt": null,
+   "sortOrder": 37,
+   "reason": "大纲要求\"未标注\" · 1次真题",
+   "knowledgePointTitle": "牙周炎局部全身促进因素",
+   "requirementLevel": "unmarked",
+   "examFrequency": 1,
+   "masteryScore": 0,
+   "lastReviewedAt": null,
+   "subjectName": "牙周病学",
+   "chapterPath": [
+    "二、牙周病的病因学及发病机制",
+    "2. 局部促进因素、全身易感因素"
+   ],
+   "chapterPaths": {
+    "examSyllabus": [
+     {
+      "id": "96b91d0d-04d3-483d-9814-2d5f12959377",
+      "title": "二、牙周病的病因学及发病机制",
+      "level": 1
+     },
+     {
+      "id": "55282924-e8e7-4732-99f1-0aa6d967b580",
+      "title": "2. 局部促进因素、全身易感因素",
+      "level": 2
+     }
+    ],
+    "textbook": [
+     {
+      "id": "43f03d75-a008-4423-a078-f9c9e0f81613",
+      "title": "第六章牙周病宿主的免疫炎症反应和促进因素",
+      "level": 2
+     },
+     {
+      "id": "6b60dd9d-2b64-4adc-bbee-3033bc66d50c",
+      "title": "第四节 牙周病的全身促进因素",
+      "level": 3
+     }
+    ]
+   },
+   "syllabusTitle": "2. 局部促进因素、全身易感因素",
+   "examYears": [
+    2022
+   ],
+   "latestExamYear": 2022,
+   "pendingQuestionCount": 1,
+   "pendingWrongCount": 0,
+   "isWeakMarked": false
+  },
+  {
+   "id": "cfc47a98-b012-4727-aa22-8e62e74413eb",
+   "dailyPlanId": "acdd5078-3d41-41d2-a10f-7479ab9f18cc",
+   "itemType": "new_learning",
+   "knowledgePointId": "c4b4d83c-7092-4744-8c94-2ccc0add0778",
+   "questionId": null,
+   "priorityScore": 36,
+   "estimatedMinutes": 20,
+   "completed": false,
+   "completedAt": null,
+   "sortOrder": 38,
+   "reason": "大纲要求\"未标注\" · 1次真题",
+   "knowledgePointTitle": "牙周微生态系的影响因素",
+   "requirementLevel": "unmarked",
+   "examFrequency": 1,
+   "masteryScore": 0,
+   "lastReviewedAt": null,
+   "subjectName": "牙周病学",
+   "chapterPath": [
+    "二、牙周病的病因学及发病机制",
+    "1. 牙菌斑的概念及致病机制"
+   ],
+   "chapterPaths": {
+    "examSyllabus": [
+     {
+      "id": "96b91d0d-04d3-483d-9814-2d5f12959377",
+      "title": "二、牙周病的病因学及发病机制",
+      "level": 1
+     },
+     {
+      "id": "f259c6a7-b468-4b69-b81e-0ac72282ef46",
+      "title": "1. 牙菌斑的概念及致病机制",
+      "level": 2
+     }
+    ],
+    "textbook": [
+     {
+      "id": "ac9df98e-4d7c-4f6f-94d5-fdd426b46e1a",
+      "title": "第四章 牙周病微生物学",
+      "level": 2
+     },
+     {
+      "id": "135ac2f4-7844-4642-9057-aa6a9a818a1d",
+      "title": "第二节 牙周微生态系",
+      "level": 3
+     }
+    ]
+   },
+   "syllabusTitle": "1. 牙菌斑的概念及致病机制",
+   "examYears": [
+    2025
+   ],
+   "latestExamYear": 2025,
+   "pendingQuestionCount": 1,
+   "pendingWrongCount": 0,
+   "isWeakMarked": false
+  },
+  {
+   "id": "b3586d92-5959-4fb3-8188-99251f6d6ef1",
+   "dailyPlanId": "acdd5078-3d41-41d2-a10f-7479ab9f18cc",
+   "itemType": "new_learning",
+   "knowledgePointId": "543537cd-7c22-4b95-8eed-5f1648344463",
+   "questionId": null,
+   "priorityScore": 36,
+   "estimatedMinutes": 20,
+   "completed": false,
+   "completedAt": null,
+   "sortOrder": 39,
+   "reason": "大纲要求\"未标注\" · 2次真题",
+   "knowledgePointTitle": "牙周药物治疗",
+   "requirementLevel": "unmarked",
+   "examFrequency": 2,
+   "masteryScore": 0,
+   "lastReviewedAt": null,
+   "subjectName": "牙周病学",
+   "chapterPath": [
+    "八、牙周病药物治疗原则"
+   ],
+   "chapterPaths": {
+    "examSyllabus": [
+     {
+      "id": "495eb569-7c54-4cc4-8291-5ff058390d5c",
+      "title": "八、牙周病药物治疗原则",
+      "level": 1
+     }
+    ],
+    "textbook": [
+     {
+      "id": "ba6ba19e-a894-47a8-8c29-e5d282773852",
+      "title": "第十六章 牙周病的药物治疗",
+      "level": 2
+     },
+     {
+      "id": "4162fdd5-94b6-4ff6-b96b-9928508c3912",
+      "title": "第一节 牙周病药物治疗的目的和原则",
+      "level": 3
+     }
+    ]
+   },
+   "syllabusTitle": "八、牙周病药物治疗原则",
+   "examYears": [
+    2024
+   ],
+   "latestExamYear": 2024,
+   "pendingQuestionCount": 1,
+   "pendingWrongCount": 0,
+   "isWeakMarked": false
+  },
+  {
+   "id": "c648111c-8c4d-4657-ba9d-c7247f9cd146",
+   "dailyPlanId": "acdd5078-3d41-41d2-a10f-7479ab9f18cc",
+   "itemType": "new_learning",
+   "knowledgePointId": "cbfaab81-9eca-4091-a1df-3feec0a76bbc",
+   "questionId": null,
+   "priorityScore": 36,
+   "estimatedMinutes": 20,
+   "completed": false,
+   "completedAt": null,
+   "sortOrder": 40,
+   "reason": "大纲要求\"未标注\" · 1次真题",
+   "knowledgePointTitle": "朗格汉斯细胞组织细胞增生症",
+   "requirementLevel": "unmarked",
+   "examFrequency": 1,
+   "masteryScore": 0,
+   "lastReviewedAt": null,
+   "subjectName": "口腔组织病理学",
+   "chapterPath": [
+    "4. 口腔病理学",
+    "4.9 颌骨疾病"
+   ],
+   "chapterPaths": {
+    "examSyllabus": [
+     {
+      "id": "87cc2f13-10da-42af-9030-284b172a2e52",
+      "title": "4. 口腔病理学",
+      "level": 1
+     },
+     {
+      "id": "6a7e5170-a761-442a-97ae-751140edcb3d",
+      "title": "4.9 颌骨疾病",
+      "level": 2
+     }
+    ],
+    "textbook": [
+     {
+      "id": "2f761378-3abe-4ca1-9714-48dcb69a83ff",
+      "title": "口腔组织病理学",
+      "level": 1
+     },
+     {
+      "id": "250a7fae-63a9-4cd2-8d37-01ff560f4e78",
+      "title": "第一篇 口腔组织胚胎学",
+      "level": 2
+     },
+     {
+      "id": "338937f8-d4b6-4e09-a82d-b5fae8af3c11",
+      "title": "第三章 牙体组织",
+      "level": 3
+     }
+    ]
+   },
+   "syllabusTitle": "4.9 颌骨疾病",
+   "examYears": [
+    2022
+   ],
+   "latestExamYear": 2022,
+   "pendingQuestionCount": 1,
+   "pendingWrongCount": 0,
+   "isWeakMarked": false
+  },
+  {
+   "id": "1e7d9b63-f2a1-4da1-a14d-e78080eaed68",
+   "dailyPlanId": "acdd5078-3d41-41d2-a10f-7479ab9f18cc",
+   "itemType": "new_learning",
+   "knowledgePointId": "d57c7666-0f06-4ce9-b35e-2ebbee698dc6",
+   "questionId": null,
+   "priorityScore": 36,
+   "estimatedMinutes": 20,
+   "completed": false,
+   "completedAt": null,
+   "sortOrder": 41,
+   "reason": "大纲要求\"未标注\" · 1次真题",
+   "knowledgePointTitle": "白斑的组织病理学改变",
+   "requirementLevel": "unmarked",
+   "examFrequency": 1,
+   "masteryScore": 0,
+   "lastReviewedAt": null,
+   "subjectName": "口腔组织病理学",
+   "chapterPath": [
+    "4. 口腔病理学",
+    "4.6 口腔黏膜病病理学"
+   ],
+   "chapterPaths": {
+    "examSyllabus": [
+     {
+      "id": "87cc2f13-10da-42af-9030-284b172a2e52",
+      "title": "4. 口腔病理学",
+      "level": 1
+     },
+     {
+      "id": "6b248c90-3a23-4ae0-b109-a8e4ec22ffb1",
+      "title": "4.6 口腔黏膜病病理学",
+      "level": 2
+     }
+    ],
+    "textbook": [
+     {
+      "id": "2f761378-3abe-4ca1-9714-48dcb69a83ff",
+      "title": "口腔组织病理学",
+      "level": 1
+     },
+     {
+      "id": "dd293ee2-c186-4c73-a28f-e28aa91a53a9",
+      "title": "第二篇 口腔病理学",
+      "level": 2
+     },
+     {
+      "id": "4212bd9a-d95b-431e-a230-d8f762b49092",
+      "title": "第二十一章 口腔组织病理学实验教程",
+      "level": 3
+     }
+    ]
+   },
+   "syllabusTitle": "4.6 口腔黏膜病病理学",
+   "examYears": [
+    2025
+   ],
+   "latestExamYear": 2025,
+   "pendingQuestionCount": 1,
+   "pendingWrongCount": 0,
+   "isWeakMarked": false
+  },
+  {
+   "id": "540517d2-e581-4ac1-b495-6987d11cadd9",
+   "dailyPlanId": "acdd5078-3d41-41d2-a10f-7479ab9f18cc",
+   "itemType": "new_learning",
+   "knowledgePointId": "3d2c0572-a69c-4806-adff-aadc3e11ffee",
+   "questionId": null,
+   "priorityScore": 36,
+   "estimatedMinutes": 20,
+   "completed": false,
+   "completedAt": null,
+   "sortOrder": 42,
+   "reason": "大纲要求\"未标注\" · 1次真题",
+   "knowledgePointTitle": "腮腺混合瘤的临表",
+   "requirementLevel": "unmarked",
+   "examFrequency": 1,
+   "masteryScore": 0,
+   "lastReviewedAt": null,
+   "subjectName": "口腔组织病理学",
+   "chapterPath": [
+    "4. 口腔病理学",
+    "4.7 唾液腺疾病及肿瘤"
+   ],
+   "chapterPaths": {
+    "examSyllabus": [
+     {
+      "id": "87cc2f13-10da-42af-9030-284b172a2e52",
+      "title": "4. 口腔病理学",
+      "level": 1
+     },
+     {
+      "id": "8280dae1-e6a4-43f7-b9a9-daa6cc526919",
+      "title": "4.7 唾液腺疾病及肿瘤",
+      "level": 2
+     }
+    ],
+    "textbook": [
+     {
+      "id": "2f761378-3abe-4ca1-9714-48dcb69a83ff",
+      "title": "口腔组织病理学",
+      "level": 1
+     },
+     {
+      "id": "dd293ee2-c186-4c73-a28f-e28aa91a53a9",
+      "title": "第二篇 口腔病理学",
+      "level": 2
+     },
+     {
+      "id": "cd2b3919-ee84-48ba-a3ce-fb2ee04400bc",
+      "title": "第十六章 唾液腺疾病",
+      "level": 3
+     },
+     {
+      "id": "dc8e661e-fce1-4be7-85ca-43db3ad1f2e3",
+      "title": "第二节 唾液腺肿瘤",
+      "level": 4
+     }
+    ]
+   },
+   "syllabusTitle": "4.7 唾液腺疾病及肿瘤",
+   "examYears": [
+    2024
+   ],
+   "latestExamYear": 2024,
+   "pendingQuestionCount": 1,
+   "pendingWrongCount": 0,
+   "isWeakMarked": false
+  },
+  {
+   "id": "03ac16c5-2990-40b9-91b9-c6ca275bd6dd",
+   "dailyPlanId": "acdd5078-3d41-41d2-a10f-7479ab9f18cc",
+   "itemType": "new_learning",
+   "knowledgePointId": "aa2043d3-7b71-4710-8d08-f8da8754859a",
+   "questionId": null,
+   "priorityScore": 36,
+   "estimatedMinutes": 20,
+   "completed": false,
+   "completedAt": null,
+   "sortOrder": 43,
+   "reason": "大纲要求\"未标注\" · 1次真题",
+   "knowledgePointTitle": "面的发育过程",
+   "requirementLevel": "unmarked",
+   "examFrequency": 1,
+   "masteryScore": 0,
+   "lastReviewedAt": null,
+   "subjectName": "口腔组织病理学",
+   "chapterPath": [
+    "1. 口腔胚胎学",
+    "1.1 颌面部发育"
+   ],
+   "chapterPaths": {
+    "examSyllabus": [
+     {
+      "id": "3b03bd5d-a1f6-484b-a549-6de8588ca611",
+      "title": "1. 口腔胚胎学",
+      "level": 1
+     },
+     {
+      "id": "5c7b5da8-1f7d-474f-ba37-892a47522c46",
+      "title": "1.1 颌面部发育",
+      "level": 2
+     }
+    ],
+    "textbook": [
+     {
+      "id": "2f761378-3abe-4ca1-9714-48dcb69a83ff",
+      "title": "口腔组织病理学",
+      "level": 1
+     },
+     {
+      "id": "250a7fae-63a9-4cd2-8d37-01ff560f4e78",
+      "title": "第一篇 口腔组织胚胎学",
+      "level": 2
+     },
+     {
+      "id": "9a352e65-4039-45d2-98b5-d40fe8aba2dc",
+      "title": "第一章 口腔颌面部发育",
+      "level": 3
+     },
+     {
+      "id": "8723235d-6618-4c9a-8d03-0127dc68cc99",
+      "title": "第二节 面部的发育",
+      "level": 4
+     }
+    ]
+   },
+   "syllabusTitle": "1.1 颌面部发育",
+   "examYears": [
+    2022
+   ],
+   "latestExamYear": 2022,
+   "pendingQuestionCount": 1,
+   "pendingWrongCount": 0,
+   "isWeakMarked": false
+  },
+  {
+   "id": "993c1538-7980-4641-9645-4d79a64289ea",
+   "dailyPlanId": "acdd5078-3d41-41d2-a10f-7479ab9f18cc",
+   "itemType": "new_learning",
+   "knowledgePointId": "276c425e-9a14-46f6-ba7a-fa70b6d8524d",
+   "questionId": null,
+   "priorityScore": 36,
+   "estimatedMinutes": 20,
+   "completed": false,
+   "completedAt": null,
+   "sortOrder": 44,
+   "reason": "大纲要求\"未标注\" · 2次真题",
+   "knowledgePointTitle": "根尖周囊肿的病理表现",
+   "requirementLevel": "unmarked",
+   "examFrequency": 2,
+   "masteryScore": 0,
+   "lastReviewedAt": null,
+   "subjectName": "口腔组织病理学",
+   "chapterPath": [
+    "4. 口腔病理学",
+    "4.4 牙髓根尖周病病理学"
+   ],
+   "chapterPaths": {
+    "examSyllabus": [
+     {
+      "id": "87cc2f13-10da-42af-9030-284b172a2e52",
+      "title": "4. 口腔病理学",
+      "level": 1
+     },
+     {
+      "id": "6a04d9fe-25d5-4330-a4ad-d5614c5ba676",
+      "title": "4.4 牙髓根尖周病病理学",
+      "level": 2
+     }
+    ],
+    "textbook": [
+     {
+      "id": "2f761378-3abe-4ca1-9714-48dcb69a83ff",
+      "title": "口腔组织病理学",
+      "level": 1
+     },
+     {
+      "id": "dd293ee2-c186-4c73-a28f-e28aa91a53a9",
+      "title": "第二篇 口腔病理学",
+      "level": 2
+     },
+     {
+      "id": "889348ca-b3f4-44f3-bdf2-7d8dec04dbdf",
+      "title": "第十一章 根尖周炎",
+      "level": 3
+     }
+    ]
+   },
+   "syllabusTitle": "4.4 牙髓根尖周病病理学",
+   "examYears": [
+    2025,
+    2024
+   ],
+   "latestExamYear": 2025,
+   "pendingQuestionCount": 2,
+   "pendingWrongCount": 0,
+   "isWeakMarked": false
+  },
+  {
+   "id": "d21d8d33-34f9-4c6e-800f-2610b67b79b2",
+   "dailyPlanId": "acdd5078-3d41-41d2-a10f-7479ab9f18cc",
+   "itemType": "new_learning",
+   "knowledgePointId": "b3e8be97-9dca-45db-a163-963cc024eb54",
+   "questionId": null,
+   "priorityScore": 36,
+   "estimatedMinutes": 20,
+   "completed": false,
+   "completedAt": null,
+   "sortOrder": 45,
+   "reason": "大纲要求\"未标注\" · 1次真题",
+   "knowledgePointTitle": "正领外科手术并发症",
+   "requirementLevel": "unmarked",
+   "examFrequency": 1,
+   "masteryScore": 0,
+   "lastReviewedAt": null,
+   "subjectName": "口腔正畸学",
+   "chapterPath": [
+    "1. 错合畸形的病因、检查诊断、分类、临床表现及矫治目标"
+   ],
+   "chapterPaths": {
+    "examSyllabus": [
+     {
+      "id": "c44a786d-ff4a-4d1c-bcab-50239c3c0b95",
+      "title": "1. 错合畸形的病因、检查诊断、分类、临床表现及矫治目标",
+      "level": 1
+     }
+    ],
+    "textbook": [
+     {
+      "id": "e5df76d0-6c01-4adf-b055-cc0d69f64aea",
+      "title": "口腔正畸学",
+      "level": 1
+     },
+     {
+      "id": "0c763cf7-d3f1-4673-910b-d93d1d471fe1",
+      "title": "第十章 错牙合畸形的多学科联合治疗",
+      "level": 2
+     },
+     {
+      "id": "17383959-5fc8-457b-8d61-4cd52b470b0c",
+      "title": "二、正畸-正颌联合矫治",
+      "level": 3
+     }
+    ]
+   },
+   "syllabusTitle": "1. 错合畸形的病因、检查诊断、分类、临床表现及矫治目标",
+   "examYears": [
+    2024
+   ],
+   "latestExamYear": 2024,
+   "pendingQuestionCount": 1,
+   "pendingWrongCount": 0,
+   "isWeakMarked": false
+  },
+  {
+   "id": "9cac9a97-b4ef-455c-a44b-4e0f5fcec500",
+   "dailyPlanId": "acdd5078-3d41-41d2-a10f-7479ab9f18cc",
+   "itemType": "new_learning",
+   "knowledgePointId": "8509b6a7-2a7e-4cea-8d9a-ed9851f87f33",
+   "questionId": null,
+   "priorityScore": 36,
+   "estimatedMinutes": 20,
+   "completed": false,
+   "completedAt": null,
+   "sortOrder": 46,
+   "reason": "大纲要求\"未标注\" · 1次真题",
+   "knowledgePointTitle": "随颌骨生长上下领间位置关系调整/上下领随着发育情况位置的变化",
+   "requirementLevel": "unmarked",
+   "examFrequency": 1,
+   "masteryScore": 0,
+   "lastReviewedAt": null,
+   "subjectName": "口腔正畸学",
+   "chapterPath": [
+    "2. 颅面部生长发育"
+   ],
+   "chapterPaths": {
+    "examSyllabus": [
+     {
+      "id": "c0f99b26-ad51-4006-804c-0d215f2360bf",
+      "title": "2. 颅面部生长发育",
+      "level": 1
+     }
+    ],
+    "textbook": [
+     {
+      "id": "e5df76d0-6c01-4adf-b055-cc0d69f64aea",
+      "title": "口腔正畸学",
+      "level": 1
+     },
+     {
+      "id": "2aed1b3a-c7e2-4a7a-b88a-ad793af463a6",
+      "title": "第二章 颅颌面的生长发育",
+      "level": 2
+     }
+    ]
+   },
+   "syllabusTitle": "2. 颅面部生长发育",
+   "examYears": [
+    2022
+   ],
+   "latestExamYear": 2022,
+   "pendingQuestionCount": 1,
+   "pendingWrongCount": 0,
+   "isWeakMarked": false
+  },
+  {
+   "id": "58056b4b-e39d-41e7-88e7-75de795b3d96",
+   "dailyPlanId": "acdd5078-3d41-41d2-a10f-7479ab9f18cc",
+   "itemType": "new_learning",
+   "knowledgePointId": "4e089818-adc5-44f0-9305-c32c18489680",
+   "questionId": null,
+   "priorityScore": 36,
+   "estimatedMinutes": 20,
+   "completed": false,
+   "completedAt": null,
+   "sortOrder": 47,
+   "reason": "大纲要求\"未标注\" · 1次真题",
+   "knowledgePointTitle": "析法的测量",
+   "requirementLevel": "unmarked",
+   "examFrequency": 1,
+   "masteryScore": 0,
+   "lastReviewedAt": null,
+   "subjectName": "口腔正畸学",
+   "chapterPath": [
+    "4. X线头影测量技术的原理和临床应用"
+   ],
+   "chapterPaths": {
+    "examSyllabus": [
+     {
+      "id": "fbb17e8d-3e29-421d-bf49-05cb779c90ea",
+      "title": "4. X线头影测量技术的原理和临床应用",
+      "level": 1
+     }
+    ],
+    "textbook": [
+     {
+      "id": "e5df76d0-6c01-4adf-b055-cc0d69f64aea",
+      "title": "口腔正畸学",
+      "level": 1
+     },
+     {
+      "id": "cc8c8cce-9f7e-4914-897a-479e7ad4caa9",
+      "title": "第五章 错牙合畸形的检查诊断",
+      "level": 2
+     },
+     {
+      "id": "c178d707-9143-4cfa-a06a-94bff5b707d4",
+      "title": "三、X线头影测量分析",
+      "level": 3
+     }
+    ]
+   },
+   "syllabusTitle": "4. X线头影测量技术的原理和临床应用",
+   "examYears": [
+    2024
+   ],
+   "latestExamYear": 2024,
+   "pendingQuestionCount": 1,
+   "pendingWrongCount": 0,
+   "isWeakMarked": false
+  },
+  {
+   "id": "6664746a-e5a0-4a54-9e60-14024d0e9e50",
+   "dailyPlanId": "acdd5078-3d41-41d2-a10f-7479ab9f18cc",
+   "itemType": "new_learning",
+   "knowledgePointId": "f374a6c3-c366-469a-ae88-99085379d9d4",
+   "questionId": null,
+   "priorityScore": 36,
+   "estimatedMinutes": 20,
+   "completed": false,
+   "completedAt": null,
+   "sortOrder": 48,
+   "reason": "大纲要求\"未标注\" · 2次真题",
+   "knowledgePointTitle": "牙合面检查、模型测量分析与X线头影测量分析",
+   "requirementLevel": "unmarked",
+   "examFrequency": 2,
+   "masteryScore": 0,
+   "lastReviewedAt": null,
+   "subjectName": "口腔正畸学",
+   "chapterPath": [
+    "4. X线头影测量技术的原理和临床应用"
+   ],
+   "chapterPaths": {
+    "examSyllabus": [
+     {
+      "id": "fbb17e8d-3e29-421d-bf49-05cb779c90ea",
+      "title": "4. X线头影测量技术的原理和临床应用",
+      "level": 1
+     }
+    ],
+    "textbook": [
+     {
+      "id": "e5df76d0-6c01-4adf-b055-cc0d69f64aea",
+      "title": "口腔正畸学",
+      "level": 1
+     },
+     {
+      "id": "cc8c8cce-9f7e-4914-897a-479e7ad4caa9",
+      "title": "第五章 错牙合畸形的检查诊断",
+      "level": 2
+     },
+     {
+      "id": "c178d707-9143-4cfa-a06a-94bff5b707d4",
+      "title": "三、X线头影测量分析",
+      "level": 3
+     }
+    ]
+   },
+   "syllabusTitle": "4. X线头影测量技术的原理和临床应用",
+   "examYears": [
+    2025,
+    2022
+   ],
+   "latestExamYear": 2025,
+   "pendingQuestionCount": 2,
+   "pendingWrongCount": 0,
+   "isWeakMarked": false
+  },
+  {
+   "id": "9063d5ae-4ed0-4772-850a-1a610ff5f490",
+   "dailyPlanId": "acdd5078-3d41-41d2-a10f-7479ab9f18cc",
+   "itemType": "new_learning",
+   "knowledgePointId": "fd2977b7-401a-4c83-ab96-4dff5f9648d8",
+   "questionId": null,
+   "priorityScore": 36,
+   "estimatedMinutes": 20,
+   "completed": false,
+   "completedAt": null,
+   "sortOrder": 49,
+   "reason": "大纲要求\"未标注\" · 1次真题",
+   "knowledgePointTitle": "舌下神经、舌神经与下颌下腺管的位置关系",
+   "requirementLevel": "unmarked",
+   "examFrequency": 1,
+   "masteryScore": 0,
+   "lastReviewedAt": null,
+   "subjectName": "口腔解剖生理学",
+   "chapterPath": [
+    "第四章 第四节 唾液腺"
+   ],
+   "chapterPaths": {
+    "examSyllabus": [
+     {
+      "id": "d65c1b85-407d-4788-a3c8-9544ea3fdf2d",
+      "title": "第四章 第四节 唾液腺",
+      "level": 1
+     }
+    ],
+    "textbook": [
+     {
+      "id": "85e56f0a-94a2-485f-8c4b-fcef5e8aad33",
+      "title": "口腔解剖生理学",
+      "level": 1
+     },
+     {
+      "id": "f89df732-329c-477f-b024-4949e54e04fb",
+      "title": "第四章 口腔颌面颈部系统解剖",
+      "level": 2
+     },
+     {
+      "id": "dd19966a-1d1f-4568-8089-12190a6f1ba6",
+      "title": "第七节 神经",
+      "level": 3
+     }
+    ]
+   },
+   "syllabusTitle": "第四章 第四节 唾液腺",
+   "examYears": [
+    2025
+   ],
+   "latestExamYear": 2025,
+   "pendingQuestionCount": 1,
+   "pendingWrongCount": 0,
+   "isWeakMarked": false
+  },
+  {
+   "id": "1cdacedd-f245-4fc6-9459-6cfc66a134be",
+   "dailyPlanId": "acdd5078-3d41-41d2-a10f-7479ab9f18cc",
+   "itemType": "new_learning",
+   "knowledgePointId": "84816b95-ff7c-493c-a667-beae7b561522",
+   "questionId": null,
+   "priorityScore": 36,
+   "estimatedMinutes": 20,
+   "completed": false,
+   "completedAt": null,
+   "sortOrder": 50,
+   "reason": "大纲要求\"未标注\" · 1次真题",
+   "knowledgePointTitle": "张口受限的间",
+   "requirementLevel": "unmarked",
+   "examFrequency": 1,
+   "masteryScore": 0,
+   "lastReviewedAt": null,
+   "subjectName": "口腔解剖生理学",
+   "chapterPath": [
+    "第四章 第二节 颞下颌关节"
+   ],
+   "chapterPaths": {
+    "examSyllabus": [
+     {
+      "id": "f0c22ddf-2403-4ea1-b4c3-458a818c1228",
+      "title": "第四章 第二节 颞下颌关节",
+      "level": 1
+     }
+    ],
+    "textbook": [
+     {
+      "id": "85e56f0a-94a2-485f-8c4b-fcef5e8aad33",
+      "title": "口腔解剖生理学",
+      "level": 1
+     },
+     {
+      "id": "f89df732-329c-477f-b024-4949e54e04fb",
+      "title": "第四章 口腔颌面颈部系统解剖",
+      "level": 2
+     },
+     {
+      "id": "6857ecc6-6b2f-4ee1-8a2f-3720de70e705",
+      "title": "第二节 颞下颌关节",
+      "level": 3
+     }
+    ]
+   },
+   "syllabusTitle": "第四章 第二节 颞下颌关节",
+   "examYears": [
+    2024
+   ],
+   "latestExamYear": 2024,
+   "pendingQuestionCount": 1,
+   "pendingWrongCount": 0,
+   "isWeakMarked": false
+  },
+  {
+   "id": "1ab6dd09-6ad0-4ded-aba1-b2398fc121f2",
+   "dailyPlanId": "acdd5078-3d41-41d2-a10f-7479ab9f18cc",
+   "itemType": "new_learning",
+   "knowledgePointId": "45a27af1-b876-4168-8c60-ea251a9ce488",
+   "questionId": null,
+   "priorityScore": 36,
+   "estimatedMinutes": 20,
+   "completed": false,
+   "completedAt": null,
+   "sortOrder": 51,
+   "reason": "大纲要求\"未标注\" · 2次真题",
+   "knowledgePointTitle": "疱疹性龈口炎与疱疹样阿弗他溃疡的鉴别诊断",
+   "requirementLevel": "unmarked",
+   "examFrequency": 2,
+   "masteryScore": 0,
+   "lastReviewedAt": null,
+   "subjectName": "口腔黏膜病学",
+   "chapterPath": [
+    "一、口腔黏膜感染性疾病",
+    "1. 病毒感染（疱疹性口炎等）"
+   ],
+   "chapterPaths": {
+    "examSyllabus": [
+     {
+      "id": "c7b29ea4-3b81-404d-ad65-0ed6cdcbf718",
+      "title": "一、口腔黏膜感染性疾病",
+      "level": 1
+     },
+     {
+      "id": "a68b0c0f-8275-4b2c-8810-0da3e4e72870",
+      "title": "1. 病毒感染（疱疹性口炎等）",
+      "level": 2
+     }
+    ],
+    "textbook": [
+     {
+      "id": "404dd1f3-5c9d-4629-9ca8-fa09c1874d65",
+      "title": "口腔黏膜病学",
+      "level": 1
+     },
+     {
+      "id": "5cdfdbe0-6721-4125-89f3-d4460744740a",
+      "title": "第四章 口腔黏膜溃疡类疾病",
+      "level": 2
+     },
+     {
+      "id": "fb7f1c9d-680e-49df-8da0-317c4b88d2ce",
+      "title": "第一节 复发性阿弗他溃疡",
+      "level": 3
+     }
+    ]
+   },
+   "syllabusTitle": "1. 病毒感染（疱疹性口炎等）",
+   "examYears": [
+    2025,
+    2022
+   ],
+   "latestExamYear": 2025,
+   "pendingQuestionCount": 2,
+   "pendingWrongCount": 0,
+   "isWeakMarked": false
+  },
+  {
+   "id": "34fca725-5721-4829-8f30-149e4aabc6d6",
+   "dailyPlanId": "acdd5078-3d41-41d2-a10f-7479ab9f18cc",
+   "itemType": "new_learning",
+   "knowledgePointId": "5817b002-fe8c-4e4d-9599-d97bd58eb446",
+   "questionId": null,
+   "priorityScore": 36,
+   "estimatedMinutes": 20,
+   "completed": false,
+   "completedAt": null,
+   "sortOrder": 52,
+   "reason": "大纲要求\"未标注\" · 1次真题",
+   "knowledgePointTitle": "艾滋病的口腔表现及防治原则",
+   "requirementLevel": "unmarked",
+   "examFrequency": 1,
+   "masteryScore": 0,
+   "lastReviewedAt": null,
+   "subjectName": "口腔黏膜病学",
+   "chapterPath": [
+    "六、性传播疾病的口腔表现",
+    "2. 艾滋病口腔表现"
+   ],
+   "chapterPaths": {
+    "examSyllabus": [
+     {
+      "id": "f14bb36c-c1ee-4a7b-954f-a4ede40b686c",
+      "title": "六、性传播疾病的口腔表现",
+      "level": 1
+     },
+     {
+      "id": "d4815e1d-db12-4592-a2e5-92b99fde693c",
+      "title": "2. 艾滋病口腔表现",
+      "level": 2
+     }
+    ],
+    "textbook": [
+     {
+      "id": "404dd1f3-5c9d-4629-9ca8-fa09c1874d65",
+      "title": "口腔黏膜病学",
+      "level": 1
+     },
+     {
+      "id": "7d2ec663-6353-4da9-9655-f659f6f26268",
+      "title": "第十章 艾滋病",
+      "level": 2
+     }
+    ]
+   },
+   "syllabusTitle": "2. 艾滋病口腔表现",
+   "examYears": [
+    2025
+   ],
+   "latestExamYear": 2025,
+   "pendingQuestionCount": 1,
+   "pendingWrongCount": 0,
+   "isWeakMarked": false
+  },
+  {
+   "id": "04e023bb-d34b-492f-988a-9aa7289a7241",
+   "dailyPlanId": "acdd5078-3d41-41d2-a10f-7479ab9f18cc",
+   "itemType": "new_learning",
+   "knowledgePointId": "07246585-f0c9-436a-b993-b092035e6c71",
+   "questionId": null,
+   "priorityScore": 36,
+   "estimatedMinutes": 20,
+   "completed": false,
+   "completedAt": null,
+   "sortOrder": 53,
+   "reason": "大纲要求\"未标注\" · 1次真题",
+   "knowledgePointTitle": "白斑哪些情况更容易恶变",
+   "requirementLevel": "unmarked",
+   "examFrequency": 1,
+   "masteryScore": 0,
+   "lastReviewedAt": null,
+   "subjectName": "口腔黏膜病学",
+   "chapterPath": [
+    "三、斑纹类疾病",
+    "1. 口腔白斑病"
+   ],
+   "chapterPaths": {
+    "examSyllabus": [
+     {
+      "id": "714f8b87-1330-49d0-a7a1-8e1f98b16657",
+      "title": "三、斑纹类疾病",
+      "level": 1
+     },
+     {
+      "id": "bd1cd77a-de07-447c-9f2c-7764456e35e8",
+      "title": "1. 口腔白斑病",
+      "level": 2
+     }
+    ],
+    "textbook": [
+     {
+      "id": "404dd1f3-5c9d-4629-9ca8-fa09c1874d65",
+      "title": "口腔黏膜病学",
+      "level": 1
+     },
+     {
+      "id": "8102d9b3-f17e-4cde-bc3c-e22751b665d6",
+      "title": "第六章 口腔斑纹类疾病",
+      "level": 2
+     }
+    ]
+   },
+   "syllabusTitle": "1. 口腔白斑病",
+   "examYears": [
+    2025
+   ],
+   "latestExamYear": 2025,
+   "pendingQuestionCount": 1,
+   "pendingWrongCount": 0,
+   "isWeakMarked": false
+  },
+  {
+   "id": "b18b0f89-e1c4-4c1c-a0d2-f907e8696229",
+   "dailyPlanId": "acdd5078-3d41-41d2-a10f-7479ab9f18cc",
+   "itemType": "new_learning",
+   "knowledgePointId": "6d9a7670-a235-4826-9012-6838d1e7deee",
+   "questionId": null,
+   "priorityScore": 36,
+   "estimatedMinutes": 20,
+   "completed": false,
+   "completedAt": null,
+   "sortOrder": 54,
+   "reason": "大纲要求\"未标注\" · 2次真题",
+   "knowledgePointTitle": "艾滋病的口腔病变及传播途径",
+   "requirementLevel": "unmarked",
+   "examFrequency": 2,
+   "masteryScore": 0,
+   "lastReviewedAt": null,
+   "subjectName": "口腔黏膜病学",
+   "chapterPath": [
+    "六、性传播疾病的口腔表现",
+    "2. 艾滋病口腔表现"
+   ],
+   "chapterPaths": {
+    "examSyllabus": [
+     {
+      "id": "f14bb36c-c1ee-4a7b-954f-a4ede40b686c",
+      "title": "六、性传播疾病的口腔表现",
+      "level": 1
+     },
+     {
+      "id": "d4815e1d-db12-4592-a2e5-92b99fde693c",
+      "title": "2. 艾滋病口腔表现",
+      "level": 2
+     }
+    ],
+    "textbook": [
+     {
+      "id": "404dd1f3-5c9d-4629-9ca8-fa09c1874d65",
+      "title": "口腔黏膜病学",
+      "level": 1
+     },
+     {
+      "id": "7d2ec663-6353-4da9-9655-f659f6f26268",
+      "title": "第十章 艾滋病",
+      "level": 2
+     }
+    ]
+   },
+   "syllabusTitle": "2. 艾滋病口腔表现",
+   "examYears": [
+    2024
+   ],
+   "latestExamYear": 2024,
+   "pendingQuestionCount": 1,
+   "pendingWrongCount": 0,
+   "isWeakMarked": false
+  },
+  {
+   "id": "0c84de9b-e8b1-4557-b011-3faee3985d2a",
+   "dailyPlanId": "acdd5078-3d41-41d2-a10f-7479ab9f18cc",
+   "itemType": "question_test",
+   "knowledgePointId": "38190baf-0e95-44eb-bd0d-d8c904acc444",
+   "questionId": "e6ad3938-c746-4878-a62b-0ce32bdc2cc2",
+   "priorityScore": 36,
+   "estimatedMinutes": 15,
+   "completed": false,
+   "completedAt": null,
+   "sortOrder": 55,
+   "reason": "高频题 · 12次考频 · 难度3",
+   "knowledgePointTitle": "多形性腺瘤的病理表现及生物学特点",
+   "requirementLevel": "unmarked",
+   "examFrequency": 12,
+   "masteryScore": 0,
+   "lastReviewedAt": null,
+   "subjectName": "口腔组织病理学",
+   "chapterPath": [
+    "4. 口腔病理学",
+    "4.7 唾液腺疾病及肿瘤"
+   ],
+   "chapterPaths": {
+    "examSyllabus": [
+     {
+      "id": "87cc2f13-10da-42af-9030-284b172a2e52",
+      "title": "4. 口腔病理学",
+      "level": 1
+     },
+     {
+      "id": "8280dae1-e6a4-43f7-b9a9-daa6cc526919",
+      "title": "4.7 唾液腺疾病及肿瘤",
+      "level": 2
+     }
+    ],
+    "textbook": [
+     {
+      "id": "2f761378-3abe-4ca1-9714-48dcb69a83ff",
+      "title": "口腔组织病理学",
+      "level": 1
+     },
+     {
+      "id": "dd293ee2-c186-4c73-a28f-e28aa91a53a9",
+      "title": "第二篇 口腔病理学",
+      "level": 2
+     }
+    ]
+   },
+   "syllabusTitle": "4.7 唾液腺疾病及肿瘤",
+   "examYears": [
+    2025,
+    2024,
+    2023,
+    2022,
+    2021
+   ],
+   "latestExamYear": 2024,
+   "pendingQuestionCount": 5,
+   "pendingWrongCount": 0,
+   "isWeakMarked": false,
+   "questionText": "多形性腺瘤的临床表现及病理变化",
+   "questionType": "short_answer",
+   "questionSource": "大连医科大学",
+   "questionDifficulty": 3,
+   "questionAnswerCount": 0
+  },
+  {
+   "id": "b9e1eadd-aa75-4168-9a7e-914c0ea46f09",
+   "dailyPlanId": "acdd5078-3d41-41d2-a10f-7479ab9f18cc",
+   "itemType": "question_test",
+   "knowledgePointId": "38190baf-0e95-44eb-bd0d-d8c904acc444",
+   "questionId": "d85c5889-f7dd-45fb-a57e-796f78650114",
+   "priorityScore": 36,
+   "estimatedMinutes": 15,
+   "completed": false,
+   "completedAt": null,
+   "sortOrder": 56,
+   "reason": "高频题 · 12次考频 · 难度3",
+   "knowledgePointTitle": "多形性腺瘤的病理表现及生物学特点",
+   "requirementLevel": "unmarked",
+   "examFrequency": 12,
+   "masteryScore": 0,
+   "lastReviewedAt": null,
+   "subjectName": "口腔组织病理学",
+   "chapterPath": [
+    "4. 口腔病理学",
+    "4.7 唾液腺疾病及肿瘤"
+   ],
+   "chapterPaths": {
+    "examSyllabus": [
+     {
+      "id": "87cc2f13-10da-42af-9030-284b172a2e52",
+      "title": "4. 口腔病理学",
+      "level": 1
+     },
+     {
+      "id": "8280dae1-e6a4-43f7-b9a9-daa6cc526919",
+      "title": "4.7 唾液腺疾病及肿瘤",
+      "level": 2
+     }
+    ],
+    "textbook": [
+     {
+      "id": "2f761378-3abe-4ca1-9714-48dcb69a83ff",
+      "title": "口腔组织病理学",
+      "level": 1
+     },
+     {
+      "id": "dd293ee2-c186-4c73-a28f-e28aa91a53a9",
+      "title": "第二篇 口腔病理学",
+      "level": 2
+     }
+    ]
+   },
+   "syllabusTitle": "4.7 唾液腺疾病及肿瘤",
+   "examYears": [
+    2025,
+    2024,
+    2023,
+    2022,
+    2021
+   ],
+   "latestExamYear": 2025,
+   "pendingQuestionCount": 5,
+   "pendingWrongCount": 0,
+   "isWeakMarked": false,
+   "questionText": "试述多形性腺瘤的病理学改变和生物学行为",
+   "questionType": "short_answer",
+   "questionSource": "大连医科大学",
+   "questionDifficulty": 3,
+   "questionAnswerCount": 0
+  },
+  {
+   "id": "70387253-a03a-4507-beb5-b58acc4eacc2",
+   "dailyPlanId": "acdd5078-3d41-41d2-a10f-7479ab9f18cc",
+   "itemType": "question_test",
+   "knowledgePointId": "38190baf-0e95-44eb-bd0d-d8c904acc444",
+   "questionId": "7193e170-b831-4e1a-82b9-0195c65e33a5",
+   "priorityScore": 36,
+   "estimatedMinutes": 15,
+   "completed": false,
+   "completedAt": null,
+   "sortOrder": 57,
+   "reason": "高频题 · 12次考频 · 难度3",
+   "knowledgePointTitle": "多形性腺瘤的病理表现及生物学特点",
+   "requirementLevel": "unmarked",
+   "examFrequency": 12,
+   "masteryScore": 0,
+   "lastReviewedAt": null,
+   "subjectName": "口腔组织病理学",
+   "chapterPath": [
+    "4. 口腔病理学",
+    "4.7 唾液腺疾病及肿瘤"
+   ],
+   "chapterPaths": {
+    "examSyllabus": [
+     {
+      "id": "87cc2f13-10da-42af-9030-284b172a2e52",
+      "title": "4. 口腔病理学",
+      "level": 1
+     },
+     {
+      "id": "8280dae1-e6a4-43f7-b9a9-daa6cc526919",
+      "title": "4.7 唾液腺疾病及肿瘤",
+      "level": 2
+     }
+    ],
+    "textbook": [
+     {
+      "id": "2f761378-3abe-4ca1-9714-48dcb69a83ff",
+      "title": "口腔组织病理学",
+      "level": 1
+     },
+     {
+      "id": "dd293ee2-c186-4c73-a28f-e28aa91a53a9",
+      "title": "第二篇 口腔病理学",
+      "level": 2
+     }
+    ]
+   },
+   "syllabusTitle": "4.7 唾液腺疾病及肿瘤",
+   "examYears": [
+    2025,
+    2024,
+    2023,
+    2022,
+    2021
+   ],
+   "latestExamYear": 2021,
+   "pendingQuestionCount": 5,
+   "pendingWrongCount": 0,
+   "isWeakMarked": false,
+   "questionText": "阐述涎腺最常见的良性肿瘤的病理学特点，并结合其病理学特点解释其术后复发的原因",
+   "questionType": "short_answer",
+   "questionSource": "暨南大学",
+   "questionDifficulty": 3,
+   "questionAnswerCount": 0
+  },
+  {
+   "id": "55f9d688-cbd0-4acd-8e9e-5ce860f166ee",
+   "dailyPlanId": "acdd5078-3d41-41d2-a10f-7479ab9f18cc",
+   "itemType": "question_test",
+   "knowledgePointId": "38190baf-0e95-44eb-bd0d-d8c904acc444",
+   "questionId": "2c5a288c-8d9a-4da1-b4c2-6fb72e06d4ec",
+   "priorityScore": 36,
+   "estimatedMinutes": 15,
+   "completed": false,
+   "completedAt": null,
+   "sortOrder": 58,
+   "reason": "高频题 · 12次考频 · 难度3",
+   "knowledgePointTitle": "多形性腺瘤的病理表现及生物学特点",
+   "requirementLevel": "unmarked",
+   "examFrequency": 12,
+   "masteryScore": 0,
+   "lastReviewedAt": null,
+   "subjectName": "口腔组织病理学",
+   "chapterPath": [
+    "4. 口腔病理学",
+    "4.7 唾液腺疾病及肿瘤"
+   ],
+   "chapterPaths": {
+    "examSyllabus": [
+     {
+      "id": "87cc2f13-10da-42af-9030-284b172a2e52",
+      "title": "4. 口腔病理学",
+      "level": 1
+     },
+     {
+      "id": "8280dae1-e6a4-43f7-b9a9-daa6cc526919",
+      "title": "4.7 唾液腺疾病及肿瘤",
+      "level": 2
+     }
+    ],
+    "textbook": [
+     {
+      "id": "2f761378-3abe-4ca1-9714-48dcb69a83ff",
+      "title": "口腔组织病理学",
+      "level": 1
+     },
+     {
+      "id": "dd293ee2-c186-4c73-a28f-e28aa91a53a9",
+      "title": "第二篇 口腔病理学",
+      "level": 2
+     }
+    ]
+   },
+   "syllabusTitle": "4.7 唾液腺疾病及肿瘤",
+   "examYears": [
+    2025,
+    2024,
+    2023,
+    2022,
+    2021
+   ],
+   "latestExamYear": 2024,
+   "pendingQuestionCount": 5,
+   "pendingWrongCount": 0,
+   "isWeakMarked": false,
+   "questionText": "多形性腺瘤病例变化和生物学特征",
+   "questionType": "short_answer",
+   "questionSource": "宁夏医科大学",
+   "questionDifficulty": 3,
+   "questionAnswerCount": 0
+  },
+  {
+   "id": "25125fc4-f04e-46bd-94b8-eee7d269b45e",
+   "dailyPlanId": "acdd5078-3d41-41d2-a10f-7479ab9f18cc",
+   "itemType": "question_test",
+   "knowledgePointId": "38190baf-0e95-44eb-bd0d-d8c904acc444",
+   "questionId": "b46646d0-af29-49c7-b02b-929946da87dc",
+   "priorityScore": 36,
+   "estimatedMinutes": 15,
+   "completed": false,
+   "completedAt": null,
+   "sortOrder": 59,
+   "reason": "高频题 · 12次考频 · 难度3",
+   "knowledgePointTitle": "多形性腺瘤的病理表现及生物学特点",
+   "requirementLevel": "unmarked",
+   "examFrequency": 12,
+   "masteryScore": 0,
+   "lastReviewedAt": null,
+   "subjectName": "口腔组织病理学",
+   "chapterPath": [
+    "4. 口腔病理学",
+    "4.7 唾液腺疾病及肿瘤"
+   ],
+   "chapterPaths": {
+    "examSyllabus": [
+     {
+      "id": "87cc2f13-10da-42af-9030-284b172a2e52",
+      "title": "4. 口腔病理学",
+      "level": 1
+     },
+     {
+      "id": "8280dae1-e6a4-43f7-b9a9-daa6cc526919",
+      "title": "4.7 唾液腺疾病及肿瘤",
+      "level": 2
+     }
+    ],
+    "textbook": [
+     {
+      "id": "2f761378-3abe-4ca1-9714-48dcb69a83ff",
+      "title": "口腔组织病理学",
+      "level": 1
+     },
+     {
+      "id": "dd293ee2-c186-4c73-a28f-e28aa91a53a9",
+      "title": "第二篇 口腔病理学",
+      "level": 2
+     }
+    ]
+   },
+   "syllabusTitle": "4.7 唾液腺疾病及肿瘤",
+   "examYears": [
+    2025,
+    2024,
+    2023,
+    2022,
+    2021
+   ],
+   "latestExamYear": 2024,
+   "pendingQuestionCount": 5,
+   "pendingWrongCount": 0,
+   "isWeakMarked": false,
+   "questionText": "最常见上皮性唾液腺肿瘤的病理",
+   "questionType": "short_answer",
+   "questionSource": "河北医科大学",
+   "questionDifficulty": 3,
+   "questionAnswerCount": 0
+  },
+  {
+   "id": "ecd4ccd3-9c71-487e-aedd-d6ef58aba4d6",
+   "dailyPlanId": "acdd5078-3d41-41d2-a10f-7479ab9f18cc",
+   "itemType": "question_test",
+   "knowledgePointId": "49b47a39-7617-45c3-ba54-029c1029e2bd",
+   "questionId": "1a65d963-b53e-49bf-a766-0dbb5c753048",
+   "priorityScore": 35,
+   "estimatedMinutes": 15,
+   "completed": false,
+   "completedAt": null,
+   "sortOrder": 60,
+   "reason": "高频题 · 11次考频 · 难度3",
+   "knowledgePointTitle": "牙髓病的病因及发病机制",
+   "requirementLevel": "unmarked",
+   "examFrequency": 11,
+   "masteryScore": 0,
+   "lastReviewedAt": null,
+   "subjectName": "牙体牙髓病学",
+   "chapterPath": [
+    "三、牙髓和根尖周病",
+    "2. 病因及发病机制"
+   ],
+   "chapterPaths": {
+    "examSyllabus": [
+     {
+      "id": "56e90b7c-695a-4e79-9ffd-08246eb81746",
+      "title": "三、牙髓和根尖周病",
+      "level": 1
+     },
+     {
+      "id": "a0bf2f57-f7f5-4b7e-b584-80ad039f582d",
+      "title": "2. 病因及发病机制",
+      "level": 2
+     }
+    ],
+    "textbook": [
+     {
+      "id": "e566ea25-7724-4053-b1ac-ca9aa2fdbfb4",
+      "title": "第十六章 牙髓病的临床表现及诊断",
+      "level": 3
+     },
+     {
+      "id": "127a61d5-c0f2-46c8-baa3-0744cdaa0d24",
+      "title": "第三节 各型牙髓病的临床表现及诊断要点",
+      "level": 4
+     }
+    ]
+   },
+   "syllabusTitle": "2. 病因及发病机制",
+   "examYears": [
+    2025,
+    2023,
+    2022,
+    2021
+   ],
+   "latestExamYear": 2025,
+   "pendingQuestionCount": 4,
+   "pendingWrongCount": 0,
+   "isWeakMarked": false,
+   "questionText": "牙髓病的病理表现和临床表现的关系",
+   "questionType": "short_answer",
+   "questionSource": "贵州医科大学",
+   "questionDifficulty": 3,
+   "questionAnswerCount": 0
+  },
+  {
+   "id": "fb9955de-3cc1-45d7-ac17-7774899092d3",
+   "dailyPlanId": "acdd5078-3d41-41d2-a10f-7479ab9f18cc",
+   "itemType": "question_test",
+   "knowledgePointId": "ecc8f520-39a0-4fec-a8e1-b4f06fde3eb9",
+   "questionId": "b28d8b30-4c4f-46f8-aca6-4d84e7e2f238",
+   "priorityScore": 35,
+   "estimatedMinutes": 15,
+   "completed": false,
+   "completedAt": null,
+   "sortOrder": 61,
+   "reason": "高频题 · 11次考频 · 难度3",
+   "knowledgePointTitle": "根尖周病的定义、分类、危害性",
+   "requirementLevel": "unmarked",
+   "examFrequency": 11,
+   "masteryScore": 0,
+   "lastReviewedAt": null,
+   "subjectName": "牙体牙髓病学",
+   "chapterPath": [
+    "三、牙髓和根尖周病",
+    "3. 分类"
+   ],
+   "chapterPaths": {
+    "examSyllabus": [
+     {
+      "id": "56e90b7c-695a-4e79-9ffd-08246eb81746",
+      "title": "三、牙髓和根尖周病",
+      "level": 1
+     },
+     {
+      "id": "1f180af3-a605-49de-b9da-1602ee0efc38",
+      "title": "3. 分类",
+      "level": 2
+     }
+    ],
+    "textbook": [
+     {
+      "id": "e566ea25-7724-4053-b1ac-ca9aa2fdbfb4",
+      "title": "第十六章 牙髓病的临床表现及诊断",
+      "level": 3
+     },
+     {
+      "id": "f32e167c-8905-45aa-ba64-d04b7a0cd46d",
+      "title": "第一节 分类",
+      "level": 4
+     }
+    ]
+   },
+   "syllabusTitle": "3. 分类",
+   "examYears": [
+    2025,
+    2024,
+    2022
+   ],
+   "latestExamYear": 2024,
+   "pendingQuestionCount": 3,
+   "pendingWrongCount": 0,
+   "isWeakMarked": false,
+   "questionText": "牙髓根尖周病感染的主要途径",
+   "questionType": "short_answer",
+   "questionSource": "南昌大学",
+   "questionDifficulty": 3,
+   "questionAnswerCount": 0
+  },
+  {
+   "id": "1992b4fd-a3cb-4d78-a96b-75db7643ce00",
+   "dailyPlanId": "acdd5078-3d41-41d2-a10f-7479ab9f18cc",
+   "itemType": "question_test",
+   "knowledgePointId": "ecc8f520-39a0-4fec-a8e1-b4f06fde3eb9",
+   "questionId": "bdfc862c-9a41-49bd-bdcd-6041b57b023d",
+   "priorityScore": 35,
+   "estimatedMinutes": 15,
+   "completed": false,
+   "completedAt": null,
+   "sortOrder": 62,
+   "reason": "高频题 · 11次考频 · 难度3",
+   "knowledgePointTitle": "根尖周病的定义、分类、危害性",
+   "requirementLevel": "unmarked",
+   "examFrequency": 11,
+   "masteryScore": 0,
+   "lastReviewedAt": null,
+   "subjectName": "牙体牙髓病学",
+   "chapterPath": [
+    "三、牙髓和根尖周病",
+    "3. 分类"
+   ],
+   "chapterPaths": {
+    "examSyllabus": [
+     {
+      "id": "56e90b7c-695a-4e79-9ffd-08246eb81746",
+      "title": "三、牙髓和根尖周病",
+      "level": 1
+     },
+     {
+      "id": "1f180af3-a605-49de-b9da-1602ee0efc38",
+      "title": "3. 分类",
+      "level": 2
+     }
+    ],
+    "textbook": [
+     {
+      "id": "e566ea25-7724-4053-b1ac-ca9aa2fdbfb4",
+      "title": "第十六章 牙髓病的临床表现及诊断",
+      "level": 3
+     },
+     {
+      "id": "f32e167c-8905-45aa-ba64-d04b7a0cd46d",
+      "title": "第一节 分类",
+      "level": 4
+     }
+    ]
+   },
+   "syllabusTitle": "3. 分类",
+   "examYears": [
+    2025,
+    2024,
+    2022
+   ],
+   "latestExamYear": 2024,
+   "pendingQuestionCount": 3,
+   "pendingWrongCount": 0,
+   "isWeakMarked": false,
+   "questionText": "牙髓根尖周病的生物学基础径",
+   "questionType": "short_answer",
+   "questionSource": "滨州医学院",
+   "questionDifficulty": 3,
+   "questionAnswerCount": 0
+  },
+  {
+   "id": "83ae9deb-12ec-42c2-b025-00ffc836517d",
+   "dailyPlanId": "acdd5078-3d41-41d2-a10f-7479ab9f18cc",
+   "itemType": "question_test",
+   "knowledgePointId": "8fe18e26-fda4-4a8b-8bfd-5267e561b4f9",
+   "questionId": "e7e3b308-d74c-4b51-897c-b80fd50160b3",
+   "priorityScore": 35,
+   "estimatedMinutes": 15,
+   "completed": false,
+   "completedAt": null,
+   "sortOrder": 63,
+   "reason": "高频题 · 11次考频 · 难度3",
+   "knowledgePointTitle": "龋病的临床表现、鉴别诊断、治疗原则及预后预防",
+   "requirementLevel": "unmarked",
+   "examFrequency": 11,
+   "masteryScore": 0,
+   "lastReviewedAt": null,
+   "subjectName": "牙体牙髓病学",
+   "chapterPath": [
+    "一、龋病",
+    "2. 临床特征和诊断"
+   ],
+   "chapterPaths": {
+    "examSyllabus": [
+     {
+      "id": "1c02c98a-6c7a-47d2-9d51-184f812f8875",
+      "title": "一、龋病",
+      "level": 1
+     },
+     {
+      "id": "7b979983-ea0b-4733-928e-554703077408",
+      "title": "2. 临床特征和诊断",
+      "level": 2
+     }
+    ],
+    "textbook": [
+     {
+      "id": "c47d9927-20c2-492a-8538-9274c4271836",
+      "title": "第三章 临床表现与诊断",
+      "level": 3
+     },
+     {
+      "id": "ac027f59-ea62-4d74-b47e-f28584dbcd40",
+      "title": "第二节 龋病的临床表现及分类",
+      "level": 4
+     }
+    ]
+   },
+   "syllabusTitle": "2. 临床特征和诊断",
+   "examYears": [
+    2025,
+    2024,
+    2023,
+    2022
+   ],
+   "latestExamYear": 2023,
+   "pendingQuestionCount": 4,
+   "pendingWrongCount": 0,
+   "isWeakMarked": false,
+   "questionText": "根尖周炎临床表现治疗原则鉴别诊断",
+   "questionType": "short_answer",
+   "questionSource": "徐州医科大学",
+   "questionDifficulty": 3,
+   "questionAnswerCount": 0
+  },
+  {
+   "id": "1b229ecb-6341-430b-8efd-30af44c21f0e",
+   "dailyPlanId": "acdd5078-3d41-41d2-a10f-7479ab9f18cc",
+   "itemType": "question_test",
+   "knowledgePointId": "8fe18e26-fda4-4a8b-8bfd-5267e561b4f9",
+   "questionId": "c91b1498-c5cc-4be8-8678-faf56a80d22d",
+   "priorityScore": 35,
+   "estimatedMinutes": 15,
+   "completed": false,
+   "completedAt": null,
+   "sortOrder": 64,
+   "reason": "高频题 · 11次考频 · 难度3",
+   "knowledgePointTitle": "龋病的临床表现、鉴别诊断、治疗原则及预后预防",
+   "requirementLevel": "unmarked",
+   "examFrequency": 11,
+   "masteryScore": 0,
+   "lastReviewedAt": null,
+   "subjectName": "牙体牙髓病学",
+   "chapterPath": [
+    "一、龋病",
+    "2. 临床特征和诊断"
+   ],
+   "chapterPaths": {
+    "examSyllabus": [
+     {
+      "id": "1c02c98a-6c7a-47d2-9d51-184f812f8875",
+      "title": "一、龋病",
+      "level": 1
+     },
+     {
+      "id": "7b979983-ea0b-4733-928e-554703077408",
+      "title": "2. 临床特征和诊断",
+      "level": 2
+     }
+    ],
+    "textbook": [
+     {
+      "id": "c47d9927-20c2-492a-8538-9274c4271836",
+      "title": "第三章 临床表现与诊断",
+      "level": 3
+     },
+     {
+      "id": "ac027f59-ea62-4d74-b47e-f28584dbcd40",
+      "title": "第二节 龋病的临床表现及分类",
+      "level": 4
+     }
+    ]
+   },
+   "syllabusTitle": "2. 临床特征和诊断",
+   "examYears": [
+    2025,
+    2024,
+    2023,
+    2022
+   ],
+   "latestExamYear": 2022,
+   "pendingQuestionCount": 4,
+   "pendingWrongCount": 0,
+   "isWeakMarked": false,
+   "questionText": "根折的临床表现，治疗原则，治疗方案及预后",
+   "questionType": "short_answer",
+   "questionSource": "北京大学",
+   "questionDifficulty": 3,
+   "questionAnswerCount": 0
+  },
+  {
+   "id": "032d33cb-60ae-498c-bb9c-fa15aa5f7713",
+   "dailyPlanId": "acdd5078-3d41-41d2-a10f-7479ab9f18cc",
+   "itemType": "question_test",
+   "knowledgePointId": "ccf08188-985c-4087-bdd1-5604c1041399",
+   "questionId": "856214a3-e7cc-4b3d-8995-f788f229733b",
+   "priorityScore": 33,
+   "estimatedMinutes": 15,
+   "completed": false,
+   "completedAt": null,
+   "sortOrder": 65,
+   "reason": "高频题 · 9次考频 · 难度3",
+   "knowledgePointTitle": "牙体形态的生理意义",
+   "requirementLevel": "unmarked",
+   "examFrequency": 9,
+   "masteryScore": 0,
+   "lastReviewedAt": null,
+   "subjectName": "口腔解剖生理学",
+   "chapterPath": [
+    "第二章 牙体解剖生理"
+   ],
+   "chapterPaths": {
+    "examSyllabus": [
+     {
+      "id": "804dcd2d-cb69-4664-a7da-2f86fcef97cc",
+      "title": "第二章 牙体解剖生理",
+      "level": 1
+     }
+    ],
+    "textbook": [
+     {
+      "id": "85e56f0a-94a2-485f-8c4b-fcef5e8aad33",
+      "title": "口腔解剖生理学",
+      "level": 1
+     },
+     {
+      "id": "316b8461-981e-4780-8198-742bc2dda88b",
+      "title": "第二章 牙体解剖生理",
+      "level": 2
+     },
+     {
+      "id": "52138085-0fef-4996-8660-65691332ed88",
+      "title": "第八节 牙体形态的生理意义",
+      "level": 3
+     }
+    ]
+   },
+   "syllabusTitle": "第二章 牙体解剖生理",
+   "examYears": [
+    2026,
+    2025,
+    2023,
+    2022
+   ],
+   "latestExamYear": 2022,
+   "pendingQuestionCount": 4,
+   "pendingWrongCount": 0,
+   "isWeakMarked": false,
+   "questionText": "邻面突度生理意义",
+   "questionType": "short_answer",
+   "questionSource": "温州医科大学",
+   "questionDifficulty": 3,
+   "questionAnswerCount": 0
+  },
+  {
+   "id": "a77b3eed-58d0-4700-8702-983665c43cc0",
+   "dailyPlanId": "acdd5078-3d41-41d2-a10f-7479ab9f18cc",
+   "itemType": "question_test",
+   "knowledgePointId": "ccf08188-985c-4087-bdd1-5604c1041399",
+   "questionId": "ef67fc3e-5e0f-40bd-8465-0d64ef7b3cd9",
+   "priorityScore": 33,
+   "estimatedMinutes": 15,
+   "completed": false,
+   "completedAt": null,
+   "sortOrder": 66,
+   "reason": "高频题 · 9次考频 · 难度3",
+   "knowledgePointTitle": "牙体形态的生理意义",
+   "requirementLevel": "unmarked",
+   "examFrequency": 9,
+   "masteryScore": 0,
+   "lastReviewedAt": null,
+   "subjectName": "口腔解剖生理学",
+   "chapterPath": [
+    "第二章 牙体解剖生理"
+   ],
+   "chapterPaths": {
+    "examSyllabus": [
+     {
+      "id": "804dcd2d-cb69-4664-a7da-2f86fcef97cc",
+      "title": "第二章 牙体解剖生理",
+      "level": 1
+     }
+    ],
+    "textbook": [
+     {
+      "id": "85e56f0a-94a2-485f-8c4b-fcef5e8aad33",
+      "title": "口腔解剖生理学",
+      "level": 1
+     },
+     {
+      "id": "316b8461-981e-4780-8198-742bc2dda88b",
+      "title": "第二章 牙体解剖生理",
+      "level": 2
+     },
+     {
+      "id": "52138085-0fef-4996-8660-65691332ed88",
+      "title": "第八节 牙体形态的生理意义",
+      "level": 3
+     }
+    ]
+   },
+   "syllabusTitle": "第二章 牙体解剖生理",
+   "examYears": [
+    2026,
+    2025,
+    2023,
+    2022
+   ],
+   "latestExamYear": 2026,
+   "pendingQuestionCount": 4,
+   "pendingWrongCount": 0,
+   "isWeakMarked": false,
+   "questionText": "下颌姿势位的生理意义",
+   "questionType": "short_answer",
+   "questionSource": "暨南大学",
+   "questionDifficulty": 3,
+   "questionAnswerCount": 0
+  },
+  {
+   "id": "a136f90a-fed8-4712-8e90-ff6a29770e9e",
+   "dailyPlanId": "acdd5078-3d41-41d2-a10f-7479ab9f18cc",
+   "itemType": "question_test",
+   "knowledgePointId": "ccf08188-985c-4087-bdd1-5604c1041399",
+   "questionId": "749f1556-fc7e-4fd1-9e41-04f50ebed732",
+   "priorityScore": 33,
+   "estimatedMinutes": 15,
+   "completed": false,
+   "completedAt": null,
+   "sortOrder": 67,
+   "reason": "高频题 · 9次考频 · 难度3",
+   "knowledgePointTitle": "牙体形态的生理意义",
+   "requirementLevel": "unmarked",
+   "examFrequency": 9,
+   "masteryScore": 0,
+   "lastReviewedAt": null,
+   "subjectName": "口腔解剖生理学",
+   "chapterPath": [
+    "第二章 牙体解剖生理"
+   ],
+   "chapterPaths": {
+    "examSyllabus": [
+     {
+      "id": "804dcd2d-cb69-4664-a7da-2f86fcef97cc",
+      "title": "第二章 牙体解剖生理",
+      "level": 1
+     }
+    ],
+    "textbook": [
+     {
+      "id": "85e56f0a-94a2-485f-8c4b-fcef5e8aad33",
+      "title": "口腔解剖生理学",
+      "level": 1
+     },
+     {
+      "id": "316b8461-981e-4780-8198-742bc2dda88b",
+      "title": "第二章 牙体解剖生理",
+      "level": 2
+     },
+     {
+      "id": "52138085-0fef-4996-8660-65691332ed88",
+      "title": "第八节 牙体形态的生理意义",
+      "level": 3
+     }
+    ]
+   },
+   "syllabusTitle": "第二章 牙体解剖生理",
+   "examYears": [
+    2026,
+    2025,
+    2023,
+    2022
+   ],
+   "latestExamYear": 2023,
+   "pendingQuestionCount": 4,
+   "pendingWrongCount": 0,
+   "isWeakMarked": false,
+   "questionText": "牙冠唇颊舌而突度的生理意义",
+   "questionType": "short_answer",
+   "questionSource": "新疆医科大学",
+   "questionDifficulty": 3,
+   "questionAnswerCount": 0
+  },
+  {
+   "id": "c02750f9-d1bc-4432-9995-461619d27df0",
+   "dailyPlanId": "acdd5078-3d41-41d2-a10f-7479ab9f18cc",
+   "itemType": "question_test",
+   "knowledgePointId": "bb99a2a4-e07c-41ef-aa42-e5403986ff81",
+   "questionId": "86d876a0-c528-4aa2-a69f-d2cd4470b26e",
+   "priorityScore": 32,
+   "estimatedMinutes": 15,
+   "completed": false,
+   "completedAt": null,
+   "sortOrder": 68,
+   "reason": "高频题 · 7次考频 · 难度3",
+   "knowledgePointTitle": "天疱疮与类天疱疮",
+   "requirementLevel": "unmarked",
+   "examFrequency": 7,
+   "masteryScore": 0,
+   "lastReviewedAt": null,
+   "subjectName": "口腔黏膜病学",
+   "chapterPath": [
+    "四、大疱类疾病",
+    "2. 瘢痕性类天疱疮"
+   ],
+   "chapterPaths": {
+    "examSyllabus": [
+     {
+      "id": "0daa4f2d-0ed5-47d5-86af-fc395c551b5a",
+      "title": "四、大疱类疾病",
+      "level": 1
+     },
+     {
+      "id": "ec0e8049-2c11-4636-a480-cdd26f1243de",
+      "title": "2. 瘢痕性类天疱疮",
+      "level": 2
+     }
+    ],
+    "textbook": [
+     {
+      "id": "404dd1f3-5c9d-4629-9ca8-fa09c1874d65",
+      "title": "口腔黏膜病学",
+      "level": 1
+     },
+     {
+      "id": "4d8cc391-5398-4164-bfd2-3cb0a37fa885",
+      "title": "第五章 口腔黏膜大疱性疾病",
+      "level": 2
+     },
+     {
+      "id": "d6c48aac-a993-4000-8c9f-31e7ecbcb38c",
+      "title": "第一节 天疱疮",
+      "level": 3
+     }
+    ]
+   },
+   "syllabusTitle": "2. 瘢痕性类天疱疮",
+   "examYears": [
+    2026,
+    2025,
+    2024,
+    2023,
+    2022
+   ],
+   "latestExamYear": 2022,
+   "pendingQuestionCount": 5,
+   "pendingWrongCount": 0,
+   "isWeakMarked": false,
+   "questionText": "多形性红斑和天疱疮鉴别",
+   "questionType": "short_answer",
+   "questionSource": "山东大学",
+   "questionDifficulty": 3,
+   "questionAnswerCount": 0
+  },
+  {
+   "id": "371c8e9b-36de-4e8a-95b2-f1b0a6a85497",
+   "dailyPlanId": "acdd5078-3d41-41d2-a10f-7479ab9f18cc",
+   "itemType": "question_test",
+   "knowledgePointId": "2908dfca-7af0-4e93-8c0f-59a41df09ecf",
+   "questionId": "baef4ed5-a099-4223-8437-ca23dd0038f6",
+   "priorityScore": 31,
+   "estimatedMinutes": 15,
+   "completed": false,
+   "completedAt": null,
+   "sortOrder": 69,
+   "reason": "高频题 · 6次考频 · 难度3",
+   "knowledgePointTitle": "功能性矫治器的原理及适应症",
+   "requirementLevel": "unmarked",
+   "examFrequency": 6,
+   "masteryScore": 0,
+   "lastReviewedAt": null,
+   "subjectName": "口腔正畸学",
+   "chapterPath": [
+    "6. 矫治器和矫治技术"
+   ],
+   "chapterPaths": {
+    "examSyllabus": [
+     {
+      "id": "ac5497b6-ae55-4194-b3a1-09fb398b3640",
+      "title": "6. 矫治器和矫治技术",
+      "level": 1
+     }
+    ],
+    "textbook": [
+     {
+      "id": "e5df76d0-6c01-4adf-b055-cc0d69f64aea",
+      "title": "口腔正畸学",
+      "level": 1
+     },
+     {
+      "id": "f72357ab-76c5-493c-8d13-5e45b56a958c",
+      "title": "第七章 矫治器和矫治技术",
+      "level": 2
+     },
+     {
+      "id": "d4253c1d-727e-4d1f-9f09-4e62788f9db4",
+      "title": "三、功能矫治器和矫治技术",
+      "level": 3
+     }
+    ]
+   },
+   "syllabusTitle": "6. 矫治器和矫治技术",
+   "examYears": [
+    2025,
+    2024,
+    2023
+   ],
+   "latestExamYear": 2023,
+   "pendingQuestionCount": 3,
+   "pendingWrongCount": 0,
+   "isWeakMarked": false,
+   "questionText": "动能性矫治的机制，作用原理，适应症",
+   "questionType": "short_answer",
+   "questionSource": "南京医科大学",
+   "questionDifficulty": 3,
+   "questionAnswerCount": 0
+  },
+  {
+   "id": "66fcf493-fb1c-4ac5-b6bd-a4721ba261b7",
+   "dailyPlanId": "acdd5078-3d41-41d2-a10f-7479ab9f18cc",
+   "itemType": "question_test",
+   "knowledgePointId": "88ea04cc-ecb9-4c00-bde8-65e4873e30cb",
+   "questionId": "074d825e-f324-48d3-b2a1-1bc2f1f14f5a",
+   "priorityScore": 31,
+   "estimatedMinutes": 15,
+   "completed": false,
+   "completedAt": null,
+   "sortOrder": 70,
+   "reason": "高频题 · 6次考频 · 难度3",
+   "knowledgePointTitle": "早期矫治",
+   "requirementLevel": "unmarked",
+   "examFrequency": 6,
+   "masteryScore": 0,
+   "lastReviewedAt": null,
+   "subjectName": "口腔正畸学",
+   "chapterPath": [
+    "8. 常见错牙合畸形的治疗及保持",
+    "8.1 常见错牙合畸形的治疗"
+   ],
+   "chapterPaths": {
+    "examSyllabus": [
+     {
+      "id": "aa0a166b-96e5-41ee-8436-17f5ae827522",
+      "title": "8. 常见错牙合畸形的治疗及保持",
+      "level": 1
+     },
+     {
+      "id": "6f74d368-4430-495f-b1a7-fa770cb89cc5",
+      "title": "8.1 常见错牙合畸形的治疗",
+      "level": 2
+     }
+    ],
+    "textbook": [
+     {
+      "id": "e5df76d0-6c01-4adf-b055-cc0d69f64aea",
+      "title": "口腔正畸学",
+      "level": 1
+     },
+     {
+      "id": "56cd8f00-e663-48e9-9301-7f386c1f4240",
+      "title": "第八章 错牙合畸形的早期预防和矫治",
+      "level": 2
+     },
+     {
+      "id": "d0ba8fd4-e1eb-4c38-97ed-ab42e2884719",
+      "title": "二、早期预防及预防性矫治",
+      "level": 3
+     }
+    ]
+   },
+   "syllabusTitle": "8.1 常见错牙合畸形的治疗",
+   "examYears": [
+    2025,
+    2022
+   ],
+   "latestExamYear": 2025,
+   "pendingQuestionCount": 2,
+   "pendingWrongCount": 0,
+   "isWeakMarked": false,
+   "questionText": "错𬌗畸形早期矫治的有利和不利因素",
+   "questionType": "short_answer",
+   "questionSource": "温州医科大学",
+   "questionDifficulty": 3,
+   "questionAnswerCount": 0
+  },
+  {
+   "id": "a7c5da8b-d8b1-491c-a00a-970bf8dfcba4",
+   "dailyPlanId": "acdd5078-3d41-41d2-a10f-7479ab9f18cc",
+   "itemType": "question_test",
+   "knowledgePointId": "96743930-7e08-43d5-9102-18745fa93a51",
+   "questionId": "51d4df5e-4cec-46e2-86c4-149f9aaa7e7a",
+   "priorityScore": 31,
+   "estimatedMinutes": 15,
+   "completed": false,
+   "completedAt": null,
+   "sortOrder": 71,
+   "reason": "高频题 · 6次考频 · 难度3",
+   "knowledgePointTitle": "环境因素与错合畸形的关系",
+   "requirementLevel": "unmarked",
+   "examFrequency": 6,
+   "masteryScore": 0,
+   "lastReviewedAt": null,
+   "subjectName": "口腔正畸学",
+   "chapterPath": [
+    "1. 错合畸形的病因、检查诊断、分类、临床表现及矫治目标"
+   ],
+   "chapterPaths": {
+    "examSyllabus": [
+     {
+      "id": "c44a786d-ff4a-4d1c-bcab-50239c3c0b95",
+      "title": "1. 错合畸形的病因、检查诊断、分类、临床表现及矫治目标",
+      "level": 1
+     }
+    ],
+    "textbook": [
+     {
+      "id": "e5df76d0-6c01-4adf-b055-cc0d69f64aea",
+      "title": "口腔正畸学",
+      "level": 1
+     },
+     {
+      "id": "82cfdea1-49bb-4ba4-8fa9-623b9c9cd936",
+      "title": "第三章 错牙合畸形的病因",
+      "level": 2
+     },
+     {
+      "id": "6ae7fc94-2772-4427-890c-2d59ba1673ba",
+      "title": "二、环境因素",
+      "level": 3
+     }
+    ]
+   },
+   "syllabusTitle": "1. 错合畸形的病因、检查诊断、分类、临床表现及矫治目标",
+   "examYears": [
+    2025,
+    2024
+   ],
+   "latestExamYear": 2025,
+   "pendingQuestionCount": 2,
+   "pendingWrongCount": 0,
+   "isWeakMarked": false,
+   "questionText": "混合牙列时期暂时性错𬌗畸形有哪些",
+   "questionType": "short_answer",
+   "questionSource": "南开大学",
+   "questionDifficulty": 3,
+   "questionAnswerCount": 0
+  },
+  {
+   "id": "2fdd58d0-f904-4a47-852e-f6a36724668f",
+   "dailyPlanId": "acdd5078-3d41-41d2-a10f-7479ab9f18cc",
+   "itemType": "question_test",
+   "knowledgePointId": "2908dfca-7af0-4e93-8c0f-59a41df09ecf",
+   "questionId": "f07e4d49-5ac7-4323-980f-4e1fa7d64a1a",
+   "priorityScore": 31,
+   "estimatedMinutes": 15,
+   "completed": false,
+   "completedAt": null,
+   "sortOrder": 72,
+   "reason": "高频题 · 6次考频 · 难度3",
+   "knowledgePointTitle": "功能性矫治器的原理及适应症",
+   "requirementLevel": "unmarked",
+   "examFrequency": 6,
+   "masteryScore": 0,
+   "lastReviewedAt": null,
+   "subjectName": "口腔正畸学",
+   "chapterPath": [
+    "6. 矫治器和矫治技术"
+   ],
+   "chapterPaths": {
+    "examSyllabus": [
+     {
+      "id": "ac5497b6-ae55-4194-b3a1-09fb398b3640",
+      "title": "6. 矫治器和矫治技术",
+      "level": 1
+     }
+    ],
+    "textbook": [
+     {
+      "id": "e5df76d0-6c01-4adf-b055-cc0d69f64aea",
+      "title": "口腔正畸学",
+      "level": 1
+     },
+     {
+      "id": "f72357ab-76c5-493c-8d13-5e45b56a958c",
+      "title": "第七章 矫治器和矫治技术",
+      "level": 2
+     },
+     {
+      "id": "d4253c1d-727e-4d1f-9f09-4e62788f9db4",
+      "title": "三、功能矫治器和矫治技术",
+      "level": 3
+     }
+    ]
+   },
+   "syllabusTitle": "6. 矫治器和矫治技术",
+   "examYears": [
+    2025,
+    2024,
+    2023
+   ],
+   "latestExamYear": 2025,
+   "pendingQuestionCount": 3,
+   "pendingWrongCount": 0,
+   "isWeakMarked": false,
+   "questionText": "正畸深覆的矫治功能性矫治适应症",
+   "questionType": "short_answer",
+   "questionSource": "南京大学",
+   "questionDifficulty": 3,
+   "questionAnswerCount": 0
+  },
+  {
+   "id": "5f3b64ab-2186-478b-85a4-7d3146987601",
+   "dailyPlanId": "acdd5078-3d41-41d2-a10f-7479ab9f18cc",
+   "itemType": "question_test",
+   "knowledgePointId": "88ea04cc-ecb9-4c00-bde8-65e4873e30cb",
+   "questionId": "865aed26-96d3-473c-b952-da9a01e9d594",
+   "priorityScore": 30,
+   "estimatedMinutes": 15,
+   "completed": false,
+   "completedAt": null,
+   "sortOrder": 73,
+   "reason": "高频题 · 5次考频 · 难度3",
+   "knowledgePointTitle": "早期矫治",
+   "requirementLevel": "unmarked",
+   "examFrequency": 5,
+   "masteryScore": 0,
+   "lastReviewedAt": null,
+   "subjectName": "口腔正畸学",
+   "chapterPath": [
+    "8. 常见错牙合畸形的治疗及保持",
+    "8.1 常见错牙合畸形的治疗"
+   ],
+   "chapterPaths": {
+    "examSyllabus": [
+     {
+      "id": "aa0a166b-96e5-41ee-8436-17f5ae827522",
+      "title": "8. 常见错牙合畸形的治疗及保持",
+      "level": 1
+     },
+     {
+      "id": "6f74d368-4430-495f-b1a7-fa770cb89cc5",
+      "title": "8.1 常见错牙合畸形的治疗",
+      "level": 2
+     }
+    ],
+    "textbook": [
+     {
+      "id": "e5df76d0-6c01-4adf-b055-cc0d69f64aea",
+      "title": "口腔正畸学",
+      "level": 1
+     },
+     {
+      "id": "56cd8f00-e663-48e9-9301-7f386c1f4240",
+      "title": "第八章 错牙合畸形的早期预防和矫治",
+      "level": 2
+     },
+     {
+      "id": "d0ba8fd4-e1eb-4c38-97ed-ab42e2884719",
+      "title": "二、早期预防及预防性矫治",
+      "level": 3
+     }
+    ]
+   },
+   "syllabusTitle": "8.1 常见错牙合畸形的治疗",
+   "examYears": [
+    2025,
+    2022
+   ],
+   "latestExamYear": 2022,
+   "pendingQuestionCount": 2,
+   "pendingWrongCount": 0,
+   "isWeakMarked": false,
+   "questionText": "早期矫治的概念目标内容",
+   "questionType": "short_answer",
+   "questionSource": "山西医科大学",
+   "questionDifficulty": 3,
+   "questionAnswerCount": 0
+  },
+  {
+   "id": "6e4c343f-e06d-4ceb-b3ef-0a4e9d9089f3",
+   "dailyPlanId": "acdd5078-3d41-41d2-a10f-7479ab9f18cc",
+   "itemType": "question_test",
+   "knowledgePointId": "a8e5cc1d-1d62-4a91-b111-f8889b36e50d",
+   "questionId": "998c14e4-ce95-468a-a233-b357ae111273",
+   "priorityScore": 30,
+   "estimatedMinutes": 15,
+   "completed": false,
+   "completedAt": null,
+   "sortOrder": 74,
+   "reason": "高频题 · 5次考频 · 难度3",
+   "knowledgePointTitle": "上颌骨的三大支柱结构及功能",
+   "requirementLevel": "unmarked",
+   "examFrequency": 5,
+   "masteryScore": 0,
+   "lastReviewedAt": null,
+   "subjectName": "口腔解剖生理学",
+   "chapterPath": [
+    "第四章 第一节 骨"
+   ],
+   "chapterPaths": {
+    "examSyllabus": [
+     {
+      "id": "c7740a6a-6050-4ae7-a857-9447f23c925a",
+      "title": "第四章 第一节 骨",
+      "level": 1
+     }
+    ],
+    "textbook": [
+     {
+      "id": "85e56f0a-94a2-485f-8c4b-fcef5e8aad33",
+      "title": "口腔解剖生理学",
+      "level": 1
+     },
+     {
+      "id": "f89df732-329c-477f-b024-4949e54e04fb",
+      "title": "第四章 口腔颌面颈部系统解剖",
+      "level": 2
+     },
+     {
+      "id": "08dfed9b-2eb5-4217-92ca-483a6cce6e61",
+      "title": "第一节 骨",
+      "level": 3
+     }
+    ]
+   },
+   "syllabusTitle": "第四章 第一节 骨",
+   "examYears": [
+    2025,
+    2024,
+    2023,
+    2022
+   ],
+   "latestExamYear": 2025,
+   "pendingQuestionCount": 4,
+   "pendingWrongCount": 0,
+   "isWeakMarked": false,
+   "questionText": "3大支柱解释",
+   "questionType": "short_answer",
+   "questionSource": "四川大学",
+   "questionDifficulty": 3,
+   "questionAnswerCount": 0
+  },
+  {
+   "id": "b810018e-a586-4506-aec8-f6e8a045aabc",
+   "dailyPlanId": "acdd5078-3d41-41d2-a10f-7479ab9f18cc",
+   "itemType": "question_test",
+   "knowledgePointId": "a8e5cc1d-1d62-4a91-b111-f8889b36e50d",
+   "questionId": "ed316a26-e5f2-415c-8996-49b9a8ba3651",
+   "priorityScore": 30,
+   "estimatedMinutes": 15,
+   "completed": false,
+   "completedAt": null,
+   "sortOrder": 75,
+   "reason": "高频题 · 5次考频 · 难度3",
+   "knowledgePointTitle": "上颌骨的三大支柱结构及功能",
+   "requirementLevel": "unmarked",
+   "examFrequency": 5,
+   "masteryScore": 0,
+   "lastReviewedAt": null,
+   "subjectName": "口腔解剖生理学",
+   "chapterPath": [
+    "第四章 第一节 骨"
+   ],
+   "chapterPaths": {
+    "examSyllabus": [
+     {
+      "id": "c7740a6a-6050-4ae7-a857-9447f23c925a",
+      "title": "第四章 第一节 骨",
+      "level": 1
+     }
+    ],
+    "textbook": [
+     {
+      "id": "85e56f0a-94a2-485f-8c4b-fcef5e8aad33",
+      "title": "口腔解剖生理学",
+      "level": 1
+     },
+     {
+      "id": "f89df732-329c-477f-b024-4949e54e04fb",
+      "title": "第四章 口腔颌面颈部系统解剖",
+      "level": 2
+     },
+     {
+      "id": "08dfed9b-2eb5-4217-92ca-483a6cce6e61",
+      "title": "第一节 骨",
+      "level": 3
+     }
+    ]
+   },
+   "syllabusTitle": "第四章 第一节 骨",
+   "examYears": [
+    2025,
+    2024,
+    2023,
+    2022
+   ],
+   "latestExamYear": 2024,
+   "pendingQuestionCount": 4,
+   "pendingWrongCount": 0,
+   "isWeakMarked": false,
+   "questionText": "上颌骨支柱结构",
+   "questionType": "short_answer",
+   "questionSource": "温州医科大学",
+   "questionDifficulty": 3,
+   "questionAnswerCount": 0
+  },
+  {
+   "id": "02ad8360-0008-4987-8d3f-0a16b98a7487",
+   "dailyPlanId": "acdd5078-3d41-41d2-a10f-7479ab9f18cc",
+   "itemType": "question_test",
+   "knowledgePointId": "6f046399-edff-4d54-8668-fa058b96fa51",
+   "questionId": "b5849bdd-9fd8-4fba-93be-6ddc78426db7",
+   "priorityScore": 29,
+   "estimatedMinutes": 15,
+   "completed": false,
+   "completedAt": null,
+   "sortOrder": 76,
+   "reason": "高频题 · 4次考频 · 难度3",
+   "knowledgePointTitle": "口腔白斑的组织病理特点及分级",
+   "requirementLevel": "unmarked",
+   "examFrequency": 4,
+   "masteryScore": 0,
+   "lastReviewedAt": null,
+   "subjectName": "口腔黏膜病学",
+   "chapterPath": [
+    "三、斑纹类疾病",
+    "1. 口腔白斑病"
+   ],
+   "chapterPaths": {
+    "examSyllabus": [
+     {
+      "id": "714f8b87-1330-49d0-a7a1-8e1f98b16657",
+      "title": "三、斑纹类疾病",
+      "level": 1
+     },
+     {
+      "id": "bd1cd77a-de07-447c-9f2c-7764456e35e8",
+      "title": "1. 口腔白斑病",
+      "level": 2
+     }
+    ],
+    "textbook": [
+     {
+      "id": "404dd1f3-5c9d-4629-9ca8-fa09c1874d65",
+      "title": "口腔黏膜病学",
+      "level": 1
+     },
+     {
+      "id": "8102d9b3-f17e-4cde-bc3c-e22751b665d6",
+      "title": "第六章 口腔斑纹类疾病",
+      "level": 2
+     },
+     {
+      "id": "776b63c2-3c7b-4c50-bacd-8fa30e5eb6aa",
+      "title": "第三节 口腔白斑病",
+      "level": 3
+     }
+    ]
+   },
+   "syllabusTitle": "1. 口腔白斑病",
+   "examYears": [
+    2025,
+    2024,
+    2022
+   ],
+   "latestExamYear": 2024,
+   "pendingQuestionCount": 3,
+   "pendingWrongCount": 0,
+   "isWeakMarked": false,
+   "questionText": "白斑理",
+   "questionType": "short_answer",
+   "questionSource": "天津医科大学",
+   "questionDifficulty": 3,
+   "questionAnswerCount": 0
+  },
+  {
+   "id": "aa905fb4-ab5c-44ae-a013-cc01103f9146",
+   "dailyPlanId": "acdd5078-3d41-41d2-a10f-7479ab9f18cc",
+   "itemType": "question_test",
+   "knowledgePointId": "6f046399-edff-4d54-8668-fa058b96fa51",
+   "questionId": "e98c93db-8171-4693-800a-fb8f52b50990",
+   "priorityScore": 29,
+   "estimatedMinutes": 15,
+   "completed": false,
+   "completedAt": null,
+   "sortOrder": 77,
+   "reason": "高频题 · 4次考频 · 难度3",
+   "knowledgePointTitle": "口腔白斑的组织病理特点及分级",
+   "requirementLevel": "unmarked",
+   "examFrequency": 4,
+   "masteryScore": 0,
+   "lastReviewedAt": null,
+   "subjectName": "口腔黏膜病学",
+   "chapterPath": [
+    "三、斑纹类疾病",
+    "1. 口腔白斑病"
+   ],
+   "chapterPaths": {
+    "examSyllabus": [
+     {
+      "id": "714f8b87-1330-49d0-a7a1-8e1f98b16657",
+      "title": "三、斑纹类疾病",
+      "level": 1
+     },
+     {
+      "id": "bd1cd77a-de07-447c-9f2c-7764456e35e8",
+      "title": "1. 口腔白斑病",
+      "level": 2
+     }
+    ],
+    "textbook": [
+     {
+      "id": "404dd1f3-5c9d-4629-9ca8-fa09c1874d65",
+      "title": "口腔黏膜病学",
+      "level": 1
+     },
+     {
+      "id": "8102d9b3-f17e-4cde-bc3c-e22751b665d6",
+      "title": "第六章 口腔斑纹类疾病",
+      "level": 2
+     },
+     {
+      "id": "776b63c2-3c7b-4c50-bacd-8fa30e5eb6aa",
+      "title": "第三节 口腔白斑病",
+      "level": 3
+     }
+    ]
+   },
+   "syllabusTitle": "1. 口腔白斑病",
+   "examYears": [
+    2025,
+    2024,
+    2022
+   ],
+   "latestExamYear": 2025,
+   "pendingQuestionCount": 3,
+   "pendingWrongCount": 0,
+   "isWeakMarked": false,
+   "questionText": "口腔自斑的组织病再",
+   "questionType": "short_answer",
+   "questionSource": "苏州大学",
+   "questionDifficulty": 3,
+   "questionAnswerCount": 0
+  },
+  {
+   "id": "da919b79-8df9-49c4-9ff0-548f0c2d78d1",
+   "dailyPlanId": "acdd5078-3d41-41d2-a10f-7479ab9f18cc",
+   "itemType": "question_test",
+   "knowledgePointId": "6f046399-edff-4d54-8668-fa058b96fa51",
+   "questionId": "6e0a8fcb-cf39-4eea-8699-c8d08fe3e8bf",
+   "priorityScore": 29,
+   "estimatedMinutes": 15,
+   "completed": false,
+   "completedAt": null,
+   "sortOrder": 78,
+   "reason": "高频题 · 4次考频 · 难度3",
+   "knowledgePointTitle": "口腔白斑的组织病理特点及分级",
+   "requirementLevel": "unmarked",
+   "examFrequency": 4,
+   "masteryScore": 0,
+   "lastReviewedAt": null,
+   "subjectName": "口腔黏膜病学",
+   "chapterPath": [
+    "三、斑纹类疾病",
+    "1. 口腔白斑病"
+   ],
+   "chapterPaths": {
+    "examSyllabus": [
+     {
+      "id": "714f8b87-1330-49d0-a7a1-8e1f98b16657",
+      "title": "三、斑纹类疾病",
+      "level": 1
+     },
+     {
+      "id": "bd1cd77a-de07-447c-9f2c-7764456e35e8",
+      "title": "1. 口腔白斑病",
+      "level": 2
+     }
+    ],
+    "textbook": [
+     {
+      "id": "404dd1f3-5c9d-4629-9ca8-fa09c1874d65",
+      "title": "口腔黏膜病学",
+      "level": 1
+     },
+     {
+      "id": "8102d9b3-f17e-4cde-bc3c-e22751b665d6",
+      "title": "第六章 口腔斑纹类疾病",
+      "level": 2
+     },
+     {
+      "id": "776b63c2-3c7b-4c50-bacd-8fa30e5eb6aa",
+      "title": "第三节 口腔白斑病",
+      "level": 3
+     }
+    ]
+   },
+   "syllabusTitle": "1. 口腔白斑病",
+   "examYears": [
+    2025,
+    2024,
+    2022
+   ],
+   "latestExamYear": 2022,
+   "pendingQuestionCount": 3,
+   "pendingWrongCount": 0,
+   "isWeakMarked": false,
+   "questionText": "白斑复发的危险因素",
+   "questionType": "short_answer",
+   "questionSource": "浙江大学",
+   "questionDifficulty": 3,
+   "questionAnswerCount": 0
+  },
+  {
+   "id": "f49f583b-daf5-4117-8ab2-d22a4ea36f71",
+   "dailyPlanId": "acdd5078-3d41-41d2-a10f-7479ab9f18cc",
+   "itemType": "question_test",
+   "knowledgePointId": "d11f120e-f714-4317-8886-d05ae79ac641",
+   "questionId": "7456f0c7-3078-4f59-858e-d193dd1f50eb",
+   "priorityScore": 29,
+   "estimatedMinutes": 15,
+   "completed": false,
+   "completedAt": null,
+   "sortOrder": 79,
+   "reason": "高频题 · 4次考频 · 难度3",
+   "knowledgePointTitle": "复发性阿弗他溃疡的病因及治疗原则",
+   "requirementLevel": "unmarked",
+   "examFrequency": 4,
+   "masteryScore": 0,
+   "lastReviewedAt": null,
+   "subjectName": "口腔黏膜病学",
+   "chapterPath": [
+    "二、溃疡类疾病",
+    "1. 复发性阿弗他溃疡"
+   ],
+   "chapterPaths": {
+    "examSyllabus": [
+     {
+      "id": "dccaa40f-13c3-42cc-9e7b-3769a705fd78",
+      "title": "二、溃疡类疾病",
+      "level": 1
+     },
+     {
+      "id": "3854727c-a94f-4520-ac59-a709dc244c5b",
+      "title": "1. 复发性阿弗他溃疡",
+      "level": 2
+     }
+    ],
+    "textbook": [
+     {
+      "id": "404dd1f3-5c9d-4629-9ca8-fa09c1874d65",
+      "title": "口腔黏膜病学",
+      "level": 1
+     },
+     {
+      "id": "5cdfdbe0-6721-4125-89f3-d4460744740a",
+      "title": "第四章 口腔黏膜溃疡类疾病",
+      "level": 2
+     },
+     {
+      "id": "fb7f1c9d-680e-49df-8da0-317c4b88d2ce",
+      "title": "第一节 复发性阿弗他溃疡",
+      "level": 3
+     }
+    ]
+   },
+   "syllabusTitle": "1. 复发性阿弗他溃疡",
+   "examYears": [
+    2025,
+    2024,
+    2022
+   ],
+   "latestExamYear": 2025,
+   "pendingQuestionCount": 3,
+   "pendingWrongCount": 0,
+   "isWeakMarked": false,
+   "questionText": "简述复发性口腔溃疡的病因",
+   "questionType": "short_answer",
+   "questionSource": "苏州大学",
+   "questionDifficulty": 3,
+   "questionAnswerCount": 0
+  }
+ ]
+}

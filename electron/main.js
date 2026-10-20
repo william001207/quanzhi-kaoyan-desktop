@@ -7,7 +7,7 @@
  * 3. 窗口关闭时结束服务端进程并退出应用
  * 4. 数据目录持久化在系统用户数据目录（userData/pglite-data）
  */
-const { app, BrowserWindow, shell } = require('electron');
+const { app, BrowserWindow, shell, dialog } = require('electron');
 const { spawn } = require('child_process');
 const path = require('path');
 const fs = require('fs');
@@ -43,6 +43,12 @@ function startServer(dirs) {
   const mainJs = path.join(dirs.serverDir, 'dist', 'main.js');
   if (!fs.existsSync(mainJs)) {
     console.error('[desktop] server dist not found:', mainJs);
+    dialog.showErrorBox(
+      '启动失败：找不到服务端程序',
+      '缺少文件：\n' + mainJs + '\n\n' +
+        '原因通常是：安装包不完整，或本地修改代码后没有重新编译服务端。\n' +
+        '处理办法：重新安装应用；若在本地开发，先在 server 目录执行 npm run build 再启动。',
+    );
     app.exit(1);
     return;
   }
@@ -72,10 +78,28 @@ function startServer(dirs) {
   });
   serverProc.stderr.on('data', (d) => process.stderr.write('[server:err] ' + d.toString()));
   serverProc.on('exit', (code) => {
+    // 记录退出前服务是否已经就绪，用于区分「启动失败」和「运行中崩溃」
+    const neverReady = !serverReady;
     serverProc = null;
     serverReady = false;
     if (code !== 0 && code !== null) {
       console.error('[desktop] server exited with code', code);
+    }
+    // 出问题时必须让用户看见原因，否则窗口一闪而过、无从排查
+    if (neverReady) {
+      dialog.showErrorBox(
+        '启动失败：本地服务没能起来',
+        '应用启动时本地服务意外退出，常见原因：\n' +
+          '· 数据库文件损坏或被占用（可先重启电脑再试）\n' +
+          '· 端口 17890 被其他程序占用\n' +
+          '· 安装包不完整，或缺少题库数据文件\n\n' +
+          '若反复出现，请把终端里的 [server:err] 输出发给维护者。',
+      );
+    } else if (mainWindow && !mainWindow.isDestroyed()) {
+      dialog.showErrorBox(
+        '本地服务已停止',
+        '后台服务意外退出，应用将关闭。\n你的学习记录已保存在本机，重新打开应用即可继续。',
+      );
     }
     // 服务意外退出时，若窗口还开着则退出应用，避免出现死窗口
     if (mainWindow && !mainWindow.isDestroyed()) {
@@ -84,11 +108,20 @@ function startServer(dirs) {
   });
 }
 
+let serverStopping = false;
 function stopServer() {
-  if (serverProc) {
-    try { serverProc.kill(); } catch (_) { /* ignore */ }
-    serverProc = null;
-  }
+  if (!serverProc || serverStopping) return;
+  serverStopping = true;
+  const proc = serverProc;
+  // 先发 SIGTERM，让服务端有机会把数据库缓冲区刷盘（closeDb）
+  try { proc.kill('SIGTERM'); } catch (_) { /* ignore */ }
+  // 兜底：2 秒内没退出就强杀，避免残留进程占着端口导致下次启动失败
+  const timer = setTimeout(() => {
+    try { proc.kill('SIGKILL'); } catch (_) { /* ignore */ }
+  }, 2000);
+  if (typeof timer.unref === 'function') timer.unref();
+  // 注意：这里不把 serverProc 置空，交给 exit 事件统一处理。
+  // 否则 before-quit 无法判断「是否还在等服务端收尾」，等待逻辑会失效。
 }
 
 function createWindow(dirs) {
@@ -118,6 +151,14 @@ function createWindow(dirs) {
     if (/^https?:/i.test(url)) shell.openExternal(url);
     return { action: 'deny' };
   });
+  // 同一窗口里的跳转也拦一道：只允许本机服务地址，外部网址用系统浏览器打开
+  const appOrigin = `http://${SERVER_HOST}:${SERVER_PORT}`;
+  mainWindow.webContents.on('will-navigate', (event, url) => {
+    if (/^https?:/i.test(url) && !url.startsWith(appOrigin)) {
+      event.preventDefault();
+      shell.openExternal(url);
+    }
+  });
   mainWindow.on('closed', () => {
     mainWindow = null;
     stopServer();
@@ -133,12 +174,27 @@ function loadApp(dirs) {
   }
 }
 
-app.whenReady().then(() => {
-  const dirs = resolveDirs();
-  // 立即创建窗口并显示本地加载页（白屏期也有内容），服务就绪后 loadApp 切入
-  createWindow(dirs);
-  startServer(dirs);
-});
+// 只允许运行一个实例。
+// 原因：两个实例会同时打开同一个数据库目录，可能造成数据损坏；也会抢同一个端口导致启动失败。
+if (!app.requestSingleInstanceLock()) {
+  app.quit();
+} else {
+  app.on('second-instance', () => {
+    // 用户重复点图标时，把已有窗口拉到前面来，而不是再开一个
+    if (mainWindow) {
+      if (mainWindow.isMinimized()) mainWindow.restore();
+      mainWindow.show();
+      mainWindow.focus();
+    }
+  });
+
+  app.whenReady().then(() => {
+    const dirs = resolveDirs();
+    // 立即创建窗口并显示本地加载页（白屏期也有内容），服务就绪后 loadApp 切入
+    createWindow(dirs);
+    startServer(dirs);
+  });
+}
 
 // 关闭全部窗口即退出（含服务进程）
 app.on('window-all-closed', () => {
@@ -146,5 +202,23 @@ app.on('window-all-closed', () => {
   app.quit();
 });
 
-app.on('before-quit', () => stopServer());
+// 退出前给本地服务一点时间把数据写完（最多等 1.5 秒）。
+// 直接杀掉进程有可能丢掉刚写入的最后几条记录，这里改成「先等它自己收尾，超时才走」。
+let quitting = false;
+app.on('before-quit', (event) => {
+  if (quitting || !serverProc) return;
+  event.preventDefault();
+  const proc = serverProc;
+  stopServer();
+  const finish = () => {
+    if (quitting) return;
+    quitting = true;
+    app.quit();
+  };
+  proc.once('exit', finish);
+  // 比 stopServer 里的强杀时间（2 秒）略长，保证「先等它自己退，再强杀，最后才放行」
+  const timer = setTimeout(finish, 2500);
+  if (typeof timer.unref === 'function') timer.unref();
+});
+
 app.on('will-quit', () => stopServer());

@@ -9,6 +9,11 @@ directories:
   output: release
   buildResources: build
 
+# 产物统一用英文名 + 自动版本号。
+# 中文文件名会让 GitHub Release 的下载链接不稳定（曾出现 404），
+# 以前是靠 CI 里 mv 重命名解决的，现在由这里统一生成，不再需要额外脚本。
+artifactName: quanzhi-kaoyan-${version}-${os}-${arch}.${ext}
+
 # asar 内只放 Electron 主进程
 files:
   - electron/**/*
