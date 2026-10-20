@@ -39,19 +39,26 @@ fi
 echo "node $(node -v) / npm $(npm -v)"
 
 # ---------- 2. 依赖 ----------
-step "安装依赖（已装过会自动跳过）"
-if [ -f package-lock.json ]; then
-  npm ci --no-audit --no-fund
-else
-  warn "没有 package-lock.json，使用 npm install（依赖版本可能漂移）"
-  npm install --no-audit --no-fund
-fi
+# 依赖已装过就跳过：双击测试时不必每次都重装（npm ci 会删掉 node_modules 重来，很慢）
+step "检查依赖"
 
-if [ -f server/package-lock.json ]; then
-  npm --prefix server ci --no-audit --no-fund
+if [ -d node_modules ] && [ -d server/node_modules ]; then
+  echo "  依赖已就绪，跳过安装"
+  echo "  （如果之后有新增依赖，删掉 node_modules 和 server/node_modules 再重新运行即可）"
 else
-  warn "没有 server/package-lock.json，使用 npm install"
-  npm --prefix server install --no-audit --no-fund
+  if [ -f package-lock.json ]; then
+    npm ci --no-audit --no-fund
+  else
+    warn "没有 package-lock.json，使用 npm install（依赖版本可能漂移）"
+    npm install --no-audit --no-fund
+  fi
+
+  if [ -f server/package-lock.json ]; then
+    npm --prefix server ci --no-audit --no-fund
+  else
+    warn "没有 server/package-lock.json，使用 npm install"
+    npm --prefix server install --no-audit --no-fund
+  fi
 fi
 
 # ---------- 3. 完整性自检 ----------
