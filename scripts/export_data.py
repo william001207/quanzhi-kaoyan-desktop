@@ -23,7 +23,10 @@ except Exception:
     pass
 
 BASE = os.environ.get("EXPORT_BASE", "https://4m95ysesq0ayu.doubaoapps.com/app/app_17g1b8sj7x4/api")
-TOKEN = os.environ.get("EXPORT_TOKEN", "desktop-export-20261020")
+# 导出凭证只从环境变量读取（GitHub Actions Secrets 注入），不硬编码，避免公开仓库泄露
+TOKEN = os.environ.get("EXPORT_TOKEN", "")
+if not TOKEN:
+    sys.exit("[export_data] 缺少 EXPORT_TOKEN 环境变量（线上导出凭证）。请在运行环境或 GitHub Actions Secrets 中配置 EXPORT_TOKEN 后重试。")
 OUT = os.environ.get(
     "EXPORT_OUT",
     os.path.normpath(os.path.join(os.path.dirname(os.path.abspath(__file__)), "..", "server", "data-export")),

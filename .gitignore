@@ -12,6 +12,9 @@ server/dist/
 pglite-data/
 *.log
 
+# 全量导出数据（含个人学习数据，CI 实时导出，不入 git）
+server/data-export/
+
 # 系统文件
 .DS_Store
 Thumbs.db
@@ -26,3 +29,4 @@ Thumbs.db
 *.key
 .env
 .env.*
+__pycache__/

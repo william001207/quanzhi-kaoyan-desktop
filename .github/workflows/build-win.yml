@@ -48,6 +48,8 @@ jobs:
         shell: bash
         run: |
           EXPORT_OUT="$GITHUB_WORKSPACE/server/data-export" python scripts/export_data.py || EXPORT_OUT="$GITHUB_WORKSPACE/server/data-export" python3 scripts/export_data.py
+        env:
+          EXPORT_TOKEN: ${{ secrets.EXPORT_TOKEN }}
 
       - name: Fetch client build assets (from CDN)
         shell: bash
