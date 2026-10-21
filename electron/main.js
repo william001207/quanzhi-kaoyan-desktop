@@ -180,24 +180,22 @@ function createWindow(dirs) {
   // 没有源码改不了组件。
   //
   // 关键：组件用 aside 的 class 区分状态（收起 w-14 / 展开 w-60），可写纯 CSS 精确命中。
-  // 但 aside 自带 transition-all duration-200，宽度是「渐变」的；如果文字瞬间出现/消失，
-  // 内容瞬间占位而容器还在变宽，就会看到跳动。所以这里让文字的显隐也走 200ms 过渡：
-  //   · 伪元素文字始终存在（不随状态增删）
-  //   · 用 max-width + overflow:hidden 裁出可见区域，收起时只剩图标宽度
-  //   · span 自己加 transition: max-width，与 aside 的宽度动画同节奏
+  // 设计原则：这里只做「最小副作用」的改动 —— 不设 max-width、不用 overflow、
+  // 不加 transition，避免在 aside 自身的 200ms 宽度动画期间引发反复重排（表现为整块抖动）。
+  //   · 原文字字号恒为 0（不可见，但仍在 DOM 里，React 改它没有视觉过程）
+  //   · 图标由 ::before 画
+  //   · 收起态 ::after 直接 content:none（不生成文字节点），展开态才输出文字
   const SIDEBAR_CSS = `
+    /* aside 自带 transition-all duration-200，宽度动画期间浏览器每帧重排整个侧边栏，
+       叠加内部 justify-center / px-4 的瞬间切换，观感就是「整块抖一下」。
+       直接关掉过渡：切换瞬间完成，不再有中间态。 */
+    aside {
+      transition: none !important;
+    }
     aside > div:first-child > span.text-base.font-semibold {
       font-size: 0 !important;
       display: inline-flex;
       align-items: center;
-      overflow: hidden;
-      transition: max-width 200ms ease-in-out;
-    }
-    aside.w-14 > div:first-child > span.text-base.font-semibold {
-      max-width: 20px;
-    }
-    aside.w-60 > div:first-child > span.text-base.font-semibold {
-      max-width: 220px;
     }
     aside > div:first-child > span.text-base.font-semibold::before {
       content: '';
@@ -207,14 +205,16 @@ function createWindow(dirs) {
       height: 20px;
       background: url("/icon.png") center / contain no-repeat;
     }
-    aside > div:first-child > span.text-base.font-semibold::after {
+    aside.w-14 > div:first-child > span.text-base.font-semibold::after {
+      content: none;
+    }
+    aside.w-60 > div:first-child > span.text-base.font-semibold::after {
       content: '全职高手考研';
       font-size: 16px;
       font-weight: 600;
       line-height: 1.4;
       margin-left: 8px;
       white-space: nowrap;
-      flex: none;
     }
   `;
 
@@ -228,21 +228,6 @@ function createWindow(dirs) {
       // 装饰失败不影响任何功能，静默跳过
       console.error('[desktop] 侧边栏图标样式注入失败：', e && e.message);
     }
-  });
-
-  // ---- 临时调试：自动截图，用于核对品牌位真实渲染效果 ----
-  // 仅用于排查样式问题，定位完即删除。
-  // 第 1 张：约 8 秒后（侧边栏展开态）；第 2 张：约 20 秒后（此时你点一下收起再看）
-  [8000, 20000].forEach((delay, idx) => {
-    setTimeout(async () => {
-      try {
-        if (!mainWindow || mainWindow.isDestroyed()) return;
-        const img = await mainWindow.webContents.capturePage();
-        const out = path.join(app.getPath('userData'), `logo-debug-${idx + 1}.png`);
-        fs.writeFileSync(out, img.toPNG());
-        console.log('[debug] 截图已保存：', out);
-      } catch (_) { /* 截图失败不影响使用 */ }
-    }, delay);
   });
 
   mainWindow.on('close', (event) => {
