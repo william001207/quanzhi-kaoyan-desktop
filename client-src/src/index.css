@@ -1,0 +1,19 @@
+@import '@lark-apaas/client-toolkit/lib/index.css';
+@import "tw-animate-css";
+@import './tailwind-theme.css';
+@import "./typography.css";
+
+.scrollbar-none::-webkit-scrollbar {
+  display: none;
+}
+.scrollbar-none {
+  -ms-overflow-style: none;
+  scrollbar-width: none;
+}
+
+@config "../../tailwind.config.ts";
+
+[data-custom-element$="-watermark"],
+[data-custom-element$="-watermark-mobile"] {
+  display: none !important;
+}
