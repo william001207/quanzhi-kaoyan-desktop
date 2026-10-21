@@ -26,7 +26,7 @@ import type {
   ClearDataRange,
   ClearDataResult,
 } from '@shared/api.interface';
-import { Calendar, Clock, Scale, AlertTriangle, BookOpen, Trash2 } from 'lucide-react';
+import { Calendar, Clock, Scale, AlertTriangle, BookOpen, Trash2, Download } from 'lucide-react';
 import { invalidateStats } from '@/hooks/use-stats-refresh';
 
 const DEFAULT_SUBJECTS: string[] = [
@@ -166,6 +166,27 @@ const SettingsPage: React.FC = () => {
     description: string;
   } | null>(null);
   const [clearing, setClearing] = useState(false);
+
+  const [exporting, setExporting] = useState(false);
+  const [exportResult, setExportResult] = useState<{
+    dir: string;
+    files: { name: string; size: number }[];
+  } | null>(null);
+
+  const handleExportContent = async () => {
+    if (exporting) return;
+    setExporting(true);
+    try {
+      const result = await api.data.exportContent();
+      setExportResult(result);
+      toast.success(`已导出 ${result.files.length} 个文件`);
+    } catch (err) {
+      logger.error('导出内容数据失败', err);
+      toast.error('导出失败，请重试');
+    } finally {
+      setExporting(false);
+    }
+  };
 
   const openClearDialog = (
     type: ClearDataType,
@@ -626,6 +647,45 @@ const SettingsPage: React.FC = () => {
               考前模式会缩短复习间隔（D0→D1→D2→D4→D7），并优先推送高频考点和薄弱知识点。
               建议在考前 30 天开启。
             </p>
+          </CardContent>
+        </Card>
+
+        {/* 导出内容数据 */}
+        <Card>
+          <CardHeader className="pb-2">
+            <div className="flex items-center gap-2">
+              <Download className="h-4 w-4 text-primary" />
+              <CardTitle className="text-lg font-medium">导出内容数据</CardTitle>
+            </div>
+            <p className="text-sm text-muted-foreground mt-1">
+              把当前题库、知识点、章节导出成文件。用它覆盖仓库里的 server/data-export
+              目录，下一版安装包就会带上你的修改。
+            </p>
+          </CardHeader>
+          <CardContent className="space-y-3">
+            <Button onClick={handleExportContent} disabled={exporting}>
+              {exporting ? '导出中...' : '导出到数据目录'}
+            </Button>
+            {exportResult && (
+              <div className="rounded-md bg-muted/50 p-3 text-xs space-y-1">
+                <p className="text-muted-foreground">
+                  已导出 {exportResult.files.length} 个文件：
+                </p>
+                <ul className="space-y-0.5">
+                  {exportResult.files.map((f) => (
+                    <li key={f.name} className="flex justify-between gap-4">
+                      <span className="font-mono">{f.name}</span>
+                      <span className="text-muted-foreground">
+                        {(f.size / 1024 / 1024).toFixed(1)} MB
+                      </span>
+                    </li>
+                  ))}
+                </ul>
+                <p className="pt-1 break-all text-muted-foreground">
+                  目录：{exportResult.dir}
+                </p>
+              </div>
+            )}
           </CardContent>
         </Card>
 

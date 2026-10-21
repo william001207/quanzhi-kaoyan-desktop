@@ -9,3 +9,4 @@ export * as stats from './stats';
 export * as settings from './settings';
 export * as search from './search';
 export * as mockExam from './mock-exam';
+export * as data from './data';

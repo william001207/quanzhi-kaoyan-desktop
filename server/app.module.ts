@@ -18,6 +18,7 @@ import { SettingsModule } from './modules/settings/settings.module';
 import { ImportModule } from './modules/import/import.module';
 import { SearchModule } from './modules/search/search.module';
 import { MockExamModule } from './modules/mock-exam/mock-exam.module';
+import { DataModule } from './modules/data/data.module';
 
 @Module({
   imports: [
@@ -39,6 +40,7 @@ import { MockExamModule } from './modules/mock-exam/mock-exam.module';
     ImportModule,
     SearchModule,
     MockExamModule,
+    DataModule,
     ViewModule,
   ],
   providers: [

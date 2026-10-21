@@ -9,9 +9,9 @@
 
 | 数据集 | 规模 |
 |---|---|
-| 真题 `exam_questions` / `exam_question_details` | 1708 道 |
-| 知识点 `knowledge_points` / `knowledge_point_details` | 1054 个（另有从真题关联补录的未展开知识点） |
-| 章节 `chapter_trees` | 875 个（教材 741 + 考纲 134） |
+| 真题 `exam_questions` / `exam_question_details` | 1705 道 |
+| 知识点 `knowledge_points` / `knowledge_point_details` | 1118 个（全部已细化关联到教材「节」级） |
+| 章节 `chapter_trees` | 876 个（教材 742 + 考纲 134） |
 | 科目 `subjects` | 8 |
 | 今日计划 `daily_plan_today` | 80 项（40 知识点 + 40 真题） |
 | 设置 `settings` | 1（考试日期 2026-12-19） |
@@ -35,7 +35,7 @@
 替换本目录的文件后，**必须**同步修改 `server/database/local-db.ts` 中的：
 
 ```ts
-const DATA_VERSION = '2026-10-20.1';   // 改成新值，否则应用不会触发对齐
+const DATA_VERSION = '2026-10-22.1';   // 改成新值，否则应用不会触发对齐
 ```
 
 否则应用会认为内容没变，继续用库里的旧数据。

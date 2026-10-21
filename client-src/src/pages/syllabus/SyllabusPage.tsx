@@ -222,7 +222,7 @@ const ChapterTreeNode = memo(function ChapterTreeNode({
   return (
     <div>
       <div
-        className={`group flex items-center gap-1 px-2 py-1.5 rounded text-xs cursor-pointer transition-colors ${
+        className={`group relative flex items-center gap-1 px-2 py-1.5 rounded text-xs cursor-pointer transition-colors ${
           isSelected ? 'bg-primary/10 text-primary font-medium' : 'hover:bg-muted/50'
         }`}
         style={{ paddingLeft: `${depth * 12 + 8}px` }}
@@ -254,15 +254,16 @@ const ChapterTreeNode = memo(function ChapterTreeNode({
             onClick={(e) => e.stopPropagation()}
           />
         ) : (
-          <span className="truncate flex-1">{chapter.title}</span>
+          <span className="truncate flex-1 min-w-0">{chapter.title}</span>
         )}
         {!isEditing && kpCount > 0 && (
           <span className="text-[10px] text-muted-foreground flex-shrink-0">
             {kpCount}
           </span>
         )}
+        {/* 操作用绝对定位浮在右侧：opacity-0 只透明、仍占位，会把章节名挤掉约 52px */}
         {!isEditing && (
-          <div className="flex items-center gap-0.5 flex-shrink-0 opacity-0 group-hover:opacity-100 transition-opacity">
+          <div className="absolute right-1 top-1/2 -translate-y-1/2 flex items-center gap-0.5 rounded bg-background/95 px-0.5 opacity-0 group-hover:opacity-100 transition-opacity">
             <Button
               size="icon"
               variant="ghost"
@@ -1056,9 +1057,9 @@ const SyllabusPage: React.FC = () => {
         </button>
       </div>
 
-      <div className="flex gap-4 flex-col md:flex-row md:h-[calc(100vh-210px)]">
+      <div className="flex gap-4 flex-col md:flex-row md:h-[calc(100vh-165px)]">
         {/* 左侧：科目 + 章节树（桌面端常驻，移动端仅在tree视图显示） */}
-        <Card className={`w-full md:w-72 md:flex-shrink-0 ${mobileView === 'list' ? 'hidden md:block' : ''} md:overflow-hidden md:flex md:flex-col`}>
+        <Card className={`w-full md:w-[22rem] md:flex-shrink-0 ${mobileView === 'list' ? 'hidden md:block' : ''} md:overflow-hidden md:flex md:flex-col`}>
           <CardContent className="p-0 h-full overflow-auto">
             {subjectsLoading ? (
               <div className="p-4 space-y-2">

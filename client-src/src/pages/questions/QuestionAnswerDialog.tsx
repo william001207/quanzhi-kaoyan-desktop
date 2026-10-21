@@ -1102,7 +1102,7 @@ const QuestionAnswerDialog: React.FC<QuestionAnswerDialogProps> = ({
                        {question.answerKeywords.map((kw, idx) => (
                          <div
                            key={idx}
-                           className="flex items-start gap-2 text-sm group"
+                           className="relative flex items-start gap-2 text-sm group"
                          >
                            <Checkbox
                              id={`kw-${idx}`}
@@ -1162,7 +1162,7 @@ const QuestionAnswerDialog: React.FC<QuestionAnswerDialogProps> = ({
                                >
                                  {kw}
                                </label>
-                               <div className="flex items-center gap-0.5 opacity-0 group-hover:opacity-100 transition-opacity">
+                               <div className="absolute right-1 top-1/2 -translate-y-1/2 flex items-center gap-0.5 rounded bg-background/95 px-0.5 opacity-0 group-hover:opacity-100 transition-opacity">
                                  <Button
                                    type="button"
                                    size="icon"
