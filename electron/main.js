@@ -179,36 +179,42 @@ function createWindow(dirs) {
   // 背景：前端是构建产物，组件里写死了「收起显示『全』/ 展开显示『全职高手考研』」，
   // 没有源码改不了组件。
   //
-  // 关键：组件用 aside 的 class 区分收起/展开状态（w-14 / w-60），
-  // 所以可以写纯 CSS 选择器精确命中，**不需要 JS 打标记**。
-  // 之前的版本靠 MutationObserver 补属性，属性总比 React 更新晚一帧，
-  // 于是会看到「原文字 → 消失 → 图标出现」的三段闪动；纯 CSS 后状态切换是原子的，不再闪。
-  //
-  // 做法：原文字字号恒为 0（看不见但仍在 DOM 里，React 改它不会有视觉过程），
-  // 图标与文字全部由伪元素渲染。
+  // 关键：组件用 aside 的 class 区分状态（收起 w-14 / 展开 w-60），可写纯 CSS 精确命中。
+  // 但 aside 自带 transition-all duration-200，宽度是「渐变」的；如果文字瞬间出现/消失，
+  // 内容瞬间占位而容器还在变宽，就会看到跳动。所以这里让文字的显隐也走 200ms 过渡：
+  //   · 伪元素文字始终存在（不随状态增删）
+  //   · 用 max-width + overflow:hidden 裁出可见区域，收起时只剩图标宽度
+  //   · span 自己加 transition: max-width，与 aside 的宽度动画同节奏
   const SIDEBAR_CSS = `
-    aside.w-14 > div:first-child > span.text-base.font-semibold,
-    aside.w-60 > div:first-child > span.text-base.font-semibold {
+    aside > div:first-child > span.text-base.font-semibold {
       font-size: 0 !important;
       display: inline-flex;
       align-items: center;
+      overflow: hidden;
+      transition: max-width 200ms ease-in-out;
     }
-    aside.w-14 > div:first-child > span.text-base.font-semibold::before,
-    aside.w-60 > div:first-child > span.text-base.font-semibold::before {
+    aside.w-14 > div:first-child > span.text-base.font-semibold {
+      max-width: 20px;
+    }
+    aside.w-60 > div:first-child > span.text-base.font-semibold {
+      max-width: 220px;
+    }
+    aside > div:first-child > span.text-base.font-semibold::before {
       content: '';
       display: block;
+      flex: none;
       width: 20px;
       height: 20px;
       background: url("/icon.png") center / contain no-repeat;
-      flex: none;
     }
-    aside.w-60 > div:first-child > span.text-base.font-semibold::after {
+    aside > div:first-child > span.text-base.font-semibold::after {
       content: '全职高手考研';
       font-size: 16px;
       font-weight: 600;
       line-height: 1.4;
       margin-left: 8px;
       white-space: nowrap;
+      flex: none;
     }
   `;
 
@@ -222,6 +228,21 @@ function createWindow(dirs) {
       // 装饰失败不影响任何功能，静默跳过
       console.error('[desktop] 侧边栏图标样式注入失败：', e && e.message);
     }
+  });
+
+  // ---- 临时调试：自动截图，用于核对品牌位真实渲染效果 ----
+  // 仅用于排查样式问题，定位完即删除。
+  // 第 1 张：约 8 秒后（侧边栏展开态）；第 2 张：约 20 秒后（此时你点一下收起再看）
+  [8000, 20000].forEach((delay, idx) => {
+    setTimeout(async () => {
+      try {
+        if (!mainWindow || mainWindow.isDestroyed()) return;
+        const img = await mainWindow.webContents.capturePage();
+        const out = path.join(app.getPath('userData'), `logo-debug-${idx + 1}.png`);
+        fs.writeFileSync(out, img.toPNG());
+        console.log('[debug] 截图已保存：', out);
+      } catch (_) { /* 截图失败不影响使用 */ }
+    }, delay);
   });
 
   mainWindow.on('close', (event) => {
