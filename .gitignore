@@ -41,3 +41,4 @@ __pycache__/
 # 构建中间产物与产物备份（不进仓库）
 tmp-build/
 client-backup/
+server/export/

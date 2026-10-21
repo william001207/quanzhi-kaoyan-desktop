@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
@@ -26,7 +26,7 @@ import type {
   ClearDataRange,
   ClearDataResult,
 } from '@shared/api.interface';
-import { Calendar, Clock, Scale, AlertTriangle, BookOpen, Trash2, Download } from 'lucide-react';
+import { Calendar, Clock, Scale, AlertTriangle, BookOpen, Trash2, Download, Upload, HardDriveDownload } from 'lucide-react';
 import { invalidateStats } from '@/hooks/use-stats-refresh';
 
 const DEFAULT_SUBJECTS: string[] = [
@@ -187,6 +187,142 @@ const SettingsPage: React.FC = () => {
       setExporting(false);
     }
   };
+
+  // ---------- 学习数据导出 / 导入 ----------
+  const [learningExporting, setLearningExporting] = useState(false);
+  const learningFileRef = useRef<HTMLInputElement>(null);
+  const [pendingLearning, setPendingLearning] = useState<{
+    name: string;
+    payload: Record<string, unknown>;
+  } | null>(null);
+  const [learningImporting, setLearningImporting] = useState(false);
+  const [learningImportResult, setLearningImportResult] = useState<{
+    backupFile: string;
+    applied: Record<string, number>;
+    skipped: Record<string, number>;
+  } | null>(null);
+
+  const handleExportLearning = async () => {
+    if (learningExporting) return;
+    setLearningExporting(true);
+    try {
+      const result = await api.data.exportLearning();
+      // 触发浏览器下载，文件直接进「下载」目录，方便 AirDrop/拷贝到另一台设备
+      const blob = new Blob([JSON.stringify(result.data)], {
+        type: 'application/json',
+      });
+      const url = URL.createObjectURL(blob);
+      const a = document.createElement('a');
+      a.href = url;
+      a.download = result.fileName;
+      a.click();
+      URL.revokeObjectURL(url);
+      toast.success(`学习数据已导出到下载目录（${result.fileName}）`);
+    } catch (err) {
+      logger.error('导出学习数据失败', err);
+      toast.error('导出失败，请重试');
+    } finally {
+      setLearningExporting(false);
+    }
+  };
+
+  const extractErrMsg = (err: unknown, fallback: string) => {
+    // 平台错误包装为 { error: { message } }，Nest 原生为 { message }
+    const data = (err as { response?: { data?: any } })?.response?.data;
+    const msg = data?.error?.message ?? data?.message;
+    return typeof msg === 'string' && msg ? msg : fallback;
+  };
+
+  const onLearningFileChange = async (
+    e: React.ChangeEvent<HTMLInputElement>,
+  ) => {
+    const file = e.target.files?.[0];
+    e.target.value = '';
+    if (!file) return;
+    try {
+      const text = await file.text();
+      const payload = JSON.parse(text);
+      if (payload?.kind !== 'quanzhi-learning-data') {
+        toast.error('文件格式不正确：不是学习数据备份文件');
+        return;
+      }
+      setPendingLearning({ name: file.name, payload });
+    } catch {
+      toast.error('文件读取失败：不是有效的 JSON 文件');
+    }
+  };
+
+  const handleConfirmLearningImport = async () => {
+    if (!pendingLearning || learningImporting) return;
+    setLearningImporting(true);
+    try {
+      const result = await api.data.importLearning(pendingLearning.payload);
+      setLearningImportResult(result);
+      setPendingLearning(null);
+      toast.success('学习数据导入完成，建议刷新页面查看');
+    } catch (err) {
+      logger.error('导入学习数据失败', err);
+      toast.error(extractErrMsg(err, '导入失败，请重试'));
+    } finally {
+      setLearningImporting(false);
+    }
+  };
+
+  // ---------- 内容数据导入 ----------
+  const contentFileRef = useRef<HTMLInputElement>(null);
+  const CONTENT_FILES = [
+    'subjects.json',
+    'chapter_trees.json',
+    'knowledge_point_details.json',
+    'exam_question_details.json',
+  ];
+  const [pendingContent, setPendingContent] = useState<{
+    files: Record<string, unknown>;
+    names: string[];
+  } | null>(null);
+  const [contentImporting, setContentImporting] = useState(false);
+  const [contentImportResult, setContentImportResult] = useState<{
+    applied: Record<string, number>;
+  } | null>(null);
+
+  const onContentFilesChange = async (
+    e: React.ChangeEvent<HTMLInputElement>,
+  ) => {
+    const list = Array.from(e.target.files ?? []);
+    e.target.value = '';
+    if (!list.length) return;
+    try {
+      const files: Record<string, unknown> = {};
+      for (const f of list) {
+        files[f.name] = JSON.parse(await f.text());
+      }
+      const missing = CONTENT_FILES.filter((n) => !files[n]);
+      if (missing.length) {
+        toast.error(`缺少文件：${missing.join('、')}`);
+        return;
+      }
+      setPendingContent({ files, names: list.map((f) => f.name) });
+    } catch {
+      toast.error('文件读取失败：请确认选择的是导出的 JSON 文件');
+    }
+  };
+
+  const handleConfirmContentImport = async () => {
+    if (!pendingContent || contentImporting) return;
+    setContentImporting(true);
+    try {
+      const result = await api.data.importContent(pendingContent.files);
+      setContentImportResult(result);
+      setPendingContent(null);
+      toast.success('内容数据导入完成，建议刷新页面查看');
+    } catch (err) {
+      logger.error('导入内容数据失败', err);
+      toast.error(extractErrMsg(err, '导入失败，请重试'));
+    } finally {
+      setContentImporting(false);
+    }
+  };
+
 
   const openClearDialog = (
     type: ClearDataType,
@@ -684,6 +820,152 @@ const SettingsPage: React.FC = () => {
                 <p className="pt-1 break-all text-muted-foreground">
                   目录：{exportResult.dir}
                 </p>
+              </div>
+            )}
+          </CardContent>
+        </Card>
+
+        {/* 学习数据备份与迁移 */}
+        <Card>
+          <CardHeader className="pb-2">
+            <div className="flex items-center gap-2">
+              <HardDriveDownload className="h-4 w-4 text-primary" />
+              <CardTitle className="text-lg font-medium">
+                学习数据备份与迁移
+              </CardTitle>
+            </div>
+            <p className="text-sm text-muted-foreground mt-1">
+              导出你的学习进度（掌握度、错题、复习记录、试卷、设置）为一个
+              JSON 文件，换电脑或重装后在另一台设备上导入即可恢复。
+              导入是合并模式：不会删除本机已有记录，且导入前会自动备份当前数据。
+            </p>
+          </CardHeader>
+          <CardContent className="space-y-3">
+            <div className="flex flex-wrap gap-2">
+              <Button onClick={handleExportLearning} disabled={learningExporting}>
+                <Download className="h-4 w-4 mr-1" />
+                {learningExporting ? '导出中...' : '导出学习数据'}
+              </Button>
+              <Button
+                variant="outline"
+                onClick={() => learningFileRef.current?.click()}
+                disabled={learningImporting}
+              >
+                <Upload className="h-4 w-4 mr-1" />
+                选择备份文件导入
+              </Button>
+              <input
+                ref={learningFileRef}
+                type="file"
+                accept=".json"
+                className="hidden"
+                onChange={onLearningFileChange}
+              />
+            </div>
+            {pendingLearning && (
+              <div className="rounded-md bg-muted/50 p-3 text-sm space-y-2">
+                <p>
+                  已选择：<span className="font-mono">{pendingLearning.name}</span>
+                  ，确认导入？（导入前会自动备份当前学习数据）
+                </p>
+                <div className="flex gap-2">
+                  <Button
+                    size="sm"
+                    onClick={handleConfirmLearningImport}
+                    disabled={learningImporting}
+                  >
+                    {learningImporting ? '导入中...' : '确认导入'}
+                  </Button>
+                  <Button
+                    size="sm"
+                    variant="outline"
+                    onClick={() => setPendingLearning(null)}
+                    disabled={learningImporting}
+                  >
+                    取消
+                  </Button>
+                </div>
+              </div>
+            )}
+            {learningImportResult && (
+              <div className="rounded-md bg-muted/50 p-3 text-xs space-y-1">
+                <p className="text-muted-foreground">
+                  导入完成：知识点进度 {learningImportResult.applied.knowledgePoints ?? 0}{' '}
+                  条、题目进度 {learningImportResult.applied.questions ?? 0} 条、错题{' '}
+                  {learningImportResult.applied.wrong_question ?? 0} 条、复习记录{' '}
+                  {learningImportResult.applied.review_record ?? 0} 条、试卷{' '}
+                  {learningImportResult.applied.exam_paper ?? 0} 份、考试记录{' '}
+                  {learningImportResult.applied.exam_record ?? 0} 条
+                </p>
+                <p className="break-all text-muted-foreground">
+                  导入前备份：{learningImportResult.backupFile}
+                </p>
+              </div>
+            )}
+          </CardContent>
+        </Card>
+
+        {/* 导入内容数据 */}
+        <Card>
+          <CardHeader className="pb-2">
+            <div className="flex items-center gap-2">
+              <Upload className="h-4 w-4 text-primary" />
+              <CardTitle className="text-lg font-medium">导入内容数据</CardTitle>
+            </div>
+            <p className="text-sm text-muted-foreground mt-1">
+              选择之前「导出内容数据」生成的 4 个 JSON 文件（subjects、
+              chapter_trees、knowledge_point_details、exam_question_details），
+              导入后题库内容更新为文件版本。只更新内容，不影响学习进度。
+            </p>
+          </CardHeader>
+          <CardContent className="space-y-3">
+            <Button
+              variant="outline"
+              onClick={() => contentFileRef.current?.click()}
+              disabled={contentImporting}
+            >
+              <Upload className="h-4 w-4 mr-1" />
+              选择 4 个 JSON 文件（可多选）
+            </Button>
+            <input
+              ref={contentFileRef}
+              type="file"
+              accept=".json"
+              multiple
+              className="hidden"
+              onChange={onContentFilesChange}
+            />
+            {pendingContent && (
+              <div className="rounded-md bg-muted/50 p-3 text-sm space-y-2">
+                <p>
+                  已选择 {pendingContent.names.length} 个文件：
+                  <span className="font-mono text-xs">
+                    {pendingContent.names.join('、')}
+                  </span>
+                </p>
+                <div className="flex gap-2">
+                  <Button
+                    size="sm"
+                    onClick={handleConfirmContentImport}
+                    disabled={contentImporting}
+                  >
+                    {contentImporting ? '导入中...' : '确认导入'}
+                  </Button>
+                  <Button
+                    size="sm"
+                    variant="outline"
+                    onClick={() => setPendingContent(null)}
+                    disabled={contentImporting}
+                  >
+                    取消
+                  </Button>
+                </div>
+              </div>
+            )}
+            {contentImportResult && (
+              <div className="rounded-md bg-muted/50 p-3 text-xs text-muted-foreground">
+                导入完成：知识点 {contentImportResult.applied.knowledgePoints ?? 0}{' '}
+                个、题目 {contentImportResult.applied.questions ?? 0} 道
               </div>
             )}
           </CardContent>

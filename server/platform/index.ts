@@ -6,6 +6,7 @@
  */
 import { Module, ValidationPipe, type DynamicModule, type INestApplication } from '@nestjs/common';
 import type { NestExpressApplication } from '@nestjs/platform-express';
+import { json, urlencoded } from 'express';
 import cookieParser from 'cookie-parser';
 import type { PgliteDatabase } from 'drizzle-orm/pglite';
 import * as schema from '../database/schema';
@@ -43,6 +44,11 @@ export async function configureApp(
   // 只允许应用自身的地址跨域访问。
   // 原来的 origin: true 会把任何来源都原样放行，配合 credentials 等于让任意网页
   // 都能读写本机数据库；桌面端前后端本来就同源，不需要放开。
+  // body 解析：main.ts 关掉了默认解析器，这里注册大上限版本
+  // （导入内容数据 4 个 JSON 合计约 10MB+，默认 100kb 会直接 413）
+  app.use(json({ limit: '64mb' }) as any);
+  app.use(urlencoded({ extended: true, limit: '64mb' }) as any);
+
   const localPort = process.env.SERVER_PORT || '17890';
   app.enableCors({
     origin: [`http://127.0.0.1:${localPort}`, `http://localhost:${localPort}`],

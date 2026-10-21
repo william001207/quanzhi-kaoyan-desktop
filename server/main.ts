@@ -19,6 +19,9 @@ async function bootstrap() {
 
   const app = await NestFactory.create<NestExpressApplication>(AppModule, {
     abortOnError: process.env.NODE_ENV !== 'development',
+    // 关闭默认 body 解析器，改在 configureApp 里注册带大上限的版本
+    // （导入内容/学习数据的 JSON 可能超过默认的 100kb）
+    bodyParser: false,
   });
   httpApp = app;
   await configureApp(app, {

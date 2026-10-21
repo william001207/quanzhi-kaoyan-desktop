@@ -112,6 +112,23 @@ async function ensureSchemaAndData(db: PGlite): Promise<void> {
   }
 }
 
+/**
+ * 从指定目录执行一次内容同步（供设置页「导入内容数据」使用）。
+ * 复用启动时的增量同步逻辑：只更新/补充内容字段，不触碰用户学习进度。
+ * 通过临时切换 DATA_DIR 让 readJson 指向导入目录，结束后还原。
+ */
+export async function syncContentFromDir(dir: string): Promise<void> {
+  const db = await getDb();
+  const prev = process.env.DATA_DIR;
+  process.env.DATA_DIR = dir;
+  try {
+    await syncBusinessContent(db);
+  } finally {
+    if (prev === undefined) delete process.env.DATA_DIR;
+    else process.env.DATA_DIR = prev;
+  }
+}
+
 async function setDataVersion(db: PGlite): Promise<void> {
   await db.query(
     `INSERT INTO app_meta (key, value) VALUES ('data_version', $1)
