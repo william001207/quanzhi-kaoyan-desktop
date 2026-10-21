@@ -1,24 +1,44 @@
 {
-  "extends": "@lark-apaas/fullstack-presets/lib/simple/tsconfig/tsconfig.app.json",
   "compilerOptions": {
-    "baseUrl": "./",
-    "paths": {
-      "@client/*": ["client/*"],
-      "@shared/*": ["shared/*"],
-      "@/*": ["./client/src/*"],
-      "@lark-apaas/client-toolkit/tools/*": ["node_modules/@lark-apaas/client-toolkit/lib/apis/tools/*"]
-    },
+    "target": "ES2022",
+    "lib": [
+      "ES2022",
+      "DOM",
+      "DOM.Iterable"
+    ],
+    "module": "ESNext",
+    "moduleResolution": "bundler",
+    "jsx": "react-jsx",
+    "strict": true,
+    "skipLibCheck": true,
+    "esModuleInterop": true,
+    "allowSyntheticDefaultImports": true,
+    "resolveJsonModule": true,
+    "isolatedModules": true,
+    "noEmit": true,
     "incremental": true,
+    "baseUrl": ".",
+    "paths": {
+      "@/*": [
+        "./src/*"
+      ],
+      "@client/*": [
+        "./*"
+      ],
+      "@shared/*": [
+        "../server/shared/*"
+      ]
+    },
+    "types": [
+      "vite/client"
+    ]
   },
   "include": [
-    "client/**/*",
-    "shared/**/*"
+    "src/**/*"
   ],
   "exclude": [
     "node_modules",
     "dist",
-    "public",
-    "source_package",
-    "client/src/api/gen"
+    "public"
   ]
 }

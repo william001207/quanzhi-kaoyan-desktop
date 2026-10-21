@@ -78,6 +78,18 @@ async function ensureSchemaAndData(db: PGlite): Promise<void> {
   );
   await db.exec(schemaSql);
 
+  // 修补历史建表脚本漏掉的列。
+  // exam_paper 早期版本缺少 _created_by，而代码里定义了这个字段，
+  // 查询时会报 column "_created_by" does not exist（表现为试卷相关接口全部 500）。
+  // 用 IF NOT EXISTS 保证幂等，老库新库都能安全执行。
+  try {
+    await db.exec(
+      'ALTER TABLE exam_paper ADD COLUMN IF NOT EXISTS _created_by user_profile;',
+    );
+  } catch (e) {
+    console.warn('[local-db] 补列失败（可忽略）：', (e as Error).message);
+  }
+
   // 已导入过则跳过（幂等）
   const res: any = await db.query('SELECT count(*)::int AS n FROM subject');
   const n = Number(res.rows?.[0]?.n ?? res[0]?.n ?? 0);

@@ -58,6 +58,8 @@
   <AlertTriangle className="size-4" />
   <AlertTitle>警告</AlertTitle>
   <AlertDescription>请注意检查</AlertDescription>
+</Alert>
+
 ```
 
 #### 4. Empty 组件
@@ -128,4 +130,5 @@ interface ImageProps extends React.ImgHTMLAttributes<HTMLImageElement>
   width={300}
   height={200}
 />
+
 ```

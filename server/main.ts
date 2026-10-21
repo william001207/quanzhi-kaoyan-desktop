@@ -2,7 +2,7 @@ import { NestFactory } from '@nestjs/core';
 import { Logger } from '@nestjs/common';
 import { configureApp } from './platform';
 import { initializeDatabase, closeDb } from './database/local-db';
-import { join } from 'path';
+import { join, resolve } from 'path';
 // eslint-disable-next-line @typescript-eslint/no-var-requires
 const hbs = require('hbs');
 
@@ -38,6 +38,19 @@ async function bootstrap() {
   app.setBaseViewsDir(clientDir);
   app.setViewEngine('html');
   app.engine('html', hbs.__express);
+
+  // SPA 兜底：非 /api 的 GET 请求一律返回 index.html。
+  // 否则在新窗口里直接加载 /mock-exam/print/xxx 这类前端路由会 404
+  // （试卷预览、打印都是 window.open 打开这种地址）。
+  const expressInstance = app.getHttpAdapter().getInstance();
+  const indexHtml = resolve(clientDir, 'index.html');
+  expressInstance.use((req: any, res: any, next: any) => {
+    if (req.method !== 'GET') return next();
+    if (req.path.startsWith('/api/')) return next();
+    if (req.path.startsWith('/assets/')) return next();
+    // sendFile 要求绝对路径，CLIENT_DIR 可能是相对的（打包后是绝对路径）
+    res.sendFile(indexHtml);
+  });
 
   await app.listen(port, host);
   logger.log(`Server running on http://${host}:${port}`);

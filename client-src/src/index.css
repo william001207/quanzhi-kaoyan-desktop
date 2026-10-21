@@ -1,7 +1,9 @@
-@import '@lark-apaas/client-toolkit/lib/index.css';
+@import 'tailwindcss';
 @import "tw-animate-css";
 @import './tailwind-theme.css';
 @import "./typography.css";
+
+@config "../tailwind.config.ts";
 
 .scrollbar-none::-webkit-scrollbar {
   display: none;
@@ -11,9 +13,19 @@
   scrollbar-width: none;
 }
 
-@config "../../tailwind.config.ts";
-
 [data-custom-element$="-watermark"],
 [data-custom-element$="-watermark-mobile"] {
   display: none !important;
+}
+
+/* Tailwind 4 把 border 的默认颜色改成了 currentColor（继承文字颜色，看起来就是黑线）。
+   项目原本依赖 v3 的浅灰默认值，原平台的 preset 帮忙兜底；去掉 preset 后需要自己补回来。 */
+@layer base {
+  *,
+  ::before,
+  ::after,
+  ::backdrop,
+  ::file-selector-button {
+    border-color: var(--border);
+  }
 }

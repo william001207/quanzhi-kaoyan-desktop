@@ -326,6 +326,7 @@ CREATE TABLE IF NOT EXISTS exam_paper (
   question_ids text[] NOT NULL DEFAULT '{}',
   score_config jsonb NOT NULL DEFAULT '{}'::jsonb,
   _created_at timestamptz(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
+  _created_by user_profile,
   _updated_at timestamptz(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
   _updated_by user_profile
 );

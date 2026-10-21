@@ -137,6 +137,49 @@ function stopServer() {
   // 否则 before-quit 无法判断「是否还在等服务端收尾」，等待逻辑会失效。
 }
 
+/**
+ * 打开应用内的子窗口（试卷预览、打印页）。
+ * 这些页面由前端用 window.open 打开，是一个独立的打印视图，
+ * 必须放在应用内新窗口里，交给系统浏览器会拿不到本地服务地址。
+ */
+function openInnerWindow(url) {
+  const win = new BrowserWindow({
+    width: 1000,
+    height: 1200,
+    title: '试卷',
+    autoHideMenuBar: true,
+    webPreferences: {
+      contextIsolation: true,
+      nodeIntegration: false,
+    },
+  });
+
+  // 把子窗口的报错转发到主进程输出，出问题时能直接看到原因
+  win.webContents.on('console-message', (_e, level, message) => {
+    if (level >= 2) console.error('[print-window]', message);
+  });
+  win.webContents.on('did-fail-load', (_e, code, desc, failedUrl) => {
+    console.error('[print-window] 加载失败', code, desc, failedUrl);
+  });
+
+  // 子窗口也支持 Cmd+Option+I / F12 打开开发者工具
+  win.webContents.on('before-input-event', (event, input) => {
+    if (input.type !== 'keyDown') return;
+    const key = (input.key || '').toLowerCase();
+    const combo =
+      process.platform === 'darwin'
+        ? input.meta && input.alt && key === 'i'
+        : key === 'f12';
+    if (combo) {
+      event.preventDefault();
+      win.webContents.toggleDevTools();
+    }
+  });
+
+  win.loadURL(url);
+  return win;
+}
+
 function createWindow(dirs) {
   if (mainWindow) return;
   mainWindow = new BrowserWindow({
@@ -161,6 +204,21 @@ function createWindow(dirs) {
   mainWindow.setMenuBarVisibility(false);
   // 页面内新窗口一律交给系统浏览器
   mainWindow.webContents.setWindowOpenHandler(({ url }) => {
+    const appOrigin = `http://${SERVER_HOST}:${SERVER_PORT}`;
+    const appBasePath = '/app/app_17g1b8sj7x4';
+
+    // 应用内页面（试卷预览 / 打印）：前端传的是相对路径（如 /mock-exam/print/xxx），
+    // 要补上基路径才能命中服务端的 SPA 路由，然后在应用内新窗口打开。
+    if (url.startsWith('/')) {
+      openInnerWindow(`${appOrigin}${appBasePath}${url}`);
+      return { action: 'deny' };
+    }
+    if (url.startsWith(appOrigin)) {
+      openInnerWindow(url);
+      return { action: 'deny' };
+    }
+
+    // 外部网址交给系统浏览器
     if (/^https?:/i.test(url)) shell.openExternal(url);
     return { action: 'deny' };
   });
@@ -227,6 +285,21 @@ function createWindow(dirs) {
     } catch (e) {
       // 装饰失败不影响任何功能，静默跳过
       console.error('[desktop] 侧边栏图标样式注入失败：', e && e.message);
+    }
+  });
+
+  // 开发者工具快捷键：Cmd+Option+I（Mac）/ F12（Windows）。
+  // 界面出问题时可以自己打开控制台看报错，不用再猜。
+  mainWindow.webContents.on('before-input-event', (event, input) => {
+    if (input.type !== 'keyDown') return;
+    const key = (input.key || '').toLowerCase();
+    const combo =
+      process.platform === 'darwin'
+        ? input.meta && input.alt && key === 'i'
+        : key === 'f12';
+    if (combo) {
+      event.preventDefault();
+      mainWindow.webContents.toggleDevTools();
     }
   });
 

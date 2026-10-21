@@ -98,6 +98,8 @@ case "$PLATFORM" in
     ln -s /Applications release/dmg-staging/Applications
     hdiutil create -volname "全职高手考研系统" -srcfolder release/dmg-staging \
       -ov -format UDZO "$DMG"
+    # dmg 已生成，这份临时副本没用了。留着会让 Spotlight 搜出多个同名应用
+    rm -rf release/dmg-staging
     ;;
   win)
     npx electron-builder --win --config build/electron-builder.yml --publish never
@@ -112,6 +114,11 @@ esac
 
 # ---------- 6. 结果 ----------
 step "构建完成"
+
+# 让 Spotlight 不索引 release 目录：里面是打包产物（.app 副本），
+# 会和 /Applications 里的正式版本重名，导致搜索里出现多个同样的应用
+touch release/.metadata_never_index 2>/dev/null || true
+
 ls -lh release/*.dmg release/*.exe release/*.AppImage release/*.deb 2>/dev/null || ls -lh release/
 
 cat <<'EOF'

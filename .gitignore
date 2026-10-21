@@ -37,3 +37,7 @@ __pycache__/
 #   server/**/*.ts             后端全部源码（构建必需）
 #   client/assets/             前端构建产物（构建必需）
 #   build/icon.png             应用图标（构建必需）
+
+# 构建中间产物与产物备份（不进仓库）
+tmp-build/
+client-backup/
