@@ -24,8 +24,6 @@ let appLoaded = false;
 // 主动退出流程标志：区分「用户主动关应用」和「服务自己崩了」。
 // 主动退出时服务是被我们请退的，绝不能再弹「服务意外退出」。
 let appQuitting = false;
-// 侧边栏品牌位样式的注入标记（同一窗口只注入一次，避免重复累积）
-let sidebarCssInjected = false;
 
 /** 打包后 server/client 位于 resources/ 下；开发模式下位于工程根 */
 function resolveDirs() {
@@ -178,18 +176,25 @@ function createWindow(dirs) {
   // 这样下次点 Dock 图标能瞬间恢复（页面状态都还在，不用重新加载、不用重新初始化数据库）。
   // 真正退出应用请用 ⌘Q 或 Dock 右键「退出」。
   // ---- 侧边栏品牌位：在「全」字前面补上应用图标 ----
-  // 背景：前端是构建产物，组件里写死了「收起显示『全』/ 展开显示『全职高手考研』」的条件渲染，
-  // 没有源码改不了组件。这里的做法是「只加属性 + 注入 CSS」：
-  //   · 不给 DOM 增删节点，避免 React 下一次渲染时报找不到节点
-  //   · 原文字始终字号为 0（不可见），图标和文字全部由伪元素渲染
-  //     —— 这样 React 切换文字时用户看不到任何中间过程，不会出现「先出字、再被图标挤」的闪烁
+  // 背景：前端是构建产物，组件里写死了「收起显示『全』/ 展开显示『全职高手考研』」，
+  // 没有源码改不了组件。
+  //
+  // 关键：组件用 aside 的 class 区分收起/展开状态（w-14 / w-60），
+  // 所以可以写纯 CSS 选择器精确命中，**不需要 JS 打标记**。
+  // 之前的版本靠 MutationObserver 补属性，属性总比 React 更新晚一帧，
+  // 于是会看到「原文字 → 消失 → 图标出现」的三段闪动；纯 CSS 后状态切换是原子的，不再闪。
+  //
+  // 做法：原文字字号恒为 0（看不见但仍在 DOM 里，React 改它不会有视觉过程），
+  // 图标与文字全部由伪元素渲染。
   const SIDEBAR_CSS = `
-    span[data-app-logo] {
+    aside.w-14 > div:first-child > span.text-base.font-semibold,
+    aside.w-60 > div:first-child > span.text-base.font-semibold {
       font-size: 0 !important;
       display: inline-flex;
       align-items: center;
     }
-    span[data-app-logo]::before {
+    aside.w-14 > div:first-child > span.text-base.font-semibold::before,
+    aside.w-60 > div:first-child > span.text-base.font-semibold::before {
       content: '';
       display: block;
       width: 20px;
@@ -197,7 +202,7 @@ function createWindow(dirs) {
       background: url("/icon.png") center / contain no-repeat;
       flex: none;
     }
-    span[data-app-logo="expanded"]::after {
+    aside.w-60 > div:first-child > span.text-base.font-semibold::after {
       content: '全职高手考研';
       font-size: 16px;
       font-weight: 600;
@@ -207,46 +212,15 @@ function createWindow(dirs) {
     }
   `;
 
-  const SIDEBAR_JS = `
-    (function () {
-      if (window.__sidebarLogoHooked) return;
-      window.__sidebarLogoHooked = true;
-      var mark = function () {
-        var spans = document.querySelectorAll('span.text-base.font-semibold');
-        for (var i = 0; i < spans.length; i++) {
-          // 用 textContent 判断状态；字号为 0 不影响文本内容，所以能一直读对
-          var t = (spans[i].textContent || '').trim();
-          if (t === '全') spans[i].setAttribute('data-app-logo', 'collapsed');
-          else if (t === '全职高手考研') spans[i].setAttribute('data-app-logo', 'expanded');
-        }
-      };
-      mark();
-      // 用 requestAnimationFrame 节流：回调在下一帧绘制前执行，
-      // 和 React 的 DOM 更新落在同一帧里，浏览器只绘制一次，不会看到闪动。
-      // 注意只监听 childList / characterData，不监听 attributes，
-      // 否则我们自己 setAttribute 会再次触发观察器，形成死循环。
-      var scheduled = false;
-      var obs = new MutationObserver(function () {
-        if (scheduled) return;
-        scheduled = true;
-        requestAnimationFrame(function () { scheduled = false; mark(); });
-      });
-      obs.observe(document.body, { childList: true, subtree: true, characterData: true });
-    })();
-  `;
-
-  mainWindow.webContents.on('did-finish-load', async () => {
-    // 只处理主界面，跳过启动加载页
+  // 在 dom-ready 注入（比 did-finish-load 早），这样 React 首次渲染时样式已就位，
+  // 启动瞬间也不会看到原文字。每次页面加载都注入一份，重复注入相同规则无副作用。
+  mainWindow.webContents.on('dom-ready', async () => {
     if (!mainWindow || !mainWindow.webContents.getURL().includes('/app/')) return;
     try {
-      if (!sidebarCssInjected) {
-        await mainWindow.webContents.insertCSS(SIDEBAR_CSS);
-        sidebarCssInjected = true;
-      }
-      await mainWindow.webContents.executeJavaScript(SIDEBAR_JS);
+      await mainWindow.webContents.insertCSS(SIDEBAR_CSS);
     } catch (e) {
       // 装饰失败不影响任何功能，静默跳过
-      console.error('[desktop] 侧边栏图标装饰失败：', e && e.message);
+      console.error('[desktop] 侧边栏图标样式注入失败：', e && e.message);
     }
   });
 
