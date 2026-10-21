@@ -24,6 +24,8 @@ let appLoaded = false;
 // 主动退出流程标志：区分「用户主动关应用」和「服务自己崩了」。
 // 主动退出时服务是被我们请退的，绝不能再弹「服务意外退出」。
 let appQuitting = false;
+// 侧边栏品牌位样式的注入标记（同一窗口只注入一次，避免重复累积）
+let sidebarCssInjected = false;
 
 /** 打包后 server/client 位于 resources/ 下；开发模式下位于工程根 */
 function resolveDirs() {
@@ -175,6 +177,69 @@ function createWindow(dirs) {
   // 点红叉 = 把窗口收起来，应用继续留在 Dock 里，服务也继续运行。
   // 这样下次点 Dock 图标能瞬间恢复（页面状态都还在，不用重新加载、不用重新初始化数据库）。
   // 真正退出应用请用 ⌘Q 或 Dock 右键「退出」。
+  // ---- 侧边栏品牌位：在「全」字前面补上应用图标 ----
+  // 背景：前端是构建产物，组件里写死了「收起显示『全』/ 展开显示『全职高手考研』」的条件渲染，
+  // 没有源码改不了组件。这里的做法是「只加属性 + 注入 CSS」：
+  //   · 不给 DOM 增删节点，避免 React 下一次渲染时报找不到节点
+  //   · 用伪元素把图标画在文字前面，收起时把文字字号设为 0，只留图标
+  const SIDEBAR_CSS = `
+    span[data-app-logo]::before {
+      content: '';
+      display: inline-block;
+      width: 20px;
+      height: 20px;
+      background: url("/icon.png") center / contain no-repeat;
+      vertical-align: -0.25em;
+      margin-right: 0.4em;
+      flex: none;
+    }
+    span[data-app-logo="collapsed"] {
+      font-size: 0 !important;
+    }
+    span[data-app-logo="collapsed"]::before {
+      margin-right: 0;
+    }
+  `;
+
+  const SIDEBAR_JS = `
+    (function () {
+      if (window.__sidebarLogoHooked) return;
+      window.__sidebarLogoHooked = true;
+      var mark = function () {
+        var spans = document.querySelectorAll('span.text-base.font-semibold');
+        for (var i = 0; i < spans.length; i++) {
+          var t = (spans[i].textContent || '').trim();
+          if (t === '全') spans[i].setAttribute('data-app-logo', 'collapsed');
+          else if (t === '全职高手考研') spans[i].setAttribute('data-app-logo', 'expanded');
+        }
+      };
+      mark();
+      // React 切换侧边栏、路由跳转时都会重渲染，用防抖观察器持续补标记。
+      // 注意：只监听子节点与文本变化，不监听属性，避免我们自己 setAttribute 触发死循环。
+      var timer = null;
+      var obs = new MutationObserver(function () {
+        if (timer) return;
+        timer = setTimeout(function () { timer = null; mark(); }, 80);
+      });
+      obs.observe(document.body, { childList: true, subtree: true, characterData: true });
+    })();
+  `;
+
+  mainWindow.webContents.on('did-finish-load', async () => {
+    // 只处理主界面，跳过启动加载页
+    if (!mainWindow || !mainWindow.webContents.getURL().includes('/app/')) return;
+    try {
+      if (!sidebarCssInjected) {
+        await mainWindow.webContents.insertCSS(SIDEBAR_CSS);
+        sidebarCssInjected = true;
+      }
+      await mainWindow.webContents.executeJavaScript(SIDEBAR_JS);
+    } catch (e) {
+      // 装饰失败不影响任何功能，静默跳过
+      console.error('[desktop] 侧边栏图标装饰失败：', e && e.message);
+    }
+  });
+
   mainWindow.on('close', (event) => {
     if (appQuitting) return; // 正在退出：放行，让窗口正常关闭
     event.preventDefault();
