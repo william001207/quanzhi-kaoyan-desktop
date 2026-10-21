@@ -181,23 +181,29 @@ function createWindow(dirs) {
   // 背景：前端是构建产物，组件里写死了「收起显示『全』/ 展开显示『全职高手考研』」的条件渲染，
   // 没有源码改不了组件。这里的做法是「只加属性 + 注入 CSS」：
   //   · 不给 DOM 增删节点，避免 React 下一次渲染时报找不到节点
-  //   · 用伪元素把图标画在文字前面，收起时把文字字号设为 0，只留图标
+  //   · 原文字始终字号为 0（不可见），图标和文字全部由伪元素渲染
+  //     —— 这样 React 切换文字时用户看不到任何中间过程，不会出现「先出字、再被图标挤」的闪烁
   const SIDEBAR_CSS = `
+    span[data-app-logo] {
+      font-size: 0 !important;
+      display: inline-flex;
+      align-items: center;
+    }
     span[data-app-logo]::before {
       content: '';
-      display: inline-block;
+      display: block;
       width: 20px;
       height: 20px;
       background: url("/icon.png") center / contain no-repeat;
-      vertical-align: -0.25em;
-      margin-right: 0.4em;
       flex: none;
     }
-    span[data-app-logo="collapsed"] {
-      font-size: 0 !important;
-    }
-    span[data-app-logo="collapsed"]::before {
-      margin-right: 0;
+    span[data-app-logo="expanded"]::after {
+      content: '全职高手考研';
+      font-size: 16px;
+      font-weight: 600;
+      line-height: 1.4;
+      margin-left: 8px;
+      white-space: nowrap;
     }
   `;
 
@@ -208,18 +214,22 @@ function createWindow(dirs) {
       var mark = function () {
         var spans = document.querySelectorAll('span.text-base.font-semibold');
         for (var i = 0; i < spans.length; i++) {
+          // 用 textContent 判断状态；字号为 0 不影响文本内容，所以能一直读对
           var t = (spans[i].textContent || '').trim();
           if (t === '全') spans[i].setAttribute('data-app-logo', 'collapsed');
           else if (t === '全职高手考研') spans[i].setAttribute('data-app-logo', 'expanded');
         }
       };
       mark();
-      // React 切换侧边栏、路由跳转时都会重渲染，用防抖观察器持续补标记。
-      // 注意：只监听子节点与文本变化，不监听属性，避免我们自己 setAttribute 触发死循环。
-      var timer = null;
+      // 用 requestAnimationFrame 节流：回调在下一帧绘制前执行，
+      // 和 React 的 DOM 更新落在同一帧里，浏览器只绘制一次，不会看到闪动。
+      // 注意只监听 childList / characterData，不监听 attributes，
+      // 否则我们自己 setAttribute 会再次触发观察器，形成死循环。
+      var scheduled = false;
       var obs = new MutationObserver(function () {
-        if (timer) return;
-        timer = setTimeout(function () { timer = null; mark(); }, 80);
+        if (scheduled) return;
+        scheduled = true;
+        requestAnimationFrame(function () { scheduled = false; mark(); });
       });
       obs.observe(document.body, { childList: true, subtree: true, characterData: true });
     })();
