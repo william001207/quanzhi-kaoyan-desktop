@@ -69,7 +69,7 @@ export function initializeDatabase(): Promise<void> {
 
 // 数据内容版本：线上题库内容（知识点卡片/题目等）有更新时递增。
 // 客户端检测到版本变化后执行增量内容同步（只更新内容字段，保留用户学习进度）。
-const DATA_VERSION = '2026-10-22.2'; // 知识点界面编辑 + 6 处「𬌗」损坏修复 + 用户 16 处真题勘误 + 删除错误知识点「牙眼瘤」(f2547815) + 批量「牙眼→牙龈」「眼炎→牙龈炎」「间晾→间隙」「翼下领→翼下颌」错字修正
+const DATA_VERSION = '2026-10-22.3'; // 牙龈瘤题迁移至牙周病学挂第九章第七节;沿用此前修复、用户16处勘误、删错误知识点及批量错字修正
 
 async function ensureSchemaAndData(db: PGlite): Promise<void> {
   const schemaSql = await fs.readFile(
