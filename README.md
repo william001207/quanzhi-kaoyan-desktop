@@ -55,16 +55,36 @@ xattr -dr com.apple.quarantine "/Applications/全职高手考研系统.app"
 | 内容 | 位置 | 说明 |
 |---|---|---|
 | Electron 主进程 | `electron/` | 拉起本地服务、开窗、进程管理 |
-| 后端全部源码 | `server/`（62 个 `.ts`） | NestJS + Drizzle，含平台兼容层 `platform/` |
+| 后端全部源码 | `server/`（67 个 `.ts`） | NestJS + Drizzle，含平台兼容层 `platform/` |
 | 数据库建表 DDL | `server/database/schema.sql` | PGlite 建表语句 |
 | 题库数据 | `server/data-export/`（22 个 JSON，16MB） | 首次启动导入用的干净快照，**不含任何个人学习记录** |
-| 前端构建产物 | `client/` | 已本地化，无 CDN 依赖 |
+| 前端构建产物 | `client/` | 已本地化，无 CDN 依赖；随安装包分发 |
+| 前端源码 | `client-src/` | 网页版前端的完整源码，**可独立构建**，详见下方「改界面」 |
 | 应用图标 | `build/icon.png`、`client/icon.png` | 打包与启动页共用 |
 | 构建脚本 | `scripts/` | 自检、本机构建、仓库整理 |
 | CI | `.github/workflows/build.yml` | macOS / Windows 自动打包发布 |
 
-> 前端为原网页版的构建产物（打包后的 JS），**不含可编辑的前端源码**。
-> 需要改界面的话，改动范围仅限 `client/index.html` 与 `loading.html` 的页面外壳。
+> 前端源码在 `client-src/`：改界面改这里，构建后同步进 `client/` 即可（见「改界面」一节）。
+> 仓库里同时保留 `client/`（构建产物），是为了让不装 Node 依赖的人也能直接打包桌面版。
+
+---
+
+## 改界面（前端）
+
+前端源码在 `client-src/`，**可以独立构建，不需要平台环境**：平台私有包 `@lark-apaas/*` 已在 `vite.config.ts` 里别名到本地替身 `src/platform/`，`package.json` 中也没有这些依赖。
+
+```bash
+cd client-src
+npm install
+npm run build          # 产物输出到仓库根 tmp-build/（约 1 秒）
+cd ..
+cp -R tmp-build/. client/   # 同步进 client/（一键构建脚本只打包 client/，不会自动跑 vite）
+npm run verify         # 构建前自检
+```
+
+改完后按下面的「构建」出安装包即可。也可以先 `npm run dev` 起开发服务器调界面。
+
+> 更细的说明见 `client-src/README.md`；项目协作约定见 `AGENTS.md`。
 
 ---
 
@@ -124,7 +144,7 @@ npm run verify
 | 桌面壳 | Electron 31 |
 | 服务端 | NestJS 10 + Drizzle ORM |
 | 数据库 | PGlite（PostgreSQL 的 WASM 版，数据落在用户数据目录） |
-| 前端 | 网页版构建产物（本地化，无外部依赖） |
+| 前端 | React 19 + Vite + Tailwind 4（源码 `client-src/`，构建产物 `client/`） |
 
 服务监听 `127.0.0.1:17890`，只在本机回环，不对外暴露。
 
@@ -134,7 +154,7 @@ npm run verify
 
 章节树 / 知识点卡片 / 真题练习 / 每日计划 / 间隔重复复习 / 错题本 / 统计看板 / 模拟考试 / 全局搜索 / 数据导入。
 
-数据规模：真题 1708 道，章节 875 个（教材 741 + 考纲 134），科目 8 个，知识点 1000+（含从真题关联补录的部分）。
+数据规模：真题 1705 道，章节 876 个（教材 742 + 考纲 134），科目 8 个，知识点 1117 个。
 
 ---
 
@@ -164,7 +184,7 @@ npm run verify
 
 代码部分采用 MIT 许可。
 
-> 说明：`client/` 下的前端构建产物源自「全职高手考研系统」网页版，其授权状态独立于本仓库的 MIT 声明；如需二次分发请自行确认来源许可。
+> 说明：`client/`（前端构建产物）与 `client-src/`（前端源码）均源自「全职高手考研系统」网页版，其授权状态独立于本仓库的 MIT 声明；如需二次分发请自行确认来源许可。
 
 ### 题库内容
 
