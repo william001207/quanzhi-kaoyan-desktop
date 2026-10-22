@@ -685,40 +685,38 @@ const QuestionAnswerDialog: React.FC<QuestionAnswerDialogProps> = ({
                           添加知识点
                         </Button>
                       </DialogTrigger>
-                      <DialogContent className="sm:max-w-md">
+                      <DialogContent className="max-h-[85vh] w-[calc(100%-2rem)] gap-4 overflow-y-auto sm:max-w-xl">
                         <DialogHeader>
                           <DialogTitle className="text-base">添加关联知识点</DialogTitle>
                         </DialogHeader>
                         <div className="space-y-3">
-                          <div className="flex gap-2">
-                            <div className="relative flex-1">
-                              <Search className="absolute left-2.5 top-1/2 -translate-y-1/2 h-4 w-4 text-muted-foreground" />
-                              <Input
-                                placeholder="搜索知识点名称..."
-                                value={kpSearchKeyword}
-                                onChange={(e) => setKpSearchKeyword(e.target.value)}
-                                className="pl-8 text-sm"
-                                autoFocus
-                              />
-                            </div>
-                            <Select
-                              value={kpSearchSubjectId}
-                              onValueChange={setKpSearchSubjectId}
-                            >
-                              <SelectTrigger className="w-[120px]">
-                                <SelectValue placeholder="全部科目" />
-                              </SelectTrigger>
-                              <SelectContent>
-                                <SelectItem value="">全部科目</SelectItem>
-                                {subjects.map((s) => (
-                                  <SelectItem key={s.id} value={s.id}>
-                                    {s.name}
-                                  </SelectItem>
-                                ))}
-                              </SelectContent>
-                            </Select>
+                          <div className="relative">
+                            <Search className="absolute left-2.5 top-1/2 -translate-y-1/2 h-4 w-4 text-muted-foreground" />
+                            <Input
+                              placeholder="搜索知识点名称..."
+                              value={kpSearchKeyword}
+                              onChange={(e) => setKpSearchKeyword(e.target.value)}
+                              className="pl-8 text-sm"
+                              autoFocus
+                            />
                           </div>
-                          <ScrollArea className="h-72 border rounded-md">
+                          <Select
+                            value={kpSearchSubjectId}
+                            onValueChange={setKpSearchSubjectId}
+                          >
+                            <SelectTrigger className="w-full">
+                              <SelectValue placeholder="全部科目" />
+                            </SelectTrigger>
+                            <SelectContent>
+                              <SelectItem value="">全部科目</SelectItem>
+                              {subjects.map((s) => (
+                                <SelectItem key={s.id} value={s.id}>
+                                  {s.name}
+                                </SelectItem>
+                              ))}
+                            </SelectContent>
+                          </Select>
+                          <ScrollArea className="h-[340px] max-h-[45vh] rounded-md border">
                             {kpSearching ? (
                               <div className="py-8 text-center text-sm text-muted-foreground">
                                 搜索中...
@@ -745,7 +743,7 @@ const QuestionAnswerDialog: React.FC<QuestionAnswerDialogProps> = ({
                                       disabled={isLinked}
                                     >
                                       <div className="flex items-center justify-between gap-2">
-                                        <div className="text-sm font-medium truncate">
+                                        <div className="min-w-0 flex-1 break-words text-sm font-medium leading-snug">
                                           {kp.title}
                                         </div>
                                         {isLinked ? (

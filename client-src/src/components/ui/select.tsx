@@ -99,7 +99,10 @@ function SelectContent({
           className={cn(
             "p-1",
             position === "popper" &&
-              "h-[var(--radix-select-trigger-height)] w-full min-w-[var(--radix-select-trigger-width)] scroll-my-1"
+            // 注意：官方新版此处写了 h-[var(--radix-select-trigger-height)]，
+            // 会把列表容器高度钉死成输入框高度（约 36px），导致一次只能看到一行多。
+            // 去掉高度限制，列表按内容自然展开；空间不足时由外层 max-h + overflow-y-auto 兜底。
+            "w-full min-w-[var(--radix-select-trigger-width)] scroll-my-1"
           )}
         >
           {children}
