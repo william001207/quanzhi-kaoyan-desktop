@@ -2,6 +2,16 @@
 
 所有版本的变更记录。格式参考 [Keep a Changelog](https://keepachangelog.com/zh-CN/1.1.0/)，版本号遵循语义化版本。
 
+## [v1.1.4] - 2026-10-22
+
+### 修复
+- **试卷打印内容不全**：试卷页面的打印原先只能印出当前屏幕里看得见的那一屏，后面的题全被裁掉（根因是应用外壳为固定高度的滚动容器，浏览器只打印其可见部分）；改为打印时把试卷挂到页面最外层并隐藏侧栏顶栏，内容回到正常文档流，可完整分页；同时题号与题干、题型标题不跨页分离，答案版灰底可正常印出
+- **试卷列表的打印按钮移除**（该按钮无实际作用，试卷仍可由列表「查看」进入后打印）
+
+### 说明
+- 题库规模：1705 道真题 / 1117 个知识点 / 8 个科目，本次无数据变动，不触发数据同步
+- 界面改动经 `client-src` 构建后同步进 `client/`
+
 ## [v1.1.3] - 2026-10-22
 
 ### 新增
@@ -124,7 +134,8 @@
 - 安装包文件名改为英文（ASCII），解决 GitHub 下载链接 404
 - dmg 标准布局：打开即见 app + Applications 快捷方式
 
-[unreleased]: https://github.com/william001207/quanzhi-kaoyan-desktop/compare/v1.1.3...HEAD
+[unreleased]: https://github.com/william001207/quanzhi-kaoyan-desktop/compare/v1.1.4...HEAD
+[v1.1.4]: https://github.com/william001207/quanzhi-kaoyan-desktop/compare/v1.1.3...v1.1.4
 [v1.1.3]: https://github.com/william001207/quanzhi-kaoyan-desktop/compare/v1.1.2...v1.1.3
 [v1.1.2]: https://github.com/william001207/quanzhi-kaoyan-desktop/compare/v1.1.1...v1.1.2
 [v1.1.1]: https://github.com/william001207/quanzhi-kaoyan-desktop/compare/v1.1.0...v1.1.1

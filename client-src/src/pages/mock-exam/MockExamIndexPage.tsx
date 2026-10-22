@@ -26,7 +26,6 @@ import {
    ChevronRight,
    Trash2,
    Pencil,
-   Printer,
  } from 'lucide-react';
 import { logger } from '@lark-apaas/client-toolkit/logger';
 import { toast } from 'sonner';
@@ -603,12 +602,6 @@ const MockExamIndexPage: React.FC = () => {
     }
   };
 
-  const handlePrintPaper = (paper: ExamPaperListItem) => {
-    // 在应用内跳转到打印页（不再新开窗口：新窗口在 Electron 下容易白屏，
-    // 而且用户打印完还要手动关掉）。打印页里有「打印」按钮，走系统打印面板。
-    navigate(`/mock-exam/print/${paper.id}`);
-  };
-
   const handleDeleteTemplate = async (templateId: string) => {
     if (!await showConfirm('确定要删除这个模板吗？')) return;
     try {
@@ -1137,14 +1130,6 @@ const MockExamIndexPage: React.FC = () => {
                           查看结果
                         </Button>
                       )}
-                      <Button
-                        variant="ghost"
-                        size="sm"
-                        aria-label="打印试卷"
-                        onClick={() => handlePrintPaper(paper)}
-                      >
-                        <Printer className="h-4 w-4" />
-                      </Button>
                       <Button
                         variant="ghost"
                         size="sm"

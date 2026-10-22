@@ -9,6 +9,7 @@
 用法：python3 scripts/verify_repo.py
 """
 import os
+import re
 import sys
 import glob
 
@@ -64,8 +65,15 @@ for name, minimum in DATA:
 need_file(os.path.join("client", "index.html"), 1000)
 need_file(os.path.join("client", "loading.html"), 500)
 assets = glob.glob(path("client", "assets", "*"))
-if len(assets) < 40:
-    failures.append(f"前端资源不完整：client/assets 只有 {len(assets)} 个文件（应为 40 个以上）")
+# 产物数量会随构建变化（合并/拆分会增减 chunk），不能写死个数；
+# 真正的完整性标准是：index.html 引用的每个资源都真实存在。
+html = open(os.path.join("client", "index.html"), encoding="utf-8").read()
+refs = sorted(set(re.findall(r"assets/[A-Za-z0-9._+-]+\.(?:js|css|png|svg|ico|woff2?)", html)))
+missing = [r for r in refs if not os.path.exists(path("client", r))]
+if missing:
+    failures.append("前端资源不完整：index.html 引用了不存在的文件 -> " + ", ".join(missing))
+if len(assets) < 20:
+    failures.append(f"前端资源过少：client/assets 只有 {len(assets)} 个文件，疑似构建产物没同步进去")
 
 # 4. 图标
 need_file(os.path.join("build", "icon.png"), 1000)
