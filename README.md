@@ -40,7 +40,7 @@ xattr -dr com.apple.quarantine "/Applications/全职高手考研系统.app"
 | 场景 | 结果 |
 |---|---|
 | 关闭应用 / 重启电脑 | ✅ 不丢，数据实时写入本机数据库 |
-| **卸载后重装** | ✅ 不丢。数据在 `~/Library/Application Support/全职高手考研系统/pglite-data/`（Windows 在 `C:\Users\Willi\AppData\Roaming\全职高手考研系统\pglite-data` 下），卸载程序不会删除 |
+| **卸载后重装** | ✅ 不丢。数据在 `~/Library/Application Support/全职高手考研系统/pglite-data/`（Windows 在 `%APPDATA%\全职高手考研系统\pglite-data\` 下），卸载程序不会删除 |
 | **升级到新版本** | ✅ 不丢。启动时只做一次「题库版本对齐」：若安装包里的 `DATA_VERSION` 与你本地库记录的值不同，就用包内数据刷新**题库内容**（题干、答案、知识点卡片），学习进度字段一律不动。版本没变则什么都不做 |
 | **从新版退回旧版** | ⚠️ 进度不丢，但题库内容会被回退成旧版数据（因为旧包里的数据更旧） |
 
