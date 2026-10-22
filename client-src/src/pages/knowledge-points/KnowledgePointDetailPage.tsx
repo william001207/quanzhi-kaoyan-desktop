@@ -42,6 +42,8 @@ import {
   DialogTrigger,
 } from '@/components/ui/dialog';
 import { Input } from '@/components/ui/input';
+import { Label } from '@/components/ui/label';
+import { Textarea } from '@/components/ui/textarea';
 import { ScrollArea } from '@/components/ui/scroll-area';
 import { Search, Plus } from 'lucide-react';
 import * as api from '@/api';
@@ -173,6 +175,46 @@ const KnowledgePointDetailPage: React.FC = () => {
     }
   };
 
+  const openFieldEditor = () => {
+    if (!kp) return;
+    setFieldForm({
+      title: kp.title ?? '',
+      content: kp.content ?? '',
+      summary: kp.summary ?? '',
+      keywords: (kp.keywords ?? []).join('，'),
+      requirementLevel: kp.requirementLevel ?? 'master',
+    });
+    setEditingFields(true);
+  };
+
+  const saveFields = async () => {
+    if (!kp) return;
+    setSavingFields(true);
+    try {
+      const keywords = fieldForm.keywords
+        .split(/[，,]/)
+        .map((s) => s.trim())
+        .filter(Boolean);
+      const updated = await api.knowledgePoints.update(kp.id, {
+        title: fieldForm.title.trim(),
+        content: fieldForm.content,
+        summary: fieldForm.summary,
+        keywords,
+        requirementLevel: fieldForm.requirementLevel,
+      });
+      setKp({ ...kp, ...updated });
+      setEditingFields(false);
+      toast.success('已保存知识点修改');
+    } catch (err) {
+      logger.error('保存知识点修改失败', err);
+      const msg =
+        (err as any)?.response?.data?.error?.message ?? '保存失败，请重试';
+      toast.error(msg);
+    } finally {
+      setSavingFields(false);
+    }
+  };
+
   const pathLabelMap: Record<SyllabusMode, { label: string; color: string }> = {
     exam_syllabus: { label: '真题大纲', color: 'bg-blue-50 text-blue-700 border-blue-200' },
     textbook: { label: '本科教材', color: 'bg-emerald-50 text-emerald-700 border-emerald-200' },
@@ -251,6 +293,15 @@ const KnowledgePointDetailPage: React.FC = () => {
   };
   const [contentView, setContentView] = useState<'note' | 'card'>('note');
   const [editingCard, setEditingCard] = useState(false);
+  const [editingFields, setEditingFields] = useState(false);
+  const [fieldForm, setFieldForm] = useState<{
+    title: string;
+    content: string;
+    summary: string;
+    keywords: string;
+    requirementLevel: string;
+  }>({ title: '', content: '', summary: '', keywords: '', requirementLevel: 'master' });
+  const [savingFields, setSavingFields] = useState(false);
 
   useEffect(() => {
     if (!kp) return;
@@ -710,6 +761,15 @@ const KnowledgePointDetailPage: React.FC = () => {
                       编辑卡片
                     </Button>
                   )}
+                  <Button
+                    size="sm"
+                    variant="outline"
+                    className="ml-1"
+                    onClick={openFieldEditor}
+                  >
+                    <Pencil className="h-3.5 w-3.5 mr-1" />
+                    编辑知识点
+                  </Button>
                 </div>
               </div>
             </CardHeader>
@@ -813,6 +873,78 @@ const KnowledgePointDetailPage: React.FC = () => {
               )}
             </CardContent>
           </Card>
+
+          <Dialog open={editingFields} onOpenChange={setEditingFields}>
+            <DialogContent className="sm:max-w-2xl">
+              <DialogHeader>
+                <DialogTitle className="text-base">编辑知识点</DialogTitle>
+              </DialogHeader>
+              <div className="space-y-4">
+                <div className="space-y-1.5">
+                  <Label htmlFor="kp-title">标题</Label>
+                  <Input
+                    id="kp-title"
+                    value={fieldForm.title}
+                    onChange={(e) => setFieldForm({ ...fieldForm, title: e.target.value })}
+                    className="text-sm"
+                  />
+                </div>
+                <div className="space-y-1.5">
+                  <Label htmlFor="kp-requirement">大纲要求</Label>
+                  <Select
+                    value={fieldForm.requirementLevel}
+                    onValueChange={(v) => setFieldForm({ ...fieldForm, requirementLevel: v })}
+                  >
+                    <SelectTrigger id="kp-requirement" className="text-sm">
+                      <SelectValue />
+                    </SelectTrigger>
+                    <SelectContent>
+                      <SelectItem value="unmarked">{REQUIREMENT_LEVEL_LABEL['unmarked']}</SelectItem>
+                      <SelectItem value="master">掌握</SelectItem>
+                      <SelectItem value="familiar">熟悉</SelectItem>
+                      <SelectItem value="understand">了解</SelectItem>
+                    </SelectContent>
+                  </Select>
+                </div>
+                <div className="space-y-1.5">
+                  <Label htmlFor="kp-keywords">关键词（多个用逗号隔开）</Label>
+                  <Input
+                    id="kp-keywords"
+                    value={fieldForm.keywords}
+                    onChange={(e) => setFieldForm({ ...fieldForm, keywords: e.target.value })}
+                    className="text-sm"
+                    placeholder="如：固位，稳定，吸附力"
+                  />
+                </div>
+                <div className="space-y-1.5">
+                  <Label htmlFor="kp-content">详细内容（支持 Markdown）</Label>
+                  <Textarea
+                    id="kp-content"
+                    value={fieldForm.content}
+                    onChange={(e) => setFieldForm({ ...fieldForm, content: e.target.value })}
+                    className="text-sm min-h-[160px]"
+                  />
+                </div>
+                <div className="space-y-1.5">
+                  <Label htmlFor="kp-summary">内容摘要</Label>
+                  <Textarea
+                    id="kp-summary"
+                    value={fieldForm.summary}
+                    onChange={(e) => setFieldForm({ ...fieldForm, summary: e.target.value })}
+                    className="text-sm min-h-[100px]"
+                  />
+                </div>
+              </div>
+              <DialogFooter>
+                <Button variant="outline" onClick={() => setEditingFields(false)} disabled={savingFields}>
+                  取消
+                </Button>
+                <Button onClick={saveFields} disabled={savingFields}>
+                  {savingFields ? '保存中…' : '保存'}
+                </Button>
+              </DialogFooter>
+            </DialogContent>
+          </Dialog>
         </TabsContent>
 
         {/* Tab 2: 主动回忆 */}

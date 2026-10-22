@@ -69,7 +69,8 @@ server/                 NestJS 后端（62 个 .ts）
   database/local-db.ts  PGlite 初始化、全量导入、增量同步、DATA_VERSION
   data-export/          题库数据快照（16MB，首次启动导入）
   modules/              17 个业务模块（真题/知识点/复习/错题/计划/模拟考/统计…）
-client/                 前端构建产物（无源码，只能改 index.html 外壳）
+client/                 前端构建产物（由 client-src 构建而来，勿手改；改界面去 client-src）
+client-src/            前端可维护源码（vite 构建，私有包已用本地替身绕开，能独立 npm install && build）
 build/                  electron-builder 配置 + 图标
 scripts/                verify_repo(自检) / build-desktop(打包) / setup-repo(入库)
 docs/                   发布手册、改动与回退说明
@@ -88,23 +89,25 @@ docs/                   发布手册、改动与回退说明
 
 ## 六、关于前端能力（容易误判，务必注意）
 
-`client/` 是构建产物，**没有源码**。由此得出两个**不同**的结论，千万别混为一谈：
+历史上 `client/` 是构建产物、**没有源码**，所以曾得出"前端不能改"的结论。
+**现在情况已变**：`client-src/` 是真正可维护的前端源码，且能独立构建——
 
-- ✅ **不能新增任何界面**：加按钮、加页面、改布局、改文案——统统做不到
-- ❌ **不能由此推断"某个功能不存在"**：已有功能是完整的，只是代码在压缩 bundle 里
+- `client-src/vite.config.ts` 已把平台私有包 `@lark-apaas/*` 全部 alias 到本地 `src/platform/` 替身；
+- `client-src/package.json` 里**没有**任何 `@lark-apaas/*` 依赖，所以 `npm install` 只装公开包即可；
+- 实测 `cd client-src && npm run build` 约 8 秒出包（输出到 `tmp-build`）。
 
-**判断"界面上有没有某个操作"，不要靠搜索 bundle 来推断。**
-搜字面量（中文文案、API 路径、字段名）经常失效，原因：
-- 文案可能由变量拼接，搜不到
-- API 路径在共享 api 模块里，组件文件里根本不出现
-- 压缩后变量名/组件名全被改写
+**改前端界面的标准流程**（本仓库已验证）：
+1. 改 `client-src/src` 里的源码；
+2. `cd client-src && npm run build`（产物在 `tmp-build`）；
+3. `cp -R tmp-build/. client/` 把产物同步回 `client/`；
+4. 提交 `client-src/` 和 `client/` 两处改动。
+> 注意：一键构建脚本 `scripts/build-desktop.sh` **不会**自动跑 vite，它只编译 server + 打包已有的 `client/`。所以前端改动必须手动走上面 2-3 步，否则装出来还是旧界面。
 
-正确做法：**直接问用户**（他是实际使用者，点一下就知道），或让他截图确认。
+**仍然成立的一条**：不要靠搜索压缩 bundle 来推断"某个功能是否存在"——
+已有功能在 bundle 里是完整的，文案可能由变量拼接、API 路径在共享模块、压缩后改名，搜字面量常失效。
+判断界面上有没有某个操作，**直接问用户**（他是实际使用者）或让他截图最稳。
 
-> 踩过的坑：曾两次断言"真题题干不可编辑""难度不可编辑"，
-> 实际答题卡片里两者都能改——
-> 题干是 `onClick:()=>{B(j.questionText),z(!0)}`，
-> 难度是 `<DifficultyPicker difficulty editable questionId onUpdate />`。
+> 踩过的坑：曾两次断言"真题题干不可编辑""难度不可编辑"，实际答题卡片里两者都能改。
 > 都是因为只搜字面量没搜字段名和组件 props 才漏掉。
 
 ## 七、沟通方式

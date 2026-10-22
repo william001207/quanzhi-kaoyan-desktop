@@ -69,7 +69,7 @@ export function initializeDatabase(): Promise<void> {
 
 // 数据内容版本：线上题库内容（知识点卡片/题目等）有更新时递增。
 // 客户端检测到版本变化后执行增量内容同步（只更新内容字段，保留用户学习进度）。
-const DATA_VERSION = '2026-10-22.1'; // 全库数据治理：知识点全部细化到节、OCR 错字清理、𬌗 字统一、错挂修正、垃圾题删除
+const DATA_VERSION = '2026-10-22.2'; // 知识点界面编辑功能 + 6 处「𬌗」(U+2C317) 编码损坏修复（U+FFFD 还原）
 
 async function ensureSchemaAndData(db: PGlite): Promise<void> {
   const schemaSql = await fs.readFile(
