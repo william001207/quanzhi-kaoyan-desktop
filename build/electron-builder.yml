@@ -57,6 +57,8 @@ nsis:
   perMachine: false
   allowToChangeInstallationDirectory: true
   shortcutName: 全职高手考研系统
+  # 安装前结束可能残留的旧版进程（详见 build/installer.nsh）
+  include: build/installer.nsh
 
 mac:
   target:

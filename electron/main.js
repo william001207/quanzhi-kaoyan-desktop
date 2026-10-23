@@ -7,23 +7,41 @@
  * 3. 窗口关闭时结束服务端进程并退出应用
  * 4. 数据目录持久化在系统用户数据目录（userData/pglite-data）
  */
-const { app, BrowserWindow, shell, dialog } = require('electron');
+const { app, BrowserWindow, shell, dialog, Tray, Menu } = require('electron');
 const { spawn } = require('child_process');
 const path = require('path');
 const fs = require('fs');
 
-const SERVER_PORT = 17890;
 const SERVER_HOST = '127.0.0.1';
-const BASE_URL = `http://${SERVER_HOST}:${SERVER_PORT}/app/app_17g1b8sj7x4/`;
+const APP_BASE_PATH = '/app/app_17g1b8sj7x4';
 const READY_MARK = 'DESKTOP_SERVER_READY';
+// 服务端退出码 2 = 发现旧实例还在运行（指纹文件检测到活的旧 PID），
+// 不是故障。主进程会杀掉残留进程后重新拉起，用户全程无感。
+const EXIT_INSTANCE_RUNNING = 2;
 
 let serverProc = null;
 let mainWindow = null;
+let tray = null;
 let serverReady = false;
 let appLoaded = false;
+// 服务实际监听端口：启动时由操作系统随机分配，READY 标记回传，不再写死
+let serverPort = null;
+// 「检测到残留实例 → 杀旧 → 重启」只做一次，防止极端情况下无限重启
+let instanceRetryPending = false;
 // 主动退出流程标志：区分「用户主动关应用」和「服务自己崩了」。
 // 主动退出时服务是被我们请退的，绝不能再弹「服务意外退出」。
 let appQuitting = false;
+
+/** 应用基地址。端口就绪前返回 null（窗口先显示 loading 页，不碰服务）。 */
+function appBaseUrl() {
+  if (!serverPort) return null;
+  return `http://${SERVER_HOST}:${serverPort}${APP_BASE_PATH}/`;
+}
+
+function appOrigin() {
+  if (!serverPort) return null;
+  return `http://${SERVER_HOST}:${serverPort}`;
+}
 
 /** 打包后 server/client 位于 resources/ 下；开发模式下位于工程根 */
 function resolveDirs() {
@@ -59,15 +77,19 @@ function startServer(dirs) {
   const dbDir = path.join(app.getPath('userData'), 'pglite-data');
   fs.mkdirSync(dbDir, { recursive: true });
 
+  // 端口不再写死：不传 SERVER_PORT，服务端用 0 让操作系统随机分配，
+  // 实际端口通过 READY 标记回传。开发调试时可在环境里手动指定 SERVER_PORT。
+  const env = {
+    ...process.env,
+    ELECTRON_RUN_AS_NODE: '1',
+    DB_DIR: dbDir,
+    CLIENT_DIR: dirs.clientDir,
+    SERVER_HOST,
+  };
+  if (process.env.SERVER_PORT) env.SERVER_PORT = String(process.env.SERVER_PORT);
+
   serverProc = spawn(process.execPath, [mainJs], {
-    env: {
-      ...process.env,
-      ELECTRON_RUN_AS_NODE: '1',
-      DB_DIR: dbDir,
-      CLIENT_DIR: dirs.clientDir,
-      SERVER_HOST,
-      SERVER_PORT: String(SERVER_PORT),
-    },
+    env,
     stdio: ['ignore', 'pipe', 'pipe'],
   });
 
@@ -75,8 +97,13 @@ function startServer(dirs) {
     const chunk = d.toString();
     process.stdout.write('[server] ' + chunk);
     if (!serverReady && chunk.includes(READY_MARK)) {
-      serverReady = true;
-      loadApp(dirs);
+      // 标记格式：DESKTOP_SERVER_READY <port>，解析出实际端口
+      const m = chunk.match(/DESKTOP_SERVER_READY\s+(\d+)/);
+      if (m) {
+        serverPort = Number(m[1]);
+        serverReady = true;
+        loadApp(dirs);
+      }
     }
   });
   serverProc.stderr.on('data', (d) => process.stderr.write('[server:err] ' + d.toString()));
@@ -93,13 +120,32 @@ function startServer(dirs) {
     if (appQuitting) {
       return;
     }
+    // 退出码 2 = 服务端发现旧实例还活着（指纹文件）。
+    // 这是覆盖安装后的残留进程在占着数据库，杀掉它再拉一次即可，不算故障。
+    // 旧版靠固定端口被占来暴露这个问题，会弹吓人的「启动失败」，现在自动处理。
+    if (code === EXIT_INSTANCE_RUNNING && !instanceRetryPending) {
+      const stalePid = readStaleInstancePid();
+      console.warn('[desktop] 检测到残留服务进程 pid=' + (stalePid || '?') + '，结束后重启');
+      instanceRetryPending = true;
+      const retry = () => {
+        instanceRetryPending = false;
+        if (!appQuitting && !serverProc) startServer(resolveDirs());
+      };
+      if (stalePid) {
+        killPid(stalePid, retry);
+      } else {
+        // 指纹文件没了（对方刚好自己退了），稍等直接重拉
+        setTimeout(retry, 300);
+      }
+      return;
+    }
     // 出问题时必须让用户看见原因，否则窗口一闪而过、无从排查
     if (neverReady) {
       dialog.showErrorBox(
         '启动失败：本地服务没能起来',
         '应用启动时本地服务意外退出，常见原因：\n' +
           '· 数据库文件损坏或被占用（可先重启电脑再试）\n' +
-          '· 端口 17890 被其他程序占用\n' +
+          '· 有旧版应用仍在后台运行（重启电脑可清除）\n' +
           '· 安装包不完整，或缺少题库数据文件\n\n' +
           '若反复出现，请把终端里的 [server:err] 输出发给维护者。',
       );
@@ -116,6 +162,45 @@ function startServer(dirs) {
       app.quit();
     }
   });
+}
+
+/** 读服务端留下的指纹文件，拿到残留进程的 PID（读不到返回 null）。 */
+function readStaleInstancePid() {
+  try {
+    const file = path.join(app.getPath('userData'), 'pglite-data', 'instance.json');
+    if (!fs.existsSync(file)) return null;
+    const raw = JSON.parse(fs.readFileSync(file, 'utf8'));
+    const pid = Number(raw && raw.pid);
+    return Number.isFinite(pid) && pid > 0 ? pid : null;
+  } catch (_) {
+    return null;
+  }
+}
+
+/** 结束指定 PID 的进程：先 SIGTERM 好言好语，1.5 秒后还在就 SIGKILL。 */
+function killPid(pid, done) {
+  let finished = false;
+  const finish = () => {
+    if (finished) return;
+    finished = true;
+    clearTimeout(timer);
+    done();
+  };
+  try {
+    process.kill(pid, 'SIGTERM');
+  } catch (_) {
+    // 进程可能刚好自己退了，直接收尾
+    return finish();
+  }
+  const timer = setTimeout(() => {
+    try {
+      process.kill(pid, 'SIGKILL');
+    } catch (_) {
+      /* 已经没了，正常 */
+    }
+    finish();
+  }, 1500);
+  if (typeof timer.unref === 'function') timer.unref();
 }
 
 let serverStopping = false;
@@ -204,16 +289,16 @@ function createWindow(dirs) {
   mainWindow.setMenuBarVisibility(false);
   // 页面内新窗口一律交给系统浏览器
   mainWindow.webContents.setWindowOpenHandler(({ url }) => {
-    const appOrigin = `http://${SERVER_HOST}:${SERVER_PORT}`;
-    const appBasePath = '/app/app_17g1b8sj7x4';
+    const origin = appOrigin();
+    if (!origin) return { action: 'deny' };
 
     // 应用内页面（试卷预览 / 打印）：前端传的是相对路径（如 /mock-exam/print/xxx），
     // 要补上基路径才能命中服务端的 SPA 路由，然后在应用内新窗口打开。
     if (url.startsWith('/')) {
-      openInnerWindow(`${appOrigin}${appBasePath}${url}`);
+      openInnerWindow(`${origin}${APP_BASE_PATH}${url}`);
       return { action: 'deny' };
     }
-    if (url.startsWith(appOrigin)) {
+    if (url.startsWith(origin)) {
       openInnerWindow(url);
       return { action: 'deny' };
     }
@@ -223,16 +308,16 @@ function createWindow(dirs) {
     return { action: 'deny' };
   });
   // 同一窗口里的跳转也拦一道：只允许本机服务地址，外部网址用系统浏览器打开
-  const appOrigin = `http://${SERVER_HOST}:${SERVER_PORT}`;
   mainWindow.webContents.on('will-navigate', (event, url) => {
-    if (/^https?:/i.test(url) && !url.startsWith(appOrigin)) {
+    const origin = appOrigin();
+    if (origin && /^https?:/i.test(url) && !url.startsWith(origin)) {
       event.preventDefault();
       shell.openExternal(url);
     }
   });
-  // 点红叉 = 把窗口收起来，应用继续留在 Dock 里，服务也继续运行。
-  // 这样下次点 Dock 图标能瞬间恢复（页面状态都还在，不用重新加载、不用重新初始化数据库）。
-  // 真正退出应用请用 ⌘Q 或 Dock 右键「退出」。
+  // 点红叉 = 把窗口收起来，应用继续运行，服务也继续运行。
+  // mac：应用留在 Dock，点 Dock 图标瞬间恢复（页面状态都还在，不用重新加载数据库）。
+  // win：窗口收进系统托盘，点托盘图标恢复；托盘右键「退出」才是彻底退出。
   // ---- 侧边栏品牌位：在「全」字前面补上应用图标 ----
   // 背景：前端是构建产物，组件里写死了「收起显示『全』/ 展开显示『全职高手考研』」，
   // 没有源码改不了组件。
@@ -317,10 +402,55 @@ function createWindow(dirs) {
 /** 服务就绪后切入应用主界面；窗口尚未创建则先创建（加载页），随后跳转 */
 function loadApp(dirs) {
   if (!mainWindow) createWindow(dirs);
+  const url = appBaseUrl();
+  if (!url) return;
   if (!appLoaded) {
     appLoaded = true;
-    mainWindow.loadURL(BASE_URL);
+    mainWindow.loadURL(url);
   }
+}
+
+// ---------------------------------------------------------------------------
+// 系统托盘（仅 Windows）
+// mac 上点红叉 = 窗口收进 Dock、点 Dock 图标恢复，这套已经工作，不再加托盘图标。
+// win 上点红 = 隐藏到托盘（应用不退，后台服务继续跑），
+// 单击托盘图标恢复窗口，右键菜单「显示主窗口 / 退出」。
+// ---------------------------------------------------------------------------
+function showMainWindow() {
+  if (mainWindow && !mainWindow.isDestroyed()) {
+    mainWindow.show();
+    mainWindow.focus();
+    return;
+  }
+  const dirs = resolveDirs();
+  createWindow(dirs);
+  const url = appBaseUrl();
+  if (url) {
+    mainWindow.loadURL(url);
+  } else if (!serverProc) {
+    startServer(dirs);
+  }
+}
+
+function createTray(dirs) {
+  if (tray) return;
+  try {
+    tray = new Tray(dirs.iconPath);
+  } catch (e) {
+    // 图标加载失败不该影响主流程，只是没有托盘图标而已
+    console.error('[desktop] 托盘图标创建失败：', e && e.message);
+    return;
+  }
+  tray.setToolTip('全职高手考研系统');
+  tray.setContextMenu(
+    Menu.buildFromTemplate([
+      { label: '显示主窗口', click: showMainWindow },
+      { type: 'separator' },
+      { label: '退出', click: () => app.quit() },
+    ]),
+  );
+  // 左键单击：恢复窗口（win 用户对托盘的第一预期）
+  tray.on('click', showMainWindow);
 }
 
 // 只允许运行一个实例。
@@ -339,6 +469,8 @@ if (!app.requestSingleInstanceLock()) {
 
   app.whenReady().then(() => {
     const dirs = resolveDirs();
+    // Windows：创建托盘（点红叉收到托盘，右键可退出）
+    if (process.platform === 'win32') createTray(dirs);
     // 立即创建窗口并显示本地加载页（白屏期也有内容），服务就绪后 loadApp 切入
     createWindow(dirs);
     startServer(dirs);
@@ -356,7 +488,8 @@ app.on('activate', () => {
   createWindow(dirs);
   if (serverReady) {
     // 服务还在跑，直接进主界面，不用再看加载页
-    mainWindow.loadURL(BASE_URL);
+    const url = appBaseUrl();
+    if (url) mainWindow.loadURL(url);
   } else {
     startServer(dirs);
   }

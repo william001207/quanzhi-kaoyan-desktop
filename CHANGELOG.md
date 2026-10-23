@@ -2,6 +2,20 @@
 
 所有版本的变更记录。格式参考 [Keep a Changelog](https://keepachangelog.com/zh-CN/1.1.0/)，版本号遵循语义化版本。
 
+## [v1.1.5] - 2026-10-23
+
+### 新增
+- **Windows 系统托盘**：点窗口右上角的叉不再退出应用，而是收进系统托盘；单击托盘图标恢复窗口，右键可选「显示主窗口」或「退出」（mac 行为不变，仍走 Dock）
+
+### 修复
+- **Windows 偶发「本地服务没能起来」弹窗根治**：本地服务端口由写死的 17890 改为启动时随机分配，残留进程、Hyper-V 保留段或其他程序再也不会把端口占掉导致启动失败
+- **覆盖安装后的残留进程自动清理**：服务启动时先读数据目录里的实例指纹，发现旧实例仍在运行就自动结束它再启动，不再弹错误框、也不用重启电脑
+- **启动就绪标记即时送达**：服务就绪与实例占用标记改为同步写入，避免管道缓冲导致窗口卡在加载页
+
+### 说明
+- 题库规模：1705 道真题 / 1117 个知识点 / 8 个科目，本次无数据变动，不触发数据同步
+- Windows 安装包在安装前会自动结束可能残留的旧版进程（nsis 安装脚本）
+
 ## [v1.1.4] - 2026-10-22
 
 ### 修复
@@ -137,7 +151,8 @@
 - 安装包文件名改为英文（ASCII），解决 GitHub 下载链接 404
 - dmg 标准布局：打开即见 app + Applications 快捷方式
 
-[unreleased]: https://github.com/william001207/quanzhi-kaoyan-desktop/compare/v1.1.4...HEAD
+[unreleased]: https://github.com/william001207/quanzhi-kaoyan-desktop/compare/v1.1.5...HEAD
+[v1.1.5]: https://github.com/william001207/quanzhi-kaoyan-desktop/compare/v1.1.4...v1.1.5
 [v1.1.4]: https://github.com/william001207/quanzhi-kaoyan-desktop/compare/v1.1.3...v1.1.4
 [v1.1.3]: https://github.com/william001207/quanzhi-kaoyan-desktop/compare/v1.1.2...v1.1.3
 [v1.1.2]: https://github.com/william001207/quanzhi-kaoyan-desktop/compare/v1.1.1...v1.1.2

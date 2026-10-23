@@ -3,6 +3,7 @@ import { Logger } from '@nestjs/common';
 import { configureApp } from './platform';
 import { initializeDatabase, closeDb } from './database/local-db';
 import { join, resolve } from 'path';
+import * as fs from 'fs';
 // eslint-disable-next-line @typescript-eslint/no-var-requires
 const hbs = require('hbs');
 
@@ -13,7 +14,95 @@ import { AppModule } from './app.module';
 let httpApp: NestExpressApplication | null = null;
 let shuttingDown = false;
 
+// ---------------------------------------------------------------------------
+// 实例指纹：防止两个服务进程同时打开同一个数据库
+//
+// 背景：覆盖安装时旧版的服务进程可能没被干净收掉，成为继续占着数据目录的
+// 「孤儿进程」。旧代码靠固定端口被占来兜底（起不来 → 弹窗），误报率极高
+// （Hyper-V、别的程序都可能占端口）。现在改为：启动时在数据目录写一个指纹
+// 文件记录自己的 PID；发现旧 PID 仍活着就拒绝启动（退出码 2），由主进程
+// 杀掉旧进程后重新拉起。退出时指纹文件清掉。
+// ---------------------------------------------------------------------------
+const INSTANCE_FILE = 'instance.json';
+
+function instanceFilePath(dbDir: string): string {
+  return join(dbDir, INSTANCE_FILE);
+}
+
+/** 探测 PID 是否活着。信号 0 不杀进程，只问「在吗」。 */
+function pidAlive(pid: number): boolean {
+  try {
+    process.kill(pid, 0);
+    return true;
+  } catch (e: any) {
+    // ESRCH = 不存在；EPERM = 存在但无权发信号，同样算活着
+    return !!e && e.code === 'EPERM';
+  }
+}
+
+/**
+ * 检查并占用实例。
+ * 返回 { ok: true } 可以继续启动；{ ok: false, existingPid } 表示检测到活实例。
+ */
+function claimInstance(dbDir: string): { ok: boolean; existingPid?: number } {
+  const file = instanceFilePath(dbDir);
+  let existingPid: number | undefined;
+  try {
+    if (fs.existsSync(file)) {
+      const raw = JSON.parse(fs.readFileSync(file, 'utf8'));
+      const pid = Number(raw && raw.pid);
+      if (Number.isFinite(pid) && pid > 0 && pidAlive(pid)) {
+        existingPid = pid;
+      }
+      // PID 已死 = 上次崩溃/断电留下的烂账，覆盖掉继续走
+    }
+  } catch (_) {
+    // 指纹文件损坏/读不了：当作没有处理
+  }
+  if (existingPid) {
+    return { ok: false, existingPid };
+  }
+  try {
+    fs.writeFileSync(
+      file,
+      JSON.stringify({ pid: process.pid, startedAt: new Date().toISOString() }),
+      'utf8',
+    );
+  } catch (e) {
+    // 写不了指纹不阻塞启动（极端情况：目录只读），退化为旧行为
+    console.error('[instance] 写指纹文件失败：', e);
+  }
+  return { ok: true };
+}
+
+/** 退出时清理指纹。只删自己那条，绝不误删别人的。 */
+function releaseInstance(dbDir: string): void {
+  try {
+    const file = instanceFilePath(dbDir);
+    if (!fs.existsSync(file)) return;
+    const raw = JSON.parse(fs.readFileSync(file, 'utf8'));
+    if (raw && Number(raw.pid) === process.pid) {
+      fs.unlinkSync(file);
+    }
+  } catch (_) {
+    /* ignore */
+  }
+}
+
 async function bootstrap() {
+  // 先做实例指纹检查：发现旧实例还活着就直接退出（退出码 2），
+  // 由主进程杀掉残留进程后重新拉起，避免两个服务抢同一个数据库
+  const dbDir = process.env.DB_DIR;
+  if (dbDir) {
+    const claim = claimInstance(dbDir);
+    if (!claim.ok) {
+      // 用同步写而不是 console.log：stdout 是管道时 Node 按块缓冲，
+      // 紧接着 process.exit 会丢掉没刷出的内容，主进程就收不到这个标记。
+      fs.writeSync(1, `DESKTOP_INSTANCE_RUNNING ${claim.existingPid}\n`);
+      process.exit(2);
+    }
+  }
+
   // 先确保本地数据库就绪（建表 + 数据导入）
   await initializeDatabase();
 
@@ -29,7 +118,10 @@ async function bootstrap() {
   });
   const logger = new Logger('Bootstrap');
   const host = process.env.SERVER_HOST || '127.0.0.1';
-  const port = Number(process.env.SERVER_PORT || '17890');
+  // 端口 0 = 交给操作系统随机分配。写死端口时，残留进程 / Hyper-V 保留段 /
+  // 其它程序都可能把它占掉，导致启动失败（win 上出现过这个弹窗）。
+  // 实际端口通过 READY 标记回传给主进程。SERVER_PORT 仅在开发调试时手动指定。
+  const port = process.env.SERVER_PORT ? Number(process.env.SERVER_PORT) : 0;
 
   // 客户端静态资源目录（index.html + assets/）
   const clientDir = process.env.CLIENT_DIR || join(process.cwd(), '..', 'client');
@@ -55,11 +147,14 @@ async function bootstrap() {
     res.sendFile(indexHtml);
   });
 
-  await app.listen(port, host);
-  logger.log(`Server running on http://${host}:${port}`);
-  logger.log(`API endpoints ready at http://${host}:${port}/api`);
-  // Electron 主进程等待该标记后打开窗口
-  console.log('DESKTOP_SERVER_READY');
+  const httpServer = await app.listen(port, host);
+  const addr = httpServer.address();
+  const actualPort = typeof addr === 'object' && addr ? addr.port : port;
+  logger.log(`Server running on http://${host}:${actualPort}`);
+  logger.log(`API endpoints ready at http://${host}:${actualPort}/api`);
+  // Electron 主进程等待该标记后打开窗口；标记后跟实际端口（随机分配，主进程解析使用）。
+  // 同步写：管道缓冲会拖延这个标记的送达，主进程等不到就不切主界面。
+  fs.writeSync(1, `DESKTOP_SERVER_READY ${actualPort}\n`);
 }
 
 /**
@@ -82,6 +177,9 @@ async function shutdown(reason: string): Promise<void> {
   } catch (e) {
     console.error('[shutdown] 关闭数据库时出错：', e);
   }
+  // 正常退出要清掉自己的指纹文件，下次启动直接进，不用等 PID 失效
+  const dbDir = process.env.DB_DIR;
+  if (dbDir) releaseInstance(dbDir);
   process.exit(0);
 }
 
