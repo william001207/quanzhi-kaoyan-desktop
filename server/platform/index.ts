@@ -41,17 +41,26 @@ export async function configureApp(
   app: NestExpressApplication,
   options?: { disableSwagger?: boolean },
 ): Promise<void> {
-  // 只允许应用自身的地址跨域访问。
-  // 原来的 origin: true 会把任何来源都原样放行，配合 credentials 等于让任意网页
-  // 都能读写本机数据库；桌面端前后端本来就同源，不需要放开。
   // body 解析：main.ts 关掉了默认解析器，这里注册大上限版本
   // （导入内容数据 4 个 JSON 合计约 10MB+，默认 100kb 会直接 413）
   app.use(json({ limit: '64mb' }) as any);
   app.use(urlencoded({ extended: true, limit: '64mb' }) as any);
 
-  const localPort = process.env.SERVER_PORT || '17890';
+  // 只允许本机回环地址跨域访问。
+  // 原来的 origin: true 会把任何来源都原样放行，配合 credentials 等于让任意网页
+  // 都能读写本机数据库；桌面端前后端本来就同源，不需要放开。
+  // 注意：端口现在是启动时随机分配的，这里不能再写死 17890（写了就等于没放行），
+  // 所以改为「校验来源是否本机回环 + 任意端口」。
+  const LOOPBACK_ORIGIN = /^https?:\/\/(127\.0\.0\.1|localhost|\[::1\])(:\d+)?$/;
   app.enableCors({
-    origin: [`http://127.0.0.1:${localPort}`, `http://localhost:${localPort}`],
+    origin: (
+      origin: string | undefined,
+      callback: (err: Error | null, allow?: boolean) => void,
+    ) => {
+      // 没有 Origin 头 = 同源请求 / curl / 主进程内部调用，直接放行
+      if (!origin) return callback(null, true);
+      callback(null, LOOPBACK_ORIGIN.test(origin));
+    },
     credentials: true,
   });
 
