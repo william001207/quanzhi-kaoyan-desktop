@@ -39,7 +39,6 @@ import {
 import { Badge } from '@/components/ui/badge';
 import { Card, CardContent } from '@/components/ui/card';
 import { Checkbox } from '@/components/ui/checkbox';
-import { ScrollArea } from '@/components/ui/scroll-area';
 import {
   QUESTION_TYPE_LABEL,
   type QuestionType,
@@ -432,14 +431,13 @@ const ManualAddQuestionForm: React.FC<ManualAddQuestionFormProps> = ({
                   type="button"
                   variant="outline"
                   className="w-full justify-between font-normal"
-                  disabled={!subjectId}
                 >
                   <span className="truncate">
                     {selectedKps.length > 0
                       ? `已选 ${selectedKps.length} 个知识点`
                       : subjectId
                         ? '搜索并选择知识点'
-                        : '请先选择科目'}
+                        : '选择科目并关联知识点'}
                   </span>
                   {kpPopoverOpen ? (
                     <ChevronUp className="h-4 w-4 ml-2 flex-shrink-0" />
@@ -449,67 +447,99 @@ const ManualAddQuestionForm: React.FC<ManualAddQuestionFormProps> = ({
                 </Button>
               </PopoverTrigger>
               <PopoverContent
-                className="w-[--radix-popover-trigger-width] p-0"
+                className="flex max-h-[min(70vh,440px)] w-[min(560px,calc(100vw-2rem))] flex-col overflow-hidden p-0"
                 align="start"
+                collisionPadding={12}
               >
-                <div className="p-2 border-b">
-                  <div className="relative">
-                    <Search className="h-4 w-4 absolute left-2.5 top-1/2 -translate-y-1/2 text-muted-foreground" />
-                    <Input
-                      placeholder="搜索知识点..."
-                      className="pl-8"
-                      value={kpSearch}
-                      onChange={(e) => setKpSearch(e.target.value)}
-                      autoFocus
-                    />
-                  </div>
-                </div>
-                <ScrollArea className="max-h-60">
-                  {kpLoading && (
-                    <div className="p-4 text-sm text-muted-foreground text-center">
-                      搜索中...
+                {!subjectId ? (
+                  <div className="p-3">
+                    <div className="mb-2 text-xs text-muted-foreground">
+                      先选一个科目，再挑选要关联的知识点
                     </div>
-                  )}
-                  {!kpLoading && kpOptions.length === 0 && (
-                    <div className="p-4 text-sm text-muted-foreground text-center">
-                      {subjectId ? '没有找到匹配的知识点' : '请先选择科目'}
-                    </div>
-                  )}
-                  {!kpLoading &&
-                    kpOptions.length > 0 &&
-                    kpOptions.map((kp) => {
-                      const checked = selectedKpIds.has(kp.id);
-                      return (
-                        <div
-                          key={kp.id}
-                          className={`flex items-start gap-2 px-3 py-2 cursor-pointer hover:bg-muted/50 transition-colors ${
-                            checked ? 'bg-primary/5' : ''
-                          }`}
-                          onClick={() => handleToggleKp(kp)}
-                          role="button"
-                          tabIndex={0}
-                          onKeyDown={(e) => {
-                            if (e.key === 'Enter' || e.key === ' ') {
-                              e.preventDefault();
-                              handleToggleKp(kp);
-                            }
-                          }}
+                    <div className="grid grid-cols-2 gap-1.5">
+                      {subjects.map((s) => (
+                        <Button
+                          key={s.id}
+                          type="button"
+                          variant="outline"
+                          size="sm"
+                          className="justify-start font-normal"
+                          onClick={() =>
+                            form.setValue('subjectId', s.id, {
+                              shouldValidate: true,
+                              shouldDirty: true,
+                            })
+                          }
                         >
-                          <Checkbox checked={checked} className="mt-0.5" />
-                          <div className="flex-1 min-w-0">
-                            <div className="text-sm truncate">{kp.title}</div>
-                            {checked && (
-                              <div className="text-xs text-primary mt-0.5">
-                                已添加
-                              </div>
-                            )}
-                          </div>
+                          <span className="truncate">{s.name}</span>
+                        </Button>
+                      ))}
+                    </div>
+                  </div>
+                ) : (
+                  <>
+                    <div className="shrink-0 border-b p-2">
+                      <div className="relative">
+                        <Search className="h-4 w-4 absolute left-2.5 top-1/2 -translate-y-1/2 text-muted-foreground" />
+                        <Input
+                          placeholder="搜索知识点..."
+                          className="pl-8"
+                          value={kpSearch}
+                          onChange={(e) => setKpSearch(e.target.value)}
+                          autoFocus
+                        />
+                      </div>
+                    </div>
+                    <div className="min-h-0 flex-1 overflow-y-auto overscroll-contain">
+                      {kpLoading && (
+                        <div className="p-4 text-sm text-muted-foreground text-center">
+                          搜索中...
                         </div>
-                      );
-                    })}
-                </ScrollArea>
+                      )}
+                      {!kpLoading && kpOptions.length === 0 && (
+                        <div className="p-4 text-sm text-muted-foreground text-center">
+                          没有找到匹配的知识点
+                        </div>
+                      )}
+                      {!kpLoading &&
+                        kpOptions.length > 0 &&
+                        kpOptions.map((kp) => {
+                          const checked = selectedKpIds.has(kp.id);
+                          return (
+                            <div
+                              key={kp.id}
+                              className={`flex items-start gap-2 px-3 py-2 cursor-pointer hover:bg-muted/50 transition-colors ${
+                                checked ? 'bg-primary/5' : ''
+                              }`}
+                              onClick={() => handleToggleKp(kp)}
+                              role="button"
+                              tabIndex={0}
+                              onKeyDown={(e) => {
+                                if (e.key === 'Enter' || e.key === ' ') {
+                                  e.preventDefault();
+                                  handleToggleKp(kp);
+                                }
+                              }}
+                            >
+                              <Checkbox checked={checked} className="mt-0.5" />
+                              <div className="flex-1 min-w-0">
+                                <div className="text-sm leading-snug break-words">
+                                  {kp.title}
+                                </div>
+                                {checked && (
+                                  <div className="text-xs text-primary mt-0.5">
+                                    已添加
+                                  </div>
+                                )}
+                              </div>
+                            </div>
+                          );
+                        })}
+                    </div>
+                  </>
+                )}
                 {selectedKps.length > 0 && (
-                  <div className="p-2 border-t text-xs text-muted-foreground flex items-center justify-between">
+                  <div className="shrink-0 p-2 border-t text-xs text-muted-foreground flex items-center justify-between">
                     <span>已选 {selectedKps.length} 个</span>
                     <Button
                       type="button"

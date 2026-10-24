@@ -2,6 +2,18 @@
 
 所有版本的变更记录。格式参考 [Keep a Changelog](https://keepachangelog.com/zh-CN/1.1.0/)，版本号遵循语义化版本。
 
+## [v1.1.6] - 2026-10-24
+
+### 修复
+- **「关联知识点」选择器未选科目就锁死**：手动添加真题时，底部按钮在未选科目时是灰的且点不动，必须爬回表单上方选科目；改为随时可打开，弹窗内直接给出 8 个科目快捷切换，选中即加载该科目的知识点
+- **知识点选择弹窗宽度失效**：宽度类名写成 `w-[--radix-popover-trigger-width]`，Tailwind v4 不识别该写法，编译出的是缺 `var()` 包裹的无效 CSS，弹窗一直按默认 288px 渲染、标题被挤断；改为固定 560px，窄屏自动收窄到窗口宽度减 32px
+- **知识点选择弹窗纵向溢出**：滚动区只给了「最高多高」而父容器没有确定高度，内部滚动不生效，列表把弹窗撑到超出窗口、内容被裁切并遮挡相邻元素；改为整体限高 440px 或窗口高度的 70%，搜索框与底部工具条固定，仅中间列表内部滚动
+- **知识点长标题截断**：改为自动换行显示，不再以省略号收尾，勾选后也不再额外占一行
+
+### 说明
+- 题库规模：1705 道真题 / 1117 个知识点 / 8 个科目，本次无数据变动，不触发数据同步
+- 界面改动经 `client-src` 构建后同步进 `client/`，并清理 19 个旧 hash 残留文件
+
 ## [v1.1.5] - 2026-10-23
 
 ### 新增
@@ -151,7 +163,8 @@
 - 安装包文件名改为英文（ASCII），解决 GitHub 下载链接 404
 - dmg 标准布局：打开即见 app + Applications 快捷方式
 
-[unreleased]: https://github.com/william001207/quanzhi-kaoyan-desktop/compare/v1.1.5...HEAD
+[unreleased]: https://github.com/william001207/quanzhi-kaoyan-desktop/compare/v1.1.6...HEAD
+[v1.1.6]: https://github.com/william001207/quanzhi-kaoyan-desktop/compare/v1.1.5...v1.1.6
 [v1.1.5]: https://github.com/william001207/quanzhi-kaoyan-desktop/compare/v1.1.4...v1.1.5
 [v1.1.4]: https://github.com/william001207/quanzhi-kaoyan-desktop/compare/v1.1.3...v1.1.4
 [v1.1.3]: https://github.com/william001207/quanzhi-kaoyan-desktop/compare/v1.1.2...v1.1.3
