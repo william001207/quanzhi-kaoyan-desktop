@@ -69,7 +69,7 @@ export function initializeDatabase(): Promise<void> {
 
 // 数据内容版本：线上题库内容（知识点卡片/题目等）有更新时递增。
 // 客户端检测到版本变化后执行增量内容同步（只更新内容字段，保留用户学习进度）。
-const DATA_VERSION = '2026-10-22.5'; // 用挂靠真题的参考答案填充 69 个空白知识点的正文与卡片(原标题无内容);沿用此前全部修复
+const DATA_VERSION = '2026-10-24.1'; // 新增南方医科大学 2020-2026 名词解释真题 70 道（原 1705 → 1775），含知识点关联；沿用此前全部修复
 
 async function ensureSchemaAndData(db: PGlite): Promise<void> {
   const schemaSql = await fs.readFile(

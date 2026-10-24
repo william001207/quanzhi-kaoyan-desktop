@@ -2,6 +2,22 @@
 
 所有版本的变更记录。格式参考 [Keep a Changelog](https://keepachangelog.com/zh-CN/1.1.0/)，版本号遵循语义化版本。
 
+## [v1.1.8] - 2026-10-24
+
+### 新增
+- **南方医科大学名词解释真题入库**：补入 2020–2026 年 70 道名词解释，题库由 1705 道增至 1775 道，名词解释题型由 12 条增至 82 条
+- **参考答案与答案要点补全**：原始题库仅有题干，按口腔医学教材逐题补写参考答案、要点关键词与难度分级，入库后可直接答题自评
+
+### 数据治理（DATA_VERSION → 2026-10-24.1，启动自动同步）
+- **知识点关联**：按同科目内「标题全等 / 短语包含 / 三字组相似」三级匹配挂接，每题最多 3 个知识点，共 56 题命中
+- **原文笔误修正**：`pulpltis` → `pulpitis`、`plague` → `plaque`、`Tunner 牙` → `Turner 牙`、`rentained` → `retained`
+- **只增改不删**：本次为纯新增，升级后自动并入本机题库，学习进度、错题、复习记录一律保留
+- 题库规模：1775 道真题 / 1117 个知识点 / 8 个科目
+
+### 说明
+- 14 道题（涉及 12 个考点：球间牙本质、托姆斯颗粒层、Turner 牙、哈钦森牙、牙周生态系、根尖止点、种植体周围炎、肿瘤微循环、牙冠延长术、附着体义齿、髁导斜度、牙周潜力）尚未收录于现有知识点体系，关联留空不硬凑，待后续补建知识点再挂接
+- 前端与后端代码本次无改动，`client/` 构建产物无需重建
+
 ## [v1.1.7] - 2026-10-24
 
 ### 修复
@@ -179,7 +195,8 @@
 - 安装包文件名改为英文（ASCII），解决 GitHub 下载链接 404
 - dmg 标准布局：打开即见 app + Applications 快捷方式
 
-[unreleased]: https://github.com/william001207/quanzhi-kaoyan-desktop/compare/v1.1.7...HEAD
+[unreleased]: https://github.com/william001207/quanzhi-kaoyan-desktop/compare/v1.1.8...HEAD
+[v1.1.8]: https://github.com/william001207/quanzhi-kaoyan-desktop/compare/v1.1.7...v1.1.8
 [v1.1.7]: https://github.com/william001207/quanzhi-kaoyan-desktop/compare/v1.1.6...v1.1.7
 [v1.1.6]: https://github.com/william001207/quanzhi-kaoyan-desktop/compare/v1.1.5...v1.1.6
 [v1.1.5]: https://github.com/william001207/quanzhi-kaoyan-desktop/compare/v1.1.4...v1.1.5
