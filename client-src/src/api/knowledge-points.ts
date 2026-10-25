@@ -14,11 +14,27 @@ export interface ListParams {
    pageSize?: number;
    subjectId?: string;
    chapterId?: string;
+   /** 连同下级章节一起筛选（大纲地图点「篇 / 章」时需要） */
+   includeDescendants?: boolean;
    status?: string;
    keyword?: string;
    source?: SyllabusMode;
    weakMarked?: boolean;
  }
+
+/**
+ * 各章节的知识点数量（服务端已按父子关系向上汇总），用于大纲地图树上的数字角标。
+ */
+export async function getChapterCounts(
+  subjectId: string,
+  source: SyllabusMode,
+): Promise<Record<string, number>> {
+  const { data } = await axiosForBackend.get<Record<string, number>>(
+    '/api/knowledge-points/chapter-counts',
+    { params: { subjectId, source } },
+  );
+  return data ?? {};
+}
 
 export async function list(
   params: ListParams = {},

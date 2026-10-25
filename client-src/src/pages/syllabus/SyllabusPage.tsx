@@ -565,28 +565,32 @@ const SyllabusPage: React.FC = () => {
     return map;
   }, [chapters]);
 
-  const kpCountMap = useMemo(() => {
-    const directCount = new Map<string, number>();
-    for (const kp of knowledgePoints) {
-      const cur = directCount.get(kp.chapterId) ?? 0;
-      directCount.set(kp.chapterId, cur + 1);
-    }
-    const totalCount = new Map<string, number>();
-    const compute = (chapterId: string): number => {
-      if (totalCount.has(chapterId)) return totalCount.get(chapterId)!;
-      let total = directCount.get(chapterId) ?? 0;
-      const children = childrenMap.get(chapterId) ?? [];
-      for (const child of children) {
-        total += compute(child.id);
+  // 章节知识点数量：由服务端按父子关系汇总，
+  // 保证「篇 / 章」角标上的数字 = 点开后列表里的条数。
+  const [chapterKpCounts, setChapterKpCounts] = useState<Record<string, number>>(
+    {},
+  );
+
+  const kpCountMap = useMemo(
+    () => new Map(Object.entries(chapterKpCounts)),
+    [chapterKpCounts],
+  );
+
+  useEffect(() => {
+    if (!activeSubjectId) return;
+    const loadCounts = async () => {
+      try {
+        const counts = await api.knowledgePoints.getChapterCounts(
+          activeSubjectId,
+          syllabusMode,
+        );
+        setChapterKpCounts(counts);
+      } catch (err) {
+        logger.error('加载章节知识点数量失败', err);
       }
-      totalCount.set(chapterId, total);
-      return total;
     };
-    for (const c of chapters) {
-      compute(c.id);
-    }
-    return totalCount;
-  }, [knowledgePoints, chapters, childrenMap]);
+    loadCounts();
+  }, [activeSubjectId, syllabusMode, treeRefreshKey]);
 
   useEffect(() => {
     const load = async () => {
@@ -698,6 +702,7 @@ const SyllabusPage: React.FC = () => {
         const result = await api.knowledgePoints.list({
           subjectId: activeSubjectId,
           chapterId: selectedChapterId || undefined,
+          includeDescendants: true,
           status: statusFilter || undefined,
           source: syllabusMode,
           page: kpPage,
@@ -1171,7 +1176,7 @@ const SyllabusPage: React.FC = () => {
           <div className="px-3 md:px-6 py-3 border-b flex items-center gap-2 md:gap-4 flex-wrap">
             <div className="text-xs md:text-sm text-muted-foreground">
               共 {kpTotal} 个知识点
-              {selectedChapterId && '（当前章节筛选）'}
+              {selectedChapterId && '（含下级章节）'}
             </div>
             <div className="flex-1" />
             <Select value={statusFilter} onValueChange={setStatusFilter}>
@@ -1217,14 +1222,16 @@ const SyllabusPage: React.FC = () => {
                </div>
              ) : sortedPoints.length === 0 ? (
                <div className="flex flex-col items-center justify-center h-full text-sm text-muted-foreground gap-2">
-                 {syllabusMode === 'textbook' ? (
+                 {syllabusMode === 'textbook' && !selectedChapterId ? (
                    <>
                      <BookMarked className="h-10 w-10 text-muted-foreground/40 mb-2" />
                      <div className="font-medium">本科教材目录整理中</div>
                      <div className="text-xs">导入教材目录后，可按教材章节复习知识点</div>
                    </>
                  ) : (
-                   <div>暂无知识点</div>
+                   <div>
+                     {selectedChapterId ? '该章节及其下级章节暂无知识点' : '暂无知识点'}
+                   </div>
                  )}
                </div>
              ) : (

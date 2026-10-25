@@ -1,6 +1,6 @@
 import { Injectable } from '@nestjs/common';
 import { ArrayMaxSize, IsArray, IsBoolean, IsIn, IsInt, IsObject, IsOptional, IsString, IsUUID, Max, MaxLength, Min, ValidateNested } from 'class-validator';
-import { Type } from 'class-transformer';
+import { Transform, Type } from 'class-transformer';
 import type {
    KnowledgePointStatus,
    RequirementLevel,
@@ -18,6 +18,16 @@ export class KnowledgePointListQueryDto {
   @IsOptional()
   @IsString()
   chapterId?: string;
+
+  /**
+   * 是否连同下级章节一起筛选。
+   * 大纲地图点「篇 / 章」时要看到其下所有「章 / 节」的知识点，否则父节点永远是空列表；
+   * 不传则维持原来的精确匹配，避免影响其它调用方。
+   */
+  @IsOptional()
+  @Transform(({ value }) => value === true || value === 'true' || value === 1 || value === '1')
+  @IsBoolean()
+  includeDescendants?: boolean;
 
   @IsOptional()
   @Type(() => String)

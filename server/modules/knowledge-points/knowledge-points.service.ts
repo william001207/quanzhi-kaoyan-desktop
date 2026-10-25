@@ -10,6 +10,7 @@ import type {
   ReviewRecord,
   PaginatedResponse,
   SyllabusItem,
+  SyllabusMode,
   ChapterPathNode,
   KnowledgePointChapterPaths,
 } from '../../shared/api.interface';
@@ -85,12 +86,21 @@ export class KnowledgePointsService {
 
     const source = query.source ?? 'exam_syllabus';
 
+    // 「篇 / 章」这类父节点本身不直接挂知识点，必须带上整棵子树一起筛，
+    // 否则大纲地图里点父节点永远是 0 条。默认仍走精确匹配。
+    let scopeChapterIds: string[] | null = null;
+    if (query.chapterId) {
+      scopeChapterIds = query.includeDescendants
+        ? await this.collectChapterSubtreeIds(query.chapterId)
+        : [query.chapterId];
+    }
+
     if (source === 'textbook') {
-      if (query.chapterId) {
+      if (scopeChapterIds) {
         const kpIds = await this.db
           .select({ kpId: knowledgePointTextbookChapter.knowledgePointId })
           .from(knowledgePointTextbookChapter)
-          .where(eq(knowledgePointTextbookChapter.chapterId, query.chapterId));
+          .where(inArray(knowledgePointTextbookChapter.chapterId, scopeChapterIds));
         if (kpIds.length === 0) {
           return { items: [], total: 0, page: query.page ?? 1, pageSize: query.pageSize ?? 20 };
         }
@@ -107,7 +117,7 @@ export class KnowledgePointsService {
         conditions.push(inArray(knowledgePoint.id, kpIds.map((r) => r.kpId)));
       }
     } else {
-      if (query.chapterId) conditions.push(eq(knowledgePoint.chapterId, query.chapterId));
+      if (scopeChapterIds) conditions.push(inArray(knowledgePoint.chapterId, scopeChapterIds));
     }
 
     const where = conditions.length > 0 ? and(...conditions) : undefined;
@@ -329,6 +339,113 @@ export class KnowledgePointsService {
       page,
       pageSize,
     };
+  }
+
+  /**
+   * 取某个章节连同其全部下级章节的 id。
+   * 章节表按 subjectId + source 分成两套树，规模都在千条以内，
+   * 这里一次性取同科目同来源的全部节点在内存里向下遍历，比递归 CTE 更好维护。
+   */
+  private async collectChapterSubtreeIds(chapterId: string): Promise<string[]> {
+    const rootRows = await this.db
+      .select({
+        id: chapter.id,
+        subjectId: chapter.subjectId,
+        source: chapter.source,
+      })
+      .from(chapter)
+      .where(eq(chapter.id, chapterId));
+    if (rootRows.length === 0) return [chapterId];
+
+    const { subjectId, source } = rootRows[0];
+    const all = await this.db
+      .select({ id: chapter.id, parentChapterId: chapter.parentChapterId })
+      .from(chapter)
+      .where(
+        and(eq(chapter.subjectId, subjectId), eq(chapter.source, source)),
+      );
+
+    const childrenMap = new Map<string, string[]>();
+    for (const row of all) {
+      if (!row.parentChapterId) continue;
+      const list = childrenMap.get(row.parentChapterId) ?? [];
+      list.push(row.id);
+      childrenMap.set(row.parentChapterId, list);
+    }
+
+    const ids: string[] = [];
+    const stack: string[] = [chapterId];
+    while (stack.length > 0) {
+      const current = stack.pop() as string;
+      ids.push(current);
+      const children = childrenMap.get(current);
+      if (children) stack.push(...children);
+    }
+    return ids;
+  }
+
+  /**
+   * 各章节的知识点数量（已按父子关系向上汇总），给大纲地图左侧树做数字角标。
+   * 必须和列表的「含下级章节」语义一致，点开父节点看到的条数才等于角标上的数字。
+   */
+  async chapterCounts(
+    subjectId: string,
+    source: SyllabusMode = 'exam_syllabus',
+  ): Promise<Record<string, number>> {
+    validateUuid(subjectId, '科目ID');
+
+    const chapterRows = await this.db
+      .select({ id: chapter.id, parentChapterId: chapter.parentChapterId })
+      .from(chapter)
+      .where(and(eq(chapter.subjectId, subjectId), eq(chapter.source, source)));
+
+    const parentMap = new Map<string, string | null>();
+    for (const row of chapterRows) {
+      parentMap.set(row.id, row.parentChapterId ?? null);
+    }
+
+    const direct = new Map<string, number>();
+    if (source === 'textbook') {
+      const rows = await this.db
+        .select({
+          chapterId: knowledgePointTextbookChapter.chapterId,
+          total: count(),
+        })
+        .from(knowledgePointTextbookChapter)
+        .innerJoin(
+          chapter,
+          eq(chapter.id, knowledgePointTextbookChapter.chapterId),
+        )
+        .where(eq(chapter.subjectId, subjectId))
+        .groupBy(knowledgePointTextbookChapter.chapterId);
+      for (const row of rows) {
+        if (!row.chapterId) continue;
+        direct.set(row.chapterId, Number(row.total));
+      }
+    } else {
+      const rows = await this.db
+        .select({ chapterId: knowledgePoint.chapterId, total: count() })
+        .from(knowledgePoint)
+        .where(eq(knowledgePoint.subjectId, subjectId))
+        .groupBy(knowledgePoint.chapterId);
+      for (const row of rows) {
+        if (!row.chapterId) continue;
+        direct.set(row.chapterId, Number(row.total));
+      }
+    }
+
+    const totals = new Map<string, number>();
+    for (const [chapterId, value] of direct) {
+      let current: string | null = chapterId;
+      const seen = new Set<string>();
+      while (current && !seen.has(current)) {
+        seen.add(current);
+        totals.set(current, (totals.get(current) ?? 0) + value);
+        current = parentMap.get(current) ?? null;
+      }
+    }
+
+    return Object.fromEntries(totals);
   }
 
   async findOne(id: string): Promise<KnowledgePointDetail> {

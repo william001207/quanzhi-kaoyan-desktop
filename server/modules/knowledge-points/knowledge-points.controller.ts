@@ -13,6 +13,7 @@ import type {
   ExamQuestion,
   ReviewRecord,
   PaginatedResponse,
+  SyllabusMode,
 } from '../../shared/api.interface';
 import { KnowledgePointsService } from './knowledge-points.service';
 import {
@@ -41,6 +42,14 @@ export class KnowledgePointsController {
     @Query() query: KnowledgePointListQueryDto,
   ): Promise<PaginatedResponse<KnowledgePoint>> {
     return this.knowledgePointsService.findList(query);
+  }
+
+  @Get('chapter-counts')
+  async chapterCounts(
+    @Query('subjectId') subjectId: string,
+    @Query('source') source: SyllabusMode = 'exam_syllabus',
+  ): Promise<Record<string, number>> {
+    return this.knowledgePointsService.chapterCounts(subjectId, source);
   }
 
   @Get(':id')

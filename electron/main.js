@@ -18,6 +18,10 @@ const READY_MARK = 'DESKTOP_SERVER_READY';
 // 服务端退出码 2 = 发现旧实例还在运行（指纹文件检测到活的旧 PID），
 // 不是故障。主进程会杀掉残留进程后重新拉起，用户全程无感。
 const EXIT_INSTANCE_RUNNING = 2;
+// 服务端退出码 3 = 实例锁文件根本写不了（数据目录只读、权限被改）。
+// 这时不能假设「锁写不了，数据库一定也写不了」——两者权限可能不同，
+// 放行等于关掉数据库互斥保护，所以必须报错停下。
+const EXIT_INSTANCE_LOCK_ERROR = 3;
 // 检测到残留实例时最多自动重启几次（1 = 首次失败后再试一次）。
 // 不设上限的话，「旧进程杀不掉」会让应用无限重启，表现为窗口闪着闪着永远进不去。
 const MAX_INSTANCE_RETRIES = 1;
@@ -34,8 +38,11 @@ let serverPort = null;
 // 已经自动重启过几次（检测到残留实例时用），成功进入主界面后清零
 let instanceRetries = 0;
 // 主动退出流程标志：区分「用户主动关应用」和「服务自己崩了」。
-// 主动退出时服务是被我们请退的，绝不能再弹「服务意外退出」。
+// 主动退出时服务是被我们请退的，绝不能弹「服务意外退出」。
 let appQuitting = false;
+// 服务端输出的最后若干行：退出码 3 时用来把真实原因带进弹窗，
+// 否则用户只看到「启动失败」四个字，无从排查。
+const serverLogTail = [];
 
 /** 应用基地址。端口就绪前返回 null（窗口先显示 loading 页，不碰服务）。 */
 function appBaseUrl() {
@@ -78,8 +85,24 @@ function handleServerLine(line, dirs) {
   loadApp(dirs);
 }
 
+/** 留住服务端最后几行输出，启动失败时把真实原因显示给用户 */
+function rememberServerLine(line) {
+  const text = String(line || '').trim();
+  if (!text) return;
+  serverLogTail.push(text);
+  if (serverLogTail.length > 30) serverLogTail.shift();
+}
+
+/** 从捕获的输出里取出服务端报告的实例锁错误 */
+function extractInstanceError() {
+  const hit = serverLogTail.find((l) => l.includes('DESKTOP_INSTANCE_ERROR'));
+  if (!hit) return '';
+  return hit.replace(/^.*DESKTOP_INSTANCE_ERROR\s*/, '').trim();
+}
+
 function startServer(dirs, options = {}) {
   if (serverProc) return;
+  serverLogTail.length = 0;
   // 强制接管：仅在「指纹记录已不可信」时使用，让服务端跳过旧记录直接占用，
   // 避免为了清一条过期记录去杀一个可能已被系统分配给别的程序的 PID。
   const forceClaim = options && options.forceClaim === true;
@@ -130,12 +153,19 @@ function startServer(dirs, options = {}) {
     while ((nl = stdoutBuffer.indexOf('\n')) !== -1) {
       const line = stdoutBuffer.slice(0, nl).replace(/\r$/, '');
       stdoutBuffer = stdoutBuffer.slice(nl + 1);
+      rememberServerLine(line);
       handleServerLine(line, dirs);
     }
     // 异常情况下可能长时间没有换行，别让缓冲区无限增长
     if (stdoutBuffer.length > 65536) stdoutBuffer = stdoutBuffer.slice(-4096);
   });
-  serverProc.stderr.on('data', (d) => process.stderr.write('[server:err] ' + d.toString()));
+  serverProc.stderr.on('data', (d) => {
+    const text = d.toString();
+    process.stderr.write('[server:err] ' + text);
+    for (const line of text.split(/\r?\n/)) {
+      if (line.trim()) rememberServerLine(line);
+    }
+  });
   serverProc.on('exit', (code) => {
     // 记录退出前服务是否已经就绪，用于区分「启动失败」和「运行中崩溃」
     const neverReady = !serverReady;
@@ -152,14 +182,20 @@ function startServer(dirs, options = {}) {
     if (appQuitting) {
       return;
     }
+    // 退出码 3 = 实例锁文件写不了：不能当作「无所谓」放行，
+    // 否则两个实例可能同时打开数据库。如实报错并退出。
+    if (code === EXIT_INSTANCE_LOCK_ERROR) {
+      showLockWriteErrorDialog(extractInstanceError());
+      return;
+    }
     // 退出码 2 = 服务端发现旧实例还活着（指纹文件）。
-    // 这是覆盖安装后的残留进程在占着数据库，杀掉它再拉一次即可，不算故障。
+    // 这是覆盖安装后的残留进程在占着数据库，核实身份后再决定怎么处理。
     // 旧版靠固定端口被占来暴露这个问题，会弹吓人的「启动失败」，现在自动处理。
     if (code === EXIT_INSTANCE_RUNNING) {
       // 重试次数用独立计数器累加，不能每轮清零 —— 否则「杀不掉旧进程」时会无限重启
       if (instanceRetries >= MAX_INSTANCE_RETRIES) {
         console.error('[desktop] 已重试 ' + instanceRetries + ' 次仍未拿到实例，停止重试');
-        showInstanceBlockedDialog();
+        showInstanceBlockedDialog('retry-exhausted');
         return;
       }
       instanceRetries += 1;
@@ -168,37 +204,37 @@ function startServer(dirs, options = {}) {
         '[desktop] 发现残留实例记录 pid=' + (stale && stale.pid ? stale.pid : '?') +
           '，第 ' + instanceRetries + ' 次尝试',
       );
+      // 读不到记录（文件已清掉或内容已损坏）：不带强制接管重启。
+      // 让服务端自己判断 —— 它现在能识别并清理损坏的锁文件，
+      // 而「强制接管」只应该用在确认过 PID 无关的场合。
       if (!stale || !stale.pid) {
-        setTimeout(() => restartServer(true), 300);
+        setTimeout(() => restartServer(false), 300);
         return;
       }
       // 关键一步：先核实这个 PID 到底是不是我们的服务进程，再决定怎么办。
       // 只凭「PID 还活着」就动手，可能杀掉一个刚好复用了该编号的无关程序。
-      inspectProcessIdentity(stale.pid, (identity) => {
+      inspectProcessIdentity(stale.pid, dirs, (identity) => {
         if (appQuitting || serverProc) return;
-        if (identity === 'other') {
-          // 明确不是我们的进程：不杀它，只让新服务接管那条过期记录
-          console.warn('[desktop] pid ' + stale.pid + ' 不是本应用进程，改走强制接管');
-          restartServer(true);
-          return;
-        }
         if (identity === 'ours') {
+          // 确认为本应用的服务进程：结束它，再正常拉起
           killPid(stale.pid, (result) => {
             console.warn('[desktop] 结束残留服务进程结果：' + result);
             restartServer(false);
           });
           return;
         }
-        // 无法核实身份（系统命令不可用）：只有心跳新鲜时才敢动手，
-        // 否则宁可停下报错，也不冒「顶掉一个正在写数据库的实例」的风险
-        if (stale.heartbeatFresh) {
-          killPid(stale.pid, (result) => {
-            console.warn('[desktop] 结束残留服务进程结果（心跳新鲜）：' + result);
-            restartServer(false);
-          });
+        if (identity === 'other') {
+          // 确认不是本应用的任何进程（PID 被系统回收后分给了别人）：
+          // 不杀它，只让新服务忽略那条过期记录
+          console.warn('[desktop] pid ' + stale.pid + ' 与本应用无关，忽略过期记录');
+          restartServer(true);
           return;
         }
-        showInstanceBlockedDialog();
+        // 'other-app'：是本应用的进程，但入口路径对不上（可能是另一个安装位置/
+        // 更早的版本）。'unknown'：系统命令查不出来。
+        // 这两种都**不结束进程** —— 心跳新鲜不能证明 PID 没被复用，
+        // 万一是正在写数据库的实例，杀它就是数据损坏。交给用户处理。
+        showInstanceBlockedDialog(identity);
       });
       return;
     }
@@ -248,55 +284,155 @@ function readStaleInstance() {
   }
 }
 
-// 服务进程的入口脚本，打包后是 resources/server/dist/main.js
+// 服务进程的入口脚本（打包后是 resources/server/dist/main.js）。
+// 只比对这个文件名太宽松 —— 别的项目也可能有 server/dist/main.js，
+// 所以实际判定优先用**本机安装位置下的绝对路径**，见 inspectProcessIdentity。
 const SERVER_ENTRY_HINT = 'server/dist/main.js';
 // 打包后的可执行文件名（build/electron-builder.yml 的 productName）
 const APP_EXE_HINT = '全职高手考研系统';
 
+/** 本机这份安装的服务端入口绝对路径（ps / 命令行里就是这一串） */
+function expectedServerEntry(dirs) {
+  return path.join(dirs.serverDir, 'dist', 'main.js');
+}
+
+/**
+ * POSIX：按 ps 输出的命令行判定身份。
+ *   命令行里出现「本机这份安装」的入口绝对路径 → ours
+ *   只出现应用名（是我们的应用，但入口不是这份安装）→ other-app
+ *   只出现 server/dist/main.js（别的项目同名入口）→ other-app
+ *   都不像 → other（PID 被系统回收后分给了别人）
+ */
+function classifyPosixCommand(cmd, expectedLower) {
+  const text = String(cmd || '').trim();
+  if (!text) return 'unknown';
+  const lower = text.toLowerCase();
+  if (lower.includes(expectedLower)) return 'ours';
+  if (lower.includes(APP_EXE_HINT.toLowerCase())) return 'other-app';
+  if (lower.includes(SERVER_ENTRY_HINT)) return 'other-app';
+  return 'other';
+}
+
+/**
+ * Windows：镜像名 + 命令行共同判定。
+ * 中文路径经代码页转换可能变乱码，所以入口只比 ASCII 片段，
+ * 再用「镜像名就是本应用」这一条来确认，避免把别处的同名入口认成自己。
+ */
+function classifyWindowsProcess(imageName, cmd, expectedLower) {
+  const image = String(imageName || '').toLowerCase();
+  const imageIsApp = image.includes(APP_EXE_HINT.toLowerCase());
+  const text = String(cmd || '').trim();
+  if (!text) return imageIsApp ? 'other-app' : 'unknown';
+  const lower = text.toLowerCase();
+  const hasServerEntry =
+    lower.includes(expectedLower) ||
+    lower.includes('server\\dist\\main.js') ||
+    lower.includes('server/dist/main.js');
+  if (hasServerEntry && (imageIsApp || lower.includes(APP_EXE_HINT.toLowerCase()))) return 'ours';
+  if (imageIsApp || hasServerEntry) return 'other-app';
+  return 'other';
+}
+
+/** Windows：取进程命令行。tasklist 不带命令行，只能问 WMI（wmic 已在新系统移除）。 */
+function windowsCommandLine(pid, cb) {
+  const script = `$p = Get-CimInstance Win32_Process -Filter "ProcessId=${pid}"; if ($p) { $p.CommandLine }`;
+  try {
+    execFile(
+      'powershell.exe',
+      ['-NoProfile', '-NonInteractive', '-Command', script],
+      { windowsHide: true, timeout: 8000 },
+      (err, stdout) => {
+        if (err) return cb(null);
+        cb(String(stdout || '').trim() || null);
+      },
+    );
+  } catch (_) {
+    cb(null);
+  }
+}
+
 /**
  * 核实某个 PID 是不是本应用的本地服务进程。
- * 回调参数：'ours'（是我们的）/ 'other'（不是）/ 'unknown'（查不出来）
+ * 回调参数：
+ *   'ours'      —— 确认是「本机这份安装」的服务进程（命令行含其入口绝对路径）
+ *   'other-app' —— 是本应用的进程，但入口路径对不上（另一个安装位置 / 更早的版本）
+ *   'other'     —— 与本应用无关（PID 被系统回收后分给了别的程序）
+ *   'unknown'   —— 查不出来（命令不可用、超时、编码问题）
  *
- * 为什么要查：进程崩溃后 PID 会被系统回收再分配，指纹文件里那个数字
- * 可能已经属于任何别的程序，照着它 kill 就是误杀。
+ * 为什么分这么细：只有 'ours' 才允许结束进程；'other' 才可以忽略那条记录。
+ * 其余情况一律停下来问用户 —— 心跳新鲜不能证明 PID 没被复用，
+ * 杀错一个正在写数据库的实例代价远大于让用户手动关一次。
  */
-function inspectProcessIdentity(pid, cb) {
+function inspectProcessIdentity(pid, dirs, cb) {
   if (!Number.isInteger(pid) || pid <= 0) {
     cb('unknown');
     return;
   }
+  const expectedLower = expectedServerEntry(dirs).toLowerCase();
+
   if (process.platform === 'win32') {
     // tasklist 的 CSV 输出形如： "镜像名","PID","会话名","会话#","内存"
-    execFile(
-      'tasklist',
-      ['/FI', 'PID eq ' + pid, '/FO', 'CSV', '/NH'],
-      { windowsHide: true, timeout: 5000 },
-      (err, stdout) => {
-        if (err) return cb('unknown');
-        const line = String(stdout || '').trim();
-        if (!line || /没有运行的任务|No tasks are running/i.test(line)) return cb('unknown');
-        const m = line.match(/^"([^"]+)"/);
-        if (!m) return cb('unknown');
-        cb(m[1].toLowerCase().includes(APP_EXE_HINT.toLowerCase()) ? 'ours' : 'other');
-      },
-    );
+    try {
+      execFile(
+        'tasklist',
+        ['/FI', 'PID eq ' + pid, '/FO', 'CSV', '/NH'],
+        { windowsHide: true, timeout: 5000 },
+        (err, stdout) => {
+          if (err) return cb('unknown');
+          const line = String(stdout || '').trim();
+          if (!line || /没有运行的任务|No tasks are running/i.test(line)) return cb('unknown');
+          const m = line.match(/^"([^"]+)"/);
+          if (!m) return cb('unknown');
+          windowsCommandLine(pid, (cmd) => cb(classifyWindowsProcess(m[1], cmd, expectedLower)));
+        },
+      );
+    } catch (_) {
+      cb('unknown');
+    }
     return;
   }
-  execFile('ps', ['-p', String(pid), '-o', 'command='], { timeout: 5000 }, (err, stdout) => {
-    if (err) return cb('unknown');
-    const cmd = String(stdout || '').trim();
-    if (!cmd) return cb('unknown');
-    cb(cmd.includes(SERVER_ENTRY_HINT) ? 'ours' : 'other');
-  });
+
+  try {
+    execFile('ps', ['-p', String(pid), '-o', 'command='], { timeout: 5000 }, (err, stdout) => {
+      // 查不出来（命令被拦、超时）时返回 unknown：宁可让用户手动处理，
+      // 也不能因为「查不到」就默认「不是我们的」而放行接管。
+      if (err) return cb('unknown');
+      cb(classifyPosixCommand(stdout, expectedLower));
+    });
+  } catch (_) {
+    cb('unknown');
+  }
+}
+
+/** 实例锁文件写不了：数据目录权限异常，必须让用户看到原因 */
+function showLockWriteErrorDialog(detail) {
+  dialog.showErrorBox(
+    '启动失败：无法锁定数据目录',
+    '本地服务无法在数据目录写入实例锁文件，已停止启动以避免两个实例同时打开数据库。\n\n' +
+      (detail ? '系统返回：' + detail + '\n\n' : '') +
+      '常见原因：数据目录被设为只读、被安全软件拦截，或磁盘已满。\n\n' +
+      '数据目录：\n' + path.join(app.getPath('userData'), 'pglite-data') + '\n\n' +
+      '处理办法：检查该目录的「显示简介 → 共享与权限」，确认当前用户有读写权限后重开应用。',
+  );
+  appQuitting = true;
+  app.quit();
 }
 
 /** 「实例被占用且自动清理失败」的统一提示 */
-function showInstanceBlockedDialog() {
+function showInstanceBlockedDialog(reason) {
+  const tail =
+    reason === 'other-app'
+      ? '检测到本应用还有其他实例在后台运行（可能是旧版本或另一份安装），' +
+        '但无法确认它是不是同一个数据目录的服务进程，因此没有自动结束它。\n\n'
+      : reason === 'unknown'
+        ? '检测到有进程正占用数据目录，但查不出它到底是什么程序，' +
+          '为避免误杀正在写数据库的进程，应用没有自动结束它。\n\n'
+        : '本地服务发现另一个实例仍在使用数据目录，自动结束它没有成功。\n\n';
   dialog.showErrorBox(
     '启动失败：已有后台实例在占用数据库',
-    '本地服务发现另一个实例仍在使用数据目录，自动结束它没有成功。\n\n' +
+    tail +
       '处理办法（任选其一）：\n' +
-      '· 打开「任务管理器」，结束所有「全职高手考研系统」进程，再重开应用\n' +
+      '· 打开「活动监视器 / 任务管理器」，结束所有「全职高手考研系统」进程，再重开应用\n' +
       '· 重启电脑后重开应用\n\n' +
       '为保护题库与学习记录，应用不会同时开两个实例。',
   );
