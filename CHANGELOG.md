@@ -2,6 +2,21 @@
 
 所有版本的变更记录。格式参考 [Keep a Changelog](https://keepachangelog.com/zh-CN/1.1.0/)，版本号遵循语义化版本。
 
+## [v1.2.3] - 2026-10-25
+
+### 新增
+- **中山大学名词解释真题入库（2021–2026）**：补入 2021–2026 年各 10 道名词解释，题库由 1915 道增至 1975 道，名词解释题型由 222 条增至 282 条，中山大学真题累计 95 道
+- **参考答案与答案要点补全**：原表仅有题干，逐题补写参考答案（平均约 86 字）、4 条答案要点与难度分级
+
+### 数据治理（DATA_VERSION → 2026-10-25.4，启动自动同步）
+- **知识点关联**：同科目内按标题匹配挂接，60 题中 33 题命中；其余 27 题的考点未收录于现有知识点体系，留空不硬凑
+- **只增不删**：本次为纯新增，升级后自动并入本机题库，学习进度、错题、复习记录一律保留
+- 题库规模：1975 道真题 / 1196 个知识点 / 8 个科目
+
+### 说明
+- 同一院校不同年份考同一名词（排龈 2021、2022）按两次独立考次分别保留，与库内既有做法一致
+- 15 道题与往届其他院校真题同名（深覆𬌗、结合上皮、无釉柱釉质、𬌗平面、侧方运动、根尖止点、牙内吸收、髁道斜度、导线、排龈、主承托区、牙内陷、逆行性牙髓炎等），按不同院校分别保留
+
 ## [v1.2.2] - 2026-10-25
 
 ### 新增
@@ -272,7 +287,8 @@
 - 安装包文件名改为英文（ASCII），解决 GitHub 下载链接 404
 - dmg 标准布局：打开即见 app + Applications 快捷方式
 
-[unreleased]: https://github.com/william001207/quanzhi-kaoyan-desktop/compare/v1.2.2...HEAD
+[unreleased]: https://github.com/william001207/quanzhi-kaoyan-desktop/compare/v1.2.3...HEAD
+[v1.2.3]: https://github.com/william001207/quanzhi-kaoyan-desktop/compare/v1.2.2...v1.2.3
 [v1.2.2]: https://github.com/william001207/quanzhi-kaoyan-desktop/compare/v1.2.1...v1.2.2
 [v1.2.1]: https://github.com/william001207/quanzhi-kaoyan-desktop/compare/v1.2.0...v1.2.1
 [v1.2.0]: https://github.com/william001207/quanzhi-kaoyan-desktop/compare/v1.1.9...v1.2.0

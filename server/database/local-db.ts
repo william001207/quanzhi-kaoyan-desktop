@@ -69,7 +69,7 @@ export function initializeDatabase(): Promise<void> {
 
 // 数据内容版本：线上题库内容（知识点卡片/题目等）有更新时递增。
 // 客户端检测到版本变化后执行增量内容同步（只更新内容字段，保留用户学习进度）。
-const DATA_VERSION = '2026-10-25.3'; // 新增暨南大学 2020–2021 名词解释 40 道（1875 → 1915），含参考答案与要点；全库「粘液」统一为「黏液」；含 v1.2.0 的 79 个术语型知识点与 v1.1.9 暨南 100 道题
+const DATA_VERSION = '2026-10-25.4'; // 新增中山大学 2021–2026 名词解释 60 道（1915 → 1975），含参考答案与要点；含 v1.2.2 的暨南 40 道与全库「黏液」用字统一
 
 async function ensureSchemaAndData(db: PGlite): Promise<void> {
   const schemaSql = await fs.readFile(
