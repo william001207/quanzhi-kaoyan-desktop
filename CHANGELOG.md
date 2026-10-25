@@ -2,6 +2,23 @@
 
 所有版本的变更记录。格式参考 [Keep a Changelog](https://keepachangelog.com/zh-CN/1.1.0/)，版本号遵循语义化版本。
 
+## [v1.2.2] - 2026-10-25
+
+### 新增
+- **暨南大学名词解释真题入库（2020–2021）**：补入 2020、2021 年各 20 道名词解释，题库由 1875 道增至 1915 道，名词解释题型由 182 条增至 222 条，暨南大学真题累计 212 道
+- **参考答案与答案要点补全**：原表仅有题干，逐题补写参考答案（平均约 93 字）、4 条答案要点与难度分级，入库后可直接答题自评
+
+### 数据治理（DATA_VERSION → 2026-10-25.3，启动自动同步）
+- **知识点关联**：同科目内按标题匹配挂接，40 题中 30 题命中；其余 10 题的考点未收录于现有知识点体系，留空不硬凑
+- **文字勘误**：`horizonal growth pattern` → `horizontal growth pattern`、`Mural ameloblastom` → `mural ameloblastoma`、「璧样成釉细胞瘤」→「壁样成釉细胞瘤」、「潴留性粘液囊肿」→「潴留性黏液囊肿」
+- **用字统一**：全库「粘液」统一为「黏液」，含题干与答案共 38 处（涉及 6 道题：山东大学、贵州医科大学、四川大学、同济大学、郑州大学、河北医科大学）
+- **只增不删**：本次为纯新增，升级后自动并入本机题库，学习进度、错题、复习记录一律保留
+- 题库规模：1915 道真题 / 1196 个知识点 / 8 个科目
+
+### 说明
+- 同一院校不同年份考同一名词（颈嵴、角化不良、预防性矫治）按两次独立考次分别保留，与库内既有做法一致
+- 10 道暂无对应知识点的题为：𬌗平面、无釉柱釉质、龈袋、牙周新附着、双手双合诊法、三臂卡环、主承托区、Y 轴角、釉面横纹、义齿中性区，如需全量关联可另行补建知识点
+
 ## [v1.2.1] - 2026-10-25
 
 ### 修复
@@ -255,7 +272,8 @@
 - 安装包文件名改为英文（ASCII），解决 GitHub 下载链接 404
 - dmg 标准布局：打开即见 app + Applications 快捷方式
 
-[unreleased]: https://github.com/william001207/quanzhi-kaoyan-desktop/compare/v1.2.1...HEAD
+[unreleased]: https://github.com/william001207/quanzhi-kaoyan-desktop/compare/v1.2.2...HEAD
+[v1.2.2]: https://github.com/william001207/quanzhi-kaoyan-desktop/compare/v1.2.1...v1.2.2
 [v1.2.1]: https://github.com/william001207/quanzhi-kaoyan-desktop/compare/v1.2.0...v1.2.1
 [v1.2.0]: https://github.com/william001207/quanzhi-kaoyan-desktop/compare/v1.1.9...v1.2.0
 [v1.1.9]: https://github.com/william001207/quanzhi-kaoyan-desktop/compare/v1.1.8...v1.1.9
