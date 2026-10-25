@@ -17,6 +17,7 @@ import type {
 import { KnowledgePointsService } from './knowledge-points.service';
 import {
    KnowledgePointListQueryDto,
+   CreateKnowledgePointDto,
    UpdateKnowledgePointDto,
    WeakMarkDto,
    AddQuestionDto,
@@ -27,6 +28,13 @@ export class KnowledgePointsController {
   constructor(
     private readonly knowledgePointsService: KnowledgePointsService,
   ) {}
+
+  @Post()
+  async create(
+    @Body() dto: CreateKnowledgePointDto,
+  ): Promise<KnowledgePoint> {
+    return this.knowledgePointsService.create(dto);
+  }
 
   @Get()
   async findList(

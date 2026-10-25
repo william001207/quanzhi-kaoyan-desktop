@@ -43,7 +43,7 @@ import {
   REQUIREMENT_LEVEL_LABEL,
   QUESTION_TYPE_LABEL,
 } from '@shared/api.interface';
-import { Search, ChevronLeft, ChevronRight, Flag, TrendingUp } from 'lucide-react';
+import { Search, ChevronLeft, ChevronRight, Flag, TrendingUp, Plus } from 'lucide-react';
 import { Link, useNavigate, useSearchParams } from 'react-router-dom';
 import {
   masteryColor,
@@ -53,6 +53,7 @@ import {
   statusBadgeClass,
 } from '@/utils/mastery';
 import ChapterPathBadges from '@/components/ChapterPathBadges';
+import CreateKnowledgePointDialog from './CreateKnowledgePointDialog';
 
 
 const PAGE_SIZE = 20;
@@ -79,6 +80,9 @@ const KnowledgePointsPage: React.FC = () => {
   const [searchInput, setSearchInput] = useState('');
   const [weakMarkedFilter, setWeakMarkedFilter] = useState<string>('');
   const [togglingIds, setTogglingIds] = useState<Set<string>>(new Set());
+  // 新增知识点弹窗 / 列表刷新令牌
+  const [createOpen, setCreateOpen] = useState(false);
+  const [reloadToken, setReloadToken] = useState(0);
 
   // 年份概览（供高频榜年份筛选使用）
   const [yearOverviewList, setYearOverviewList] = useState<YearQuestionOverview[]>([]);
@@ -156,7 +160,7 @@ const KnowledgePointsPage: React.FC = () => {
      } finally {
        setLoading(false);
      }
-   }, [subjectId, status, keyword, weakMarkedFilter, page]);
+   }, [subjectId, status, keyword, weakMarkedFilter, page, reloadToken]);
 
   useEffect(() => {
     if (kpTab !== 'list') return;
@@ -253,7 +257,13 @@ const KnowledgePointsPage: React.FC = () => {
 
   return (
     <div className="p-3 md:p-6">
-      <h1 className="text-xl md:text-2xl font-semibold mb-4 md:mb-6">知识点中心</h1>
+      <div className="flex items-center justify-between gap-3 mb-4 md:mb-6 flex-wrap">
+        <h1 className="text-xl md:text-2xl font-semibold">知识点中心</h1>
+        <Button size="sm" onClick={() => setCreateOpen(true)}>
+          <Plus className="h-3.5 w-3.5 mr-1" />
+          新增知识点
+        </Button>
+      </div>
 
       <Tabs value={kpTab} onValueChange={(v) => setKpTab(v as KpTabValue)}>
         <div className="overflow-x-auto scrollbar-none -mx-3 px-3 md:mx-0 md:px-0">
@@ -835,6 +845,16 @@ const KnowledgePointsPage: React.FC = () => {
            </Card>
         </TabsContent>
       </Tabs>
+
+      <CreateKnowledgePointDialog
+        open={createOpen}
+        onOpenChange={setCreateOpen}
+        defaultSubjectId={subjectId}
+        onCreated={() => {
+          setReloadToken((n) => n + 1);
+          setPage(1);
+        }}
+      />
     </div>
   );
 };

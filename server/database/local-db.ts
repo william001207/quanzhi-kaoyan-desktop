@@ -69,7 +69,7 @@ export function initializeDatabase(): Promise<void> {
 
 // 数据内容版本：线上题库内容（知识点卡片/题目等）有更新时递增。
 // 客户端检测到版本变化后执行增量内容同步（只更新内容字段，保留用户学习进度）。
-const DATA_VERSION = '2026-10-25.1'; // 新增暨南大学 2022-2026 名词解释真题 100 道（原 1775 → 1875），含参考答案与 29 条知识点关联；沿用此前全部修复
+const DATA_VERSION = '2026-10-25.2'; // 新增 79 个术语型知识点（1117 → 1196）并为 85 道原本无关联的真题挂接，全部挂上大纲与教材章节；含 v1.1.9 暨南 100 道题
 
 async function ensureSchemaAndData(db: PGlite): Promise<void> {
   const schemaSql = await fs.readFile(

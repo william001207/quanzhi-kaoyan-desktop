@@ -30,6 +30,28 @@ export async function list(
   return data;
 }
 
+export interface CreateKnowledgePointData {
+  subjectId: string;
+  chapterId: string;
+  title: string;
+  content?: string;
+  summary?: string;
+  keywords?: string[];
+  requirementLevel?: string;
+  importanceScore?: number;
+  cardData?: KnowledgePointCardData;
+}
+
+export async function create(
+  data: CreateKnowledgePointData,
+): Promise<KnowledgePoint> {
+  const { data: result } = await axiosForBackend.post<KnowledgePoint>(
+    '/api/knowledge-points',
+    data,
+  );
+  return result;
+}
+
 export async function getById(id: string): Promise<KnowledgePoint> {
   const { data } = await axiosForBackend.get<KnowledgePoint>(
     `/api/knowledge-points/${id}`,

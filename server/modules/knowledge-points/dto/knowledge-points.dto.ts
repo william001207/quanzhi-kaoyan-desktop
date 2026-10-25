@@ -1,5 +1,5 @@
 import { Injectable } from '@nestjs/common';
-import { IsBoolean, IsIn, IsInt, IsObject, IsOptional, IsString, IsUUID, Max, Min, ValidateNested } from 'class-validator';
+import { ArrayMaxSize, IsArray, IsBoolean, IsIn, IsInt, IsObject, IsOptional, IsString, IsUUID, Max, MaxLength, Min, ValidateNested } from 'class-validator';
 import { Type } from 'class-transformer';
 import type {
    KnowledgePointStatus,
@@ -55,6 +55,49 @@ export class WeakMarkDto {
   @IsString()
   @IsIn(['unfamiliar', 'hard_to_remember', 'confusing', 'important'])
   reason?: 'unfamiliar' | 'hard_to_remember' | 'confusing' | 'important';
+}
+
+export class CreateKnowledgePointDto {
+  @IsUUID()
+  subjectId!: string;
+
+  @IsUUID()
+  chapterId!: string;
+
+  @IsString()
+  @MaxLength(500)
+  title!: string;
+
+  @IsOptional()
+  @IsString()
+  content?: string;
+
+  @IsOptional()
+  @IsString()
+  summary?: string;
+
+  @IsOptional()
+  @IsArray()
+  @ArrayMaxSize(50)
+  @IsString({ each: true })
+  keywords?: string[];
+
+  @IsOptional()
+  @Type(() => String)
+  @IsString()
+  @IsIn(['master', 'familiar', 'understand', 'unmarked'])
+  requirementLevel?: RequirementLevel;
+
+  @IsOptional()
+  @Type(() => Number)
+  @IsInt()
+  @Min(0)
+  @Max(100)
+  importanceScore?: number;
+
+  @IsOptional()
+  @IsObject()
+  cardData?: Record<string, any>;
 }
 
 export class UpdateKnowledgePointDto {

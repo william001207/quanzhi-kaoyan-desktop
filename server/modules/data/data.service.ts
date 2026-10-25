@@ -200,6 +200,31 @@ export class DataExportService {
     }
     save('exam_question_details.json', qDetails);
 
+    // ---------- 5. 试卷模板 ----------
+    // 模板是「可复用的组卷配置」（科目/年份范围/题型题量/分值），不含任何作答结果，
+    // 属于内容而非个人进度，所以随内容数据一起导出、随内容同步回本机；
+    // 「生成出来的试卷 + 成绩」才是学习数据（见 exportLearning / exam_paper / exam_record）。
+    // 启动同步对模板用的是 ON CONFLICT (id) DO NOTHING，重复导出不会覆盖本机已有模板。
+    const tplRows = await db.query(
+      `SELECT id, name, subject_ids, source, year_start, year_end,
+              question_types, question_counts, score_config, mode, _created_at
+       FROM exam_paper_template ORDER BY _created_at`,
+    );
+    const templateList = (tplRows.rows as any[]).map((r) => ({
+      id: r.id,
+      name: r.name,
+      subjectIds: r.subject_ids ?? [],
+      source: r.source ?? null,
+      yearStart: r.year_start ?? null,
+      yearEnd: r.year_end ?? null,
+      questionTypes: r.question_types ?? [],
+      questionCounts: r.question_counts ?? {},
+      scoreConfig: r.score_config ?? {},
+      mode: r.mode ?? 'custom',
+      createdAt: r._created_at ? new Date(r._created_at).toISOString() : null,
+    }));
+    save('mock_templates.json', templateList);
+
     // 汇总信息，供前端展示
     this.logger.log(`导出完成：${files.length} 个文件 → ${dir}`);
     return { dir, files };
@@ -631,6 +656,15 @@ export class DataExportService {
         fs.copyFileSync(settingsSrc, path.join(tmpDir, 'settings.json'));
       } else {
         fs.writeFileSync(path.join(tmpDir, 'settings.json'), '{}', 'utf-8');
+      }
+
+      // 试卷模板属于内容数据，导出文件里带上就一并同步；老版本导出没有这个文件则跳过。
+      if (files?.['mock_templates.json']) {
+        fs.writeFileSync(
+          path.join(tmpDir, 'mock_templates.json'),
+          JSON.stringify(files['mock_templates.json']),
+          'utf-8',
+        );
       }
 
       await syncContentFromDir(tmpDir);

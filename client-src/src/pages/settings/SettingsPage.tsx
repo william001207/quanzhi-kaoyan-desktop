@@ -794,7 +794,7 @@ const SettingsPage: React.FC = () => {
               <CardTitle className="text-lg font-medium">导出内容数据</CardTitle>
             </div>
             <p className="text-sm text-muted-foreground mt-1">
-              把当前题库、知识点、章节导出成文件。用它覆盖仓库里的 server/data-export
+              把当前题库、知识点、章节和试卷模板导出成文件。用它覆盖仓库里的 server/data-export
               目录，下一版安装包就会带上你的修改。
             </p>
           </CardHeader>
@@ -915,7 +915,8 @@ const SettingsPage: React.FC = () => {
             <p className="text-sm text-muted-foreground mt-1">
               选择之前「导出内容数据」生成的 4 个 JSON 文件（subjects、
               chapter_trees、knowledge_point_details、exam_question_details），
-              导入后题库内容更新为文件版本。只更新内容，不影响学习进度。
+              选了 mock_templates.json 的话试卷模板也会一并同步。
+              导入后题库内容更新为文件版本，只更新内容，不影响学习进度。
             </p>
           </CardHeader>
           <CardContent className="space-y-3">

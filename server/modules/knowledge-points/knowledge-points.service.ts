@@ -1,4 +1,4 @@
-import { Inject, Injectable, NotFoundException, ConflictException } from '@nestjs/common';
+import { Inject, Injectable, BadRequestException, NotFoundException, ConflictException } from '@nestjs/common';
 import { validateUuid } from '../../common/utils/uuid-validate';
 import { and, desc, eq, count, inArray, ilike, or, sql } from 'drizzle-orm';
 import { CACHE_MANAGER } from '@nestjs/cache-manager';
@@ -27,6 +27,7 @@ import {
  } from '../../database/schema';
 import {
    KnowledgePointListQueryDto,
+   CreateKnowledgePointDto,
    UpdateKnowledgePointDto,
    WeakMarkDto,
  } from './dto/knowledge-points.dto';
@@ -38,6 +39,14 @@ export interface KnowledgePointDetail extends KnowledgePoint {
 
 @Injectable()
 export class KnowledgePointsService {
+  /**
+   * 列表缓存代次。cache-manager 的 Cache 接口没有清空全库的方法，
+   * 而列表缓存 key 是按查询条件拼出来的，无法逐个删除。
+   * 这里用「代次」把旧 key 整体作废：新增知识点后 +1，
+   * 旧缓存自然在 30 秒后过期，新请求一定走数据库。
+   */
+  private listCacheEpoch = 0;
+
   constructor(
     @Inject(DRIZZLE_DATABASE) private readonly db: PostgresJsDatabase,
     @Inject(CACHE_MANAGER) private readonly cacheManager: Cache,
@@ -46,7 +55,7 @@ export class KnowledgePointsService {
   async findList(
     query: KnowledgePointListQueryDto,
   ): Promise<PaginatedResponse<KnowledgePoint>> {
-    const cacheKey = `kp:list:${JSON.stringify(query)}`;
+    const cacheKey = `kp:list:v${this.listCacheEpoch}:${JSON.stringify(query)}`;
     const cached = await this.cacheManager.get<PaginatedResponse<KnowledgePoint>>(cacheKey);
     if (cached) return cached;
 
@@ -423,6 +432,74 @@ export class KnowledgePointsService {
       .limit(100);
 
     return rows.map((row) => this.toReviewRecord(row));
+  }
+
+  /**
+   * 手动新增知识点。
+   *
+   * 知识点表里 subject_id / chapter_id 都是非空外键，所以必须挂在某个科目下的某个章节里；
+   * 这里额外校验「章节确实属于该科目」，避免前端传错造成跨科目挂载。
+   * 手动新增的知识点 syllabus_item_id 为空，不参与大纲条目统计。
+   */
+  async create(dto: CreateKnowledgePointDto): Promise<KnowledgePoint> {
+    validateUuid(dto.subjectId, '科目 ID');
+    validateUuid(dto.chapterId, '章节 ID');
+
+    const title = (dto.title ?? '').trim();
+    if (!title) {
+      throw new BadRequestException('知识点标题不能为空');
+    }
+
+    const subjectRows = await this.db
+      .select({ id: subject.id })
+      .from(subject)
+      .where(eq(subject.id, dto.subjectId));
+    if (subjectRows.length === 0) {
+      throw new NotFoundException('科目不存在');
+    }
+
+    const chapterRows = await this.db
+      .select({ id: chapter.id, subjectId: chapter.subjectId })
+      .from(chapter)
+      .where(eq(chapter.id, dto.chapterId));
+    if (chapterRows.length === 0) {
+      throw new NotFoundException('章节不存在');
+    }
+    if (chapterRows[0].subjectId !== dto.subjectId) {
+      throw new BadRequestException('所选章节不属于该科目');
+    }
+
+    const dup = await this.db
+      .select({ id: knowledgePoint.id })
+      .from(knowledgePoint)
+      .where(
+        and(
+          eq(knowledgePoint.chapterId, dto.chapterId),
+          eq(knowledgePoint.title, title),
+        ),
+      );
+    if (dup.length > 0) {
+      throw new ConflictException('该章节下已存在同名知识点');
+    }
+
+    const inserted = await this.db
+      .insert(knowledgePoint)
+      .values({
+        subjectId: dto.subjectId,
+        chapterId: dto.chapterId,
+        title,
+        content: dto.content ?? null,
+        summary: dto.summary ?? null,
+        keywords: dto.keywords ?? [],
+        requirementLevel: dto.requirementLevel ?? 'unmarked',
+        importanceScore: dto.importanceScore ?? 0,
+        cardData: (dto.cardData ?? {}) as any,
+      })
+      .returning();
+
+    this.listCacheEpoch += 1;
+    await this.invalidateDailyPlanCache();
+    return this.toKnowledgePoint(inserted[0]);
   }
 
   async update(id: string, dto: UpdateKnowledgePointDto): Promise<KnowledgePoint> {
