@@ -2,6 +2,22 @@
 
 所有版本的变更记录。格式参考 [Keep a Changelog](https://keepachangelog.com/zh-CN/1.1.0/)，版本号遵循语义化版本。
 
+## [v1.1.9] - 2026-10-25
+
+### 新增
+- **暨南大学名词解释真题入库**：补入 2022–2026 年 100 道名词解释（每年 20 道），题库由 1775 道增至 1875 道，名词解释题型由 82 条增至 182 条
+- **参考答案与答案要点补全**：原表仅有题干，逐题补写参考答案（平均约 90 字）、3～4 个答案要点与难度分级，入库后可直接答题自评
+
+### 数据治理（DATA_VERSION → 2026-10-25.1，启动自动同步）
+- **知识点关联**：同科目内按标题匹配挂接，29 题命中；其余 71 题的考点未收录于现有知识点体系，留空不硬凑
+- **只增不删**：本次为纯新增，升级后自动并入本机题库，学习进度、错题、复习记录一律保留
+- 题库规模：1875 道真题 / 1117 个知识点 / 8 个科目
+
+### 说明
+- 71 条未关联集中在口腔组织病理学的牙体牙髓组织学术语（罩牙本质、骨样牙本质、釉丛、釉结等）与口腔解剖生理学的𬌗学概念，现有知识点为考题式标题、未覆盖术语级条目，待后续补建知识点再挂接
+- 原表中「骨内袋」的科目填为口腔组织病理学，按学科归属应为牙周病学，本次按原表保留未改，如需调整可另行处理
+- 前后端代码本次无改动，`client/` 构建产物无需重建
+
 ## [v1.1.8] - 2026-10-24
 
 ### 新增
@@ -195,7 +211,8 @@
 - 安装包文件名改为英文（ASCII），解决 GitHub 下载链接 404
 - dmg 标准布局：打开即见 app + Applications 快捷方式
 
-[unreleased]: https://github.com/william001207/quanzhi-kaoyan-desktop/compare/v1.1.8...HEAD
+[unreleased]: https://github.com/william001207/quanzhi-kaoyan-desktop/compare/v1.1.9...HEAD
+[v1.1.9]: https://github.com/william001207/quanzhi-kaoyan-desktop/compare/v1.1.8...v1.1.9
 [v1.1.8]: https://github.com/william001207/quanzhi-kaoyan-desktop/compare/v1.1.7...v1.1.8
 [v1.1.7]: https://github.com/william001207/quanzhi-kaoyan-desktop/compare/v1.1.6...v1.1.7
 [v1.1.6]: https://github.com/william001207/quanzhi-kaoyan-desktop/compare/v1.1.5...v1.1.6
