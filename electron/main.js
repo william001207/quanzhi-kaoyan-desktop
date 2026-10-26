@@ -285,15 +285,31 @@ function readStaleInstance() {
 }
 
 // 服务进程的入口脚本（打包后是 resources/server/dist/main.js）。
-// 只比对这个文件名太宽松 —— 别的项目也可能有 server/dist/main.js，
-// 所以实际判定优先用**本机安装位置下的绝对路径**，见 inspectProcessIdentity。
+// 注意：这个片段只能用来判断「像我们但不是这一份安装」，**绝不能用来判 ours** ——
+// 另一份安装（甚至别的项目）也可能有 server/dist/main.js 这个入口。
 const SERVER_ENTRY_HINT = 'server/dist/main.js';
 // 打包后的可执行文件名（build/electron-builder.yml 的 productName）
 const APP_EXE_HINT = '全职高手考研系统';
+const APP_EXE_LOWER = APP_EXE_HINT.toLowerCase();
 
 /** 本机这份安装的服务端入口绝对路径（ps / 命令行里就是这一串） */
 function expectedServerEntry(dirs) {
   return path.join(dirs.serverDir, 'dist', 'main.js');
+}
+
+/** Windows 路径统一成小写 + 反斜杠，去掉可能带的首尾引号，用于精确比对 */
+function normalizeWinPath(p) {
+  return String(p || '')
+    .trim()
+    .replace(/^"+|"+$/g, '')
+    .replace(/\//g, '\\')
+    .toLowerCase();
+}
+
+function winBasename(p) {
+  const s = String(p || '');
+  const i = Math.max(s.lastIndexOf('\\'), s.lastIndexOf('/'));
+  return (i >= 0 ? s.slice(i + 1) : s).toLowerCase();
 }
 
 /**
@@ -308,34 +324,63 @@ function classifyPosixCommand(cmd, expectedLower) {
   if (!text) return 'unknown';
   const lower = text.toLowerCase();
   if (lower.includes(expectedLower)) return 'ours';
-  if (lower.includes(APP_EXE_HINT.toLowerCase())) return 'other-app';
+  if (lower.includes(APP_EXE_LOWER)) return 'other-app';
   if (lower.includes(SERVER_ENTRY_HINT)) return 'other-app';
   return 'other';
 }
 
 /**
- * Windows：镜像名 + 命令行共同判定。
- * 中文路径经代码页转换可能变乱码，所以入口只比 ASCII 片段，
- * 再用「镜像名就是本应用」这一条来确认，避免把别处的同名入口认成自己。
+ * Windows：判定身份。imageName 可空（有 detail.exe 时不必依赖 tasklist）。
+ *
+ * 关键改动：**「哪一份安装」只认可执行文件的绝对路径**。
+ * 以前拿 `server\dist\main.js` 这个通配片段 + 镜像名判 ours，另一个安装目录
+ * （同名 exe、同样入口文件名、共用同一个数据目录）的服务进程会被认成「本机这份」，
+ * 从而被结束掉 —— 它可能正在写数据库。现在：
+ *   · exe 路径与本机 process.execPath 一致 → 才是 ours
+ *   · exe 路径不同但镜像名是本应用 → other-app（另一处安装，绝不结束）
+ *   · 拿不到 exe 路径时，只有命令行含**本机入口绝对路径**才判 ours；
+ *     通配片段只能得出 other-app（保守：不杀，交给用户处理）
  */
-function classifyWindowsProcess(imageName, cmd, expectedLower) {
-  const image = String(imageName || '').toLowerCase();
-  const imageIsApp = image.includes(APP_EXE_HINT.toLowerCase());
-  const text = String(cmd || '').trim();
-  if (!text) return imageIsApp ? 'other-app' : 'unknown';
-  const lower = text.toLowerCase();
-  const hasServerEntry =
-    lower.includes(expectedLower) ||
-    lower.includes('server\\dist\\main.js') ||
-    lower.includes('server/dist/main.js');
-  if (hasServerEntry && (imageIsApp || lower.includes(APP_EXE_HINT.toLowerCase()))) return 'ours';
-  if (imageIsApp || hasServerEntry) return 'other-app';
+function classifyWindowsProcess(imageName, detail, expectedLower) {
+  const selfExe = normalizeWinPath(process.execPath);
+  const exe = normalizeWinPath(detail && detail.exe);
+  const cmd = normalizeWinPath(detail && detail.cmd);
+  const image = String(imageName || '').toLowerCase() || winBasename(exe);
+  const isAppImage = !!image && image.includes(APP_EXE_LOWER);
+  // 入口文件名片段（纯 ASCII，不受中文路径编码影响）：只能证明「是某个服务的入口」
+  const hasEntryHint = cmd.includes('server\\dist\\main.js') || cmd.includes('server/dist/main.js');
+  // 本机这一份安装的入口绝对路径：这是唯一能判 ours 的命令行证据
+  const hasOwnEntry = !!expectedLower && cmd.includes(expectedLower);
+
+  if (exe) {
+    if (exe === selfExe) {
+      // 同一份安装的可执行文件。再确认它跑的是服务入口，
+      // 避免把本应用的其它进程（如主进程、渲染进程）当成服务进程结束掉。
+      if (!cmd || hasEntryHint || hasOwnEntry) return 'ours';
+      return 'other-app';
+    }
+    // 可执行文件不是这一份：同名 exe = 另一处安装 → 绝不结束；否则是无关进程
+    return isAppImage ? 'other-app' : 'other';
+  }
+
+  // 拿不到可执行文件路径（权限受限、WMI 不可用）：退化为命令行比对
+  if (!cmd) return isAppImage ? 'other-app' : 'unknown';
+  if (hasOwnEntry) return 'ours';
+  if (isAppImage || hasEntryHint) return 'other-app';
   return 'other';
 }
 
-/** Windows：取进程命令行。tasklist 不带命令行，只能问 WMI（wmic 已在新系统移除）。 */
-function windowsCommandLine(pid, cb) {
-  const script = `$p = Get-CimInstance Win32_Process -Filter "ProcessId=${pid}"; if ($p) { $p.CommandLine }`;
+/**
+ * Windows：一次拿到进程的可执行文件路径与命令行。
+ * 输出统一转成 UTF-8 —— 中文安装路径在默认代码页下会变乱码，
+ * 那样路径比对永远不成立（以前正是因此才退回宽松的片段匹配）。
+ */
+function windowsProcessDetail(pid, cb) {
+  const script =
+    '$ErrorActionPreference="SilentlyContinue";' +
+    'try{[Console]::OutputEncoding=[Text.Encoding]::UTF8}catch{};' +
+    `$p=Get-CimInstance Win32_Process -Filter "ProcessId=${pid}";` +
+    'if($p){ConvertTo-Json -Compress -InputObject ([pscustomobject]@{exe=$p.ExecutablePath;cmd=$p.CommandLine})}';
   try {
     execFile(
       'powershell.exe',
@@ -343,7 +388,17 @@ function windowsCommandLine(pid, cb) {
       { windowsHide: true, timeout: 8000 },
       (err, stdout) => {
         if (err) return cb(null);
-        cb(String(stdout || '').trim() || null);
+        const text = String(stdout || '').trim();
+        if (!text) return cb(null);
+        try {
+          const data = JSON.parse(text);
+          cb({
+            exe: typeof data.exe === 'string' ? data.exe : '',
+            cmd: typeof data.cmd === 'string' ? data.cmd : '',
+          });
+        } catch (_) {
+          cb(null);
+        }
       },
     );
   } catch (_) {
@@ -354,8 +409,8 @@ function windowsCommandLine(pid, cb) {
 /**
  * 核实某个 PID 是不是本应用的本地服务进程。
  * 回调参数：
- *   'ours'      —— 确认是「本机这份安装」的服务进程（命令行含其入口绝对路径）
- *   'other-app' —— 是本应用的进程，但入口路径对不上（另一个安装位置 / 更早的版本）
+ *   'ours'      —— 确认是「本机这份安装」的服务进程（exe 路径或入口绝对路径对得上）
+ *   'other-app' —— 是本应用的进程，但路径对不上（另一个安装位置 / 更早的版本）
  *   'other'     —— 与本应用无关（PID 被系统回收后分给了别的程序）
  *   'unknown'   —— 查不出来（命令不可用、超时、编码问题）
  *
@@ -371,24 +426,31 @@ function inspectProcessIdentity(pid, dirs, cb) {
   const expectedLower = expectedServerEntry(dirs).toLowerCase();
 
   if (process.platform === 'win32') {
-    // tasklist 的 CSV 输出形如： "镜像名","PID","会话名","会话#","内存"
-    try {
-      execFile(
-        'tasklist',
-        ['/FI', 'PID eq ' + pid, '/FO', 'CSV', '/NH'],
-        { windowsHide: true, timeout: 5000 },
-        (err, stdout) => {
-          if (err) return cb('unknown');
-          const line = String(stdout || '').trim();
-          if (!line || /没有运行的任务|No tasks are running/i.test(line)) return cb('unknown');
-          const m = line.match(/^"([^"]+)"/);
-          if (!m) return cb('unknown');
-          windowsCommandLine(pid, (cmd) => cb(classifyWindowsProcess(m[1], cmd, expectedLower)));
-        },
-      );
-    } catch (_) {
-      cb('unknown');
-    }
+    windowsProcessDetail(pid, (detail) => {
+      if (detail) {
+        cb(classifyWindowsProcess('', detail, expectedLower));
+        return;
+      }
+      // WMI 查不到时退回 tasklist 只取镜像名：此时没有路径证据，
+      // 只能得出「是我这份 / 不是我这份」，不会误杀
+      try {
+        execFile(
+          'tasklist',
+          ['/FI', 'PID eq ' + pid, '/FO', 'CSV', '/NH'],
+          { windowsHide: true, timeout: 5000 },
+          (err, stdout) => {
+            if (err) return cb('unknown');
+            const line = String(stdout || '').trim();
+            if (!line || /没有运行的任务|No tasks are running/i.test(line)) return cb('unknown');
+            const m = line.match(/^"([^"]+)"/);
+            if (!m) return cb('unknown');
+            cb(classifyWindowsProcess(m[1], null, expectedLower));
+          },
+        );
+      } catch (_) {
+        cb('unknown');
+      }
+    });
     return;
   }
 

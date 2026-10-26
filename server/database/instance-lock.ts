@@ -16,6 +16,9 @@
  *   的判断继续执行，把 B 的新锁也挪走，再建自己的锁。结果 A、B 都认为成功。
  *   现在接管者必须先拿到 takeover 锁，进临界区后**重读并比对记录身份**
  *   （pid + token），发现已被别人换过就退出重来，因此不会挪掉别人的新锁。
+ *   清理 takeover 锁本身的残留时同样不能直接 unlink（两人同时删，会把对方
+ *   刚建的新锁也删掉，两个进程于是同时进临界区），改用 rename 独占 + 内容校验，
+ *   详见 breakStaleTakeover()。
  *
  * 记录内容：pid + 随机 token + 启动时间 + 心跳时间。
  * 心跳只作**辅助**证据：首次启动导数据时事件循环被占满，心跳可能十几秒不更新，
@@ -37,7 +40,11 @@ const HEARTBEAT_INTERVAL_MS = 3000;
  * 把这种正常情况当成「文件损坏」去抢锁，就等于绕过了互斥。
  */
 const WRITE_GRACE_MS = 2000;
-/** 接管锁本身的残留时限。临界区只有几毫秒，超过这个时间必然是上次崩溃留下的。 */
+/**
+ * 接管锁本身的残留时限。临界区只有几毫秒，超过这个时间必然是上次崩溃留下的。
+ * 注意它只是**兜底**：正常判断看「持有者 PID 还活不活」，
+ * 时间只用于「PID 被别的程序复用后无从判断」这一种场合。
+ */
 const TAKEOVER_TTL_MS = 10000;
 /** 抢锁轮次与间隔：总和约 0.6 秒，覆盖「别人正在接管」的等待 */
 const CLAIM_ROUNDS = 10;
@@ -94,14 +101,6 @@ function readSnapshot(file: string): { raw: string; mtimeMs: number } | null {
     return { raw, mtimeMs: st.mtimeMs };
   } catch (_) {
     // 不存在 / 读不了：都当作「现在没有锁」，下一轮 O_EXCL 会给出最终答案
-    return null;
-  }
-}
-
-function fileAgeMs(file: string): number | null {
-  try {
-    return Date.now() - fs.statSync(file).mtimeMs;
-  } catch (_) {
     return null;
   }
 }
@@ -228,7 +227,8 @@ function tryCreateExclusive(file: string, rec: InstanceRecord): boolean {
  * 返回 false 表示「别人正在接管」，调用方稍后重试即可。
  */
 function acquireTakeover(lockPath: string): boolean {
-  for (let i = 0; i < 2; i++) {
+  // 最多三轮：清掉一条残留后马上重抢；被别人抢先就放弃，由调用方整体重试
+  for (let i = 0; i < 3; i++) {
     try {
       const fd = fs.openSync(lockPath, 'wx');
       try {
@@ -239,18 +239,124 @@ function acquireTakeover(lockPath: string): boolean {
       return true;
     } catch (e: any) {
       if (!e || e.code !== 'EEXIST') return false;
-      // 残留的接管锁（上一个接管者在临界区内崩了）：过期就清掉再试。
-      // 这里允许并发删除：删的是同一个文件，谁删成功都一样，
-      // 随后的 O_EXCL 仍然只有一个进程能赢。
-      const age = fileAgeMs(lockPath);
-      if (age !== null && age > TAKEOVER_TTL_MS) {
-        try { fs.unlinkSync(lockPath); } catch (_) { /* ignore */ }
-        continue;
+      // 残留的接管锁（上一个接管者在临界区内崩了）：判断能不能清掉再试。
+      //
+      // 判定依据是「持有者进程是否还活着」，不再只看文件年龄 ——
+      // 文件年龄新不代表持有人活着（刚崩），年龄旧也不代表持有人死了（临界区卡住）。
+      // 时间只在两种场合兜底：内容读不出来、以及 PID 被别的程序复用后无从判断。
+      const holder = readTakeoverHolder(lockPath);
+      if (!holder) continue; // 刚好被释放，立刻重抢
+      const readable = holder.pid > 0;
+      const holderAlive = readable && pidAlive(holder.pid);
+      if (!readable) {
+        // 别人刚 open、正要把 pid 写进去：这个窗口是正常的，给宽容期，绝不抢
+        if (holder.ageMs < WRITE_GRACE_MS) return false;
+        // 宽容期过了还读不出 pid：文件确实损坏，按残留处理
+      } else if (holderAlive && holder.ageMs <= TAKEOVER_TTL_MS) {
+        // 持有者活着且没过期：正常接管中，等它
+        return false;
       }
-      return false;
+      // 走到这里只有三种情况：持有者已死 / 内容损坏 / 持有者活着但早已超时
+      // （后者是 PID 被复用的迹象，不清理会让应用永久卡在「已有实例」上）
+      console.warn(
+        `[instance] 清理残留接管锁（pid ${holder.pid || '?'}，${Math.round(holder.ageMs)} 毫秒前）`,
+      );
+      breakStaleTakeover(lockPath, holder.raw);
+      continue;
     }
   }
   return false;
+}
+
+/**
+ * 读接管锁的持有者信息。返回 null 表示文件已不在（或读不了）。
+ * pid = 0 表示内容还没写完 / 已损坏。
+ */
+function readTakeoverHolder(lockPath: string): { raw: string; ageMs: number; pid: number } | null {
+  try {
+    const raw = fs.readFileSync(lockPath, 'utf8');
+    const ageMs = Date.now() - fs.statSync(lockPath).mtimeMs;
+    let pid = 0;
+    try {
+      const data = JSON.parse(raw);
+      const n = Number(data && data.pid);
+      if (Number.isFinite(n) && n > 0) pid = n;
+    } catch (_) {
+      /* 内容还没写完或已损坏：pid 留 0 */
+    }
+    return { raw, ageMs, pid };
+  } catch (_) {
+    return null;
+  }
+}
+
+/**
+ * 把一条已判定为残留的接管锁**原子地**挪走，并校验挪走的确实是当初那一条。
+ *
+ * 为什么不能直接 unlink：
+ *   A、B 可能同时判定「这条锁过期了」。A 删掉并马上建好了自己的新锁，
+ *   B 却还在执行它那一步 unlink —— 删掉的是 A 刚建的新锁。于是两人都能
+ *   open(O_EXCL) 成功、同时进入临界区，互斥彻底失效（这正是此前留下的缺口）。
+ *
+ * 用 rename 而不是 unlink：
+ *   同一个文件只有一个进程能 rename 成功，输的一方收到 ENOENT 直接退出。
+ *   万一把目标换成了别人的新锁（rename 前它刚好被替换），挪走的内容就和
+ *   当初读到的不一致 —— 这时用 link 放回原位。link 在目标已存在时会失败，
+ *   天然不会覆盖别人，所以「放回去」这一步本身也是安全的。
+ */
+function breakStaleTakeover(lockPath: string, expectedRaw: string): void {
+  const burial = `${lockPath}.stale.${process.pid}.${randomUUID()}`;
+  try {
+    fs.renameSync(lockPath, burial);
+  } catch (_) {
+    // 别人先挪走了，或文件已不存在：交给下一轮 O_EXCL 决定胜负
+    return;
+  }
+  let same = false;
+  try {
+    same = fs.readFileSync(burial, 'utf8') === expectedRaw;
+  } catch (_) {
+    same = false;
+  }
+  if (!same) {
+    // 挪错了：这不是当初判定的那条残留，而是别人刚建好的新锁，放回去
+    try {
+      fs.linkSync(burial, lockPath);
+    } catch (_) {
+      // 硬链接不可用（exFAT 等）或原位已被占：用不覆盖的复制兜底
+      try {
+        fs.copyFileSync(burial, lockPath, fs.constants.COPYFILE_EXCL);
+      } catch (_) {
+        /* 原位已被别人占住，那就该由他持有，丢弃即可 */
+      }
+    }
+  }
+  try {
+    fs.unlinkSync(burial);
+  } catch (_) {
+    /* ignore */
+  }
+}
+
+/**
+ * 释放接管锁：只删自己写的那一条。
+ * 万一我们的锁被误判清掉、位置又被别人重建了，这里不能把人家的删掉。
+ */
+function releaseTakeover(lockPath: string): void {
+  try {
+    const raw = fs.readFileSync(lockPath, 'utf8');
+    let pid = 0;
+    try {
+      const data = JSON.parse(raw);
+      const n = Number(data && data.pid);
+      if (Number.isFinite(n) && n > 0) pid = n;
+    } catch (_) {
+      /* ignore */
+    }
+    if (pid === process.pid) fs.unlinkSync(lockPath);
+  } catch (_) {
+    /* 文件已不在：正常 */
+  }
 }
 
 /**
@@ -321,7 +427,7 @@ function takeOverAndClaim(
     }
     return 'retry';
   } finally {
-    try { fs.unlinkSync(takeoverPath); } catch (_) { /* ignore */ }
+    releaseTakeover(takeoverPath);
   }
 }
 

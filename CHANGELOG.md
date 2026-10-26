@@ -2,6 +2,17 @@
 
 所有版本的变更记录。格式参考 [Keep a Changelog](https://keepachangelog.com/zh-CN/1.1.0/)，版本号遵循语义化版本。
 
+## [v1.2.5] - 2026-10-27
+
+### 修复
+- **接管锁残留清理不再误删新锁**：两个进程同时判定同一把接管锁过期时，后一个会把前一个刚建好的新锁删掉、双双进入临界区；改为原子改名抢占并校验内容，挪错了原样放回
+- **残留接管锁不再卡住启动**：上一版崩溃留下的接管锁要干等 10 秒才清理，而启动只重试 0.6 秒，重开应用会一直提示「已有后台实例占用」；改为按持有者进程是否存活判断，实测 130 毫秒内恢复
+- **Windows 不再结束另一处安装的服务**：原判定只看命令行里的 `server\dist\main.js` 片段与进程名，另一个安装目录的服务会被当成本机这份结束；改为只认可执行文件的绝对路径
+
+### 说明
+- 纯主进程与服务端修复，不改数据、不动数据库结构，`DATA_VERSION` 保持 `2026-10-25.4`，升级后不触发重新同步
+- 查询 Windows 进程信息改为 UTF-8 输出，中文安装路径不再因乱码导致身份判断失效
+
 ## [v1.2.4] - 2026-10-26
 
 ### 修复
@@ -300,7 +311,8 @@
 - 安装包文件名改为英文（ASCII），解决 GitHub 下载链接 404
 - dmg 标准布局：打开即见 app + Applications 快捷方式
 
-[unreleased]: https://github.com/william001207/quanzhi-kaoyan-desktop/compare/v1.2.4...HEAD
+[unreleased]: https://github.com/william001207/quanzhi-kaoyan-desktop/compare/v1.2.5...HEAD
+[v1.2.5]: https://github.com/william001207/quanzhi-kaoyan-desktop/compare/v1.2.4...v1.2.5
 [v1.2.4]: https://github.com/william001207/quanzhi-kaoyan-desktop/compare/v1.2.3...v1.2.4
 [v1.2.3]: https://github.com/william001207/quanzhi-kaoyan-desktop/compare/v1.2.2...v1.2.3
 [v1.2.2]: https://github.com/william001207/quanzhi-kaoyan-desktop/compare/v1.2.1...v1.2.2

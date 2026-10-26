@@ -1,7 +1,7 @@
 {
   "name": "quanzhi-kaoyan-desktop",
   "productName": "全职高手考研系统",
-  "version": "1.2.4",
+  "version": "1.2.5",
   "description": "全职高手考研系统桌面版 —— 基于网页版完整改造的本地化应用，数据与功能完全一致，离线可用",
   "main": "electron/main.js",
   "author": "quanzhi",
