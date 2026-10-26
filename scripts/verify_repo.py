@@ -61,6 +61,51 @@ DATA = [
 for name, minimum in DATA:
     need_file(os.path.join("server", "data-export", name), minimum)
 
+# 2.1 索引层必须与详情层同步
+# 坑：data-export 里每种内容都有「详情层」（应用启动时真正导入的那份）和「索引层」（精简投影）。
+# 手改详情层加题/改章节后，索引层不会自动跟着变，条数就会落后，看起来像「仓库里是旧数据」。
+# 这里做强制校验，落后就中止构建，并提示用 scripts/sync_index.py 对齐。
+import json
+
+
+def _load_json(rel):
+    with open(path("server", "data-export", rel), encoding="utf-8") as f:
+        return json.load(f)
+
+
+def check_index(label, index_name, details_name):
+    try:
+        idx = _load_json(index_name)
+        det = _load_json(details_name)
+    except Exception as exc:
+        failures.append(f"{label}索引读取失败：{index_name} / {details_name}（{exc}）")
+        return
+    idx_list = idx if isinstance(idx, list) else list(idx.values())
+    det_map = det if isinstance(det, dict) else {e.get("id"): e for e in det}
+    idx_ids = {e.get("id") for e in idx_list}
+    det_ids = set(det_map)
+    if idx_ids != det_ids:
+        failures.append(
+            f"{label}索引与详情不一致：索引 {len(idx_ids)} 条 / 详情 {len(det_ids)} 条"
+            f"（详情有索引无 {len(det_ids - idx_ids)} 条，索引有详情无 {len(idx_ids - det_ids)} 条）"
+            f"，请运行 python3 scripts/sync_index.py 对齐"
+        )
+        return
+    # 条数一致后再抽查标题/挂载章节，防止「删了又加、总数没变」的情况漏过去
+    drift = 0
+    for e in idx_list:
+        d = det_map.get(e.get("id")) or {}
+        if e.get("title") != d.get("title"):
+            drift += 1
+        elif "chapterId" in e and e.get("chapterId") != d.get("chapterId"):
+            drift += 1
+    if drift:
+        failures.append(f"{label}索引有 {drift} 条标题或章节与详情不符，请运行 python3 scripts/sync_index.py 对齐")
+
+
+check_index("知识点", "knowledge_points.json", "knowledge_point_details.json")
+check_index("题目", "exam_questions.json", "exam_question_details.json")
+
 # 3. 前端构建产物
 need_file(os.path.join("client", "index.html"), 1000)
 need_file(os.path.join("client", "loading.html"), 500)

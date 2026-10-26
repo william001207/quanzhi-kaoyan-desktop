@@ -72,7 +72,7 @@ server/                 NestJS 后端（62 个 .ts）
 client/                 前端构建产物（由 client-src 构建而来，勿手改；改界面去 client-src）
 client-src/            前端可维护源码（vite 构建，私有包已用本地替身绕开，能独立 npm install && build）
 build/                  electron-builder 配置 + 图标
-scripts/                verify_repo(自检) / build-desktop(打包) / setup-repo(入库)
+scripts/                verify_repo(自检) / sync_index(索引对齐) / build-desktop(打包) / setup-repo(入库)
 docs/                   发布手册、改动与回退说明
 .github/workflows/      build.yml：matrix 构建 mac + win，推 v* tag 触发
 ```
@@ -85,6 +85,18 @@ docs/                   发布手册、改动与回退说明
   如需优化可改批量插入，但必须实测，别盲改。
 - 增量同步只 UPDATE 内容字段（`content`/`summary`/`keywords`/`card_data`），
   明确保留 `mastery_score`/`status`/`review_*`/`is_weak_marked` 等进度字段。**这个语义不能破坏。**
+- **`data-export/` 里每种内容都有两层文件，别改错也别只改一层**：
+  - 详情层 `*_details.json` —— 真正的题库内容（题干/答案/卡片/章节路径），**启动同步只读这一层**；
+  - 索引层 `knowledge_points.json` / `exam_questions.json` —— 同一批条目的精简投影 + 学习统计字段，
+    运行时和前端都不读，只给导出/导入脚本用。
+  手改详情层（加题、改章节、补备注）后索引层不会自动变，条数会落后（曾出现知识点索引停在 1052
+  而详情已 1196，被误判成「仓库是旧数据」）。**改完详情层必须跑一次**：
+  ```
+  python3 scripts/sync_index.py          # 对齐（幂等，可反复跑）
+  python3 scripts/sync_index.py --check  # 只检查，有差异退出码 1
+  ```
+  `verify_repo.py` 已加入强制校验：两层条数或标题/章节对不上就中止构建。
+  索引层不参与启动同步，**对齐它不需要改 `DATA_VERSION`**。
 - 服务监听 `127.0.0.1` 的**随机端口**：`listen(0)` 由系统分配，实际端口通过
   `DESKTOP_SERVER_READY <port>` 回传给主进程（主进程按行解析，不要改回按 chunk 匹配）。
   **不要再写死端口**——17890 时代已结束，残留进程、Hyper-V 保留段都会抢占它。
