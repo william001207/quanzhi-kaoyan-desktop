@@ -2,6 +2,19 @@
 
 所有版本的变更记录。格式参考 [Keep a Changelog](https://keepachangelog.com/zh-CN/1.1.0/)，版本号遵循语义化版本。
 
+## [v1.2.4] - 2026-10-26
+
+### 修复
+- **Windows 覆盖安装丢失旧安装目录**：旧版装在自定义目录时，新版安装包仍把安装路径填成默认目录，一路下一步就在默认位置又装了一份、桌面多出一个图标；现在会先找旧版本的真实位置再填入目录框
+- **安装模式不同也能找回目录**：安装器原本只按「仅为我安装 / 为所有用户安装」查对应的那一处注册表，两次选的模式不一样就查不到旧目录；现在两种模式都查一遍
+- **安装器记住装在哪**：每次安装成功后会另存一份不区分安装模式的安装目录记录，下次升级优先据此定位，不必依赖模式匹配
+- **只认真正的旧安装**：候选目录里必须确实存在上一版的卸载程序才会采用，注册表残留或已手工删掉的路径不会把安装引到空目录
+
+### 说明
+- 本次仅安装器改动，不改主进程、无数据变更，`DATA_VERSION` 保持 `2026-10-25.4`，升级后不触发重新同步
+- 升级到本版本时，旧版装在自定义目录的情况靠「另一种安装模式的注册表记录」定位；两处记录都被清理过才会退回默认目录
+- 从本版本起每次安装都会留下跨模式记录，之后再升级可稳定跟随旧目录
+
 ## [v1.2.3] - 2026-10-25
 
 ### 新增
@@ -287,7 +300,8 @@
 - 安装包文件名改为英文（ASCII），解决 GitHub 下载链接 404
 - dmg 标准布局：打开即见 app + Applications 快捷方式
 
-[unreleased]: https://github.com/william001207/quanzhi-kaoyan-desktop/compare/v1.2.3...HEAD
+[unreleased]: https://github.com/william001207/quanzhi-kaoyan-desktop/compare/v1.2.4...HEAD
+[v1.2.4]: https://github.com/william001207/quanzhi-kaoyan-desktop/compare/v1.2.3...v1.2.4
 [v1.2.3]: https://github.com/william001207/quanzhi-kaoyan-desktop/compare/v1.2.2...v1.2.3
 [v1.2.2]: https://github.com/william001207/quanzhi-kaoyan-desktop/compare/v1.2.1...v1.2.2
 [v1.2.1]: https://github.com/william001207/quanzhi-kaoyan-desktop/compare/v1.2.0...v1.2.1
