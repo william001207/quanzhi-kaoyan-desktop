@@ -128,8 +128,10 @@ cat <<'EOF'
 接下来如果要发布新版本：
   1. 先改 package.json 里的 version（比如 1.0.1）
   2. git add -A && git commit -m "release: v1.0.1"
-  3. git tag v1.0.1 && git push && git push --tags
+  3. git tag v1.0.1
+  4. 打开 GitHub Desktop 点 Push origin（本机没配推送凭证，这一步只能手动做）
+  5. 去网页 Releases 新建 tag v1.0.1 → GitHub Actions 自动构建 mac + win 两个安装包
 
-推送 tag 后，GitHub Actions 会自动构建 macOS 和 Windows 两个安装包，
-并创建 Release 页面。详细说明见 docs/发布新版本.md
+注意顺序：必须先推 main，再去网页建 Release，否则打出来的包是旧代码。
+详细说明见 docs/发布新版本.md
 EOF
