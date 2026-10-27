@@ -2,6 +2,24 @@
 
 所有版本的变更记录。格式参考 [Keep a Changelog](https://keepachangelog.com/zh-CN/1.1.0/)，版本号遵循语义化版本。
 
+## [v1.3.0] - 2026-10-27
+
+### 变更
+- **题库按新表全量重建**：内容一律以真题表与知识点表为准，题库由 1975 道真题 / 1196 个知识点调整为 1931 道真题 / 589 个知识点，表里没有的条目全部删除
+- **知识点改为纯标题体系**：589 个知识点只保留标题与章节归属，正文、关键词、复习卡片全部留空
+- **知识点全部挂到教材目录**：589 条都落在本科教材的具体章节上，没有一条挂在科目根，其中 296 条同时继承到大纲章节
+- **「概述：」类知识点改名**：这类前缀不是教材章节名，去掉后只保留冒号后的内容（10 条）
+
+### 数据治理（DATA_VERSION → 2026-10-27.1，启动自动同步）
+- **题目与知识点关联重建**：按表里的关联列重建 2252 条关联，0 条悬空、0 条对不上、0 道题没挂知识点
+- **教材目录纠错**：修正 23 处 OCR 错字与格式问题，含面部疖痈、颞下颌关节、颧骨及颧弓、苔藓、牙𬌗、龋病被识别成「瞒病」「瓣病」，以及章节号后漏空格
+- **旧统计清零**：今日计划 80 项、高频知识点 100 条、高频考频榜 20 条均引用已删除的旧 id，一并清空
+- 题库规模：1931 道真题 / 589 个知识点 / 8 个科目
+
+### 说明
+- 291 道题暂无答案与答题卡片，集中在 2022–2025 年，其余 1640 道沿用原有答案、要点与难度
+- 知识点标题保留「章节名：知识点」整条原文，只留冒号后会产生 11 组重名（「组织结构」在口腔组织病理学里 7 条同名）
+
 ## [v1.2.5] - 2026-10-27
 
 ### 修复
@@ -311,7 +329,8 @@
 - 安装包文件名改为英文（ASCII），解决 GitHub 下载链接 404
 - dmg 标准布局：打开即见 app + Applications 快捷方式
 
-[unreleased]: https://github.com/william001207/quanzhi-kaoyan-desktop/compare/v1.2.5...HEAD
+[unreleased]: https://github.com/william001207/quanzhi-kaoyan-desktop/compare/v1.3.0...HEAD
+[v1.3.0]: https://github.com/william001207/quanzhi-kaoyan-desktop/compare/v1.2.5...v1.3.0
 [v1.2.5]: https://github.com/william001207/quanzhi-kaoyan-desktop/compare/v1.2.4...v1.2.5
 [v1.2.4]: https://github.com/william001207/quanzhi-kaoyan-desktop/compare/v1.2.3...v1.2.4
 [v1.2.3]: https://github.com/william001207/quanzhi-kaoyan-desktop/compare/v1.2.2...v1.2.3

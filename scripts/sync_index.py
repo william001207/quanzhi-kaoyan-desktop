@@ -212,6 +212,9 @@ def sync_exam_questions(write=True):
         if o and (o.get("notes") or "") != (d.get("notes") or ""):
             fixed_notes += 1
         entry = ordered(src, EQ_ORDER)
+        # 题目不挂章节：旧索引若残留 chapterId（历史上题库重建后按 id 复用时会出现），
+        # 会和详情层对不上，被 verify_repo 判成漂移。这里显式丢掉。
+        entry.pop("chapterId", None)
         (kept if o else added).append(entry)
 
     result = kept + added

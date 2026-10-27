@@ -53,7 +53,9 @@ DATA = [
     ("subjects.json", 500),
     ("chapter_trees.json", 50_000),
     ("knowledge_points.json", 200_000),
-    ("knowledge_point_details.json", 1_000_000),
+    # 阈值只用来拦「文件被截断/写空」这类事故。知识点正文目前按用户要求留空，
+    # 所以文件比带正文的版本小很多（约 0.6MB），阈值相应下调。
+    ("knowledge_point_details.json", 300_000),
     ("exam_questions.json", 100_000),
     ("exam_question_details.json", 1_000_000),
     ("settings.json", 200),

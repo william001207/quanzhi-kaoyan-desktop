@@ -69,7 +69,7 @@ export function initializeDatabase(): Promise<void> {
 
 // 数据内容版本：线上题库内容（知识点卡片/题目等）有更新时递增。
 // 客户端检测到版本变化后执行增量内容同步（只更新内容字段，保留用户学习进度）。
-const DATA_VERSION = '2026-10-25.4'; // 新增中山大学 2021–2026 名词解释 60 道（1915 → 1975），含参考答案与要点；含 v1.2.2 的暨南 40 道与全库「黏液」用字统一
+const DATA_VERSION = '2026-10-27.1'; // 题库按《口腔考研真题表》《口腔考研知识点表》全量重建：真题 1931 道、知识点 589 个，关系与章节挂载全部重算，并修正教材章节 10 处 OCR 错字
 
 async function ensureSchemaAndData(db: PGlite): Promise<void> {
   const schemaSql = await fs.readFile(

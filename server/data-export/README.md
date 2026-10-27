@@ -3,17 +3,17 @@
 本目录是桌面版**首次启动时自动导入**的业务数据快照（幂等导入：库里已有数据就跳过）。
 
 这些文件**已纳入版本控制**，构建时不需要联网重新导出。
-体积约 16MB，GitHub 单文件上限 100MB，直接提交即可，无需 Git LFS。
+体积约 8MB，GitHub 单文件上限 100MB，直接提交即可，无需 Git LFS。
 
 ## 数据口径
 
 | 数据集 | 规模 |
 |---|---|
-| 真题 `exam_questions` / `exam_question_details` | 1705 道 |
-| 知识点 `knowledge_points` / `knowledge_point_details` | 1118 个（全部已细化关联到教材「节」级） |
+| 真题 `exam_questions` / `exam_question_details` | 1931 道 |
+| 知识点 `knowledge_points` / `knowledge_point_details` | 589 个（全部已挂到教材「章/节」级） |
 | 章节 `chapter_trees` | 876 个（教材 742 + 考纲 134） |
 | 科目 `subjects` | 8 |
-| 今日计划 `daily_plan_today` | 80 项（40 知识点 + 40 真题） |
+| 今日计划 `daily_plan_today` | 0 项（已清空，首次使用由应用按科目重新生成） |
 | 设置 `settings` | 1（考试日期 2026-12-19） |
 | 模拟卷模板 `mock_templates` | 1（深大模拟卷） |
 
@@ -35,7 +35,7 @@
 替换本目录的文件后，**必须**同步修改 `server/database/local-db.ts` 中的：
 
 ```ts
-const DATA_VERSION = '2026-10-22.1';   // 改成新值，否则应用不会触发对齐
+const DATA_VERSION = '2026-10-27.1';   // 改成新值，否则应用不会触发对齐
 ```
 
 否则应用会认为内容没变，继续用库里的旧数据。
