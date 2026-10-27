@@ -104,13 +104,15 @@ bash scripts/build-desktop.sh mac
 
 ```bash
 # 1. 改 package.json 里的 version，比如 1.0.1
-# 2. 提交并推送
-git add -A && git commit -m "release: v1.0.1" && git push
-# 3. 打 tag 触发自动构建
-git tag v1.0.1 && git push --tags
+# 2. 本地提交并打 tag（这台机器没配推送凭证，git push 会失败）
+git add -A && git commit -m "release: v1.0.1"
+git tag v1.0.1
 ```
 
-推送 tag 后，`build` 工作流会并行构建 macOS 和 Windows 安装包，并自动创建 Release。
+接着：在 GitHub Desktop 点 **Push origin** → 网页 Releases 新建同名 tag（Target 选 main）→
+`build` 工作流并行构建 macOS 和 Windows 安装包，并把产物传进那个 Release。
+
+⚠️ 顺序是先推 main、再建 Release。反了的话 tag 会落在旧提交上，打出来的包是旧代码。
 
 **完整操作手册（含出错排查、题库更新、回退方法）见 👉 [docs/发布新版本.md](docs/发布新版本.md)**
 
