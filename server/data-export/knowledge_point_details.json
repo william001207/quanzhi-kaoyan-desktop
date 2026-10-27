@@ -147,7 +147,7 @@
  "8c1ba5be-4845-5a3b-bc91-0ff50619fb14": {
   "id": "8c1ba5be-4845-5a3b-bc91-0ff50619fb14",
   "subjectId": "763f5b52-4e21-414e-b4b8-5eab04668227",
-  "chapterId": "05b8d043-99e4-44e4-8825-e32f4e833a2f",
+  "chapterId": "4bf9ae57-7bba-4c76-8d4a-00dcc9600985",
   "syllabusItemId": null,
   "title": "创口处理：各类创口的处理原则",
   "content": null,
@@ -181,7 +181,7 @@
  "f0a6097b-8094-504e-8651-d60a734783d4": {
   "id": "f0a6097b-8094-504e-8651-d60a734783d4",
   "subjectId": "763f5b52-4e21-414e-b4b8-5eab04668227",
-  "chapterId": "05b8d043-99e4-44e4-8825-e32f4e833a2f",
+  "chapterId": "4bf9ae57-7bba-4c76-8d4a-00dcc9600985",
   "syllabusItemId": null,
   "title": "创口处理：换药的基本原则、技术及注意事项",
   "content": null,
@@ -709,7 +709,7 @@
  "273fbabb-94b4-506d-8612-c6cc16db43da": {
   "id": "273fbabb-94b4-506d-8612-c6cc16db43da",
   "subjectId": "763f5b52-4e21-414e-b4b8-5eab04668227",
-  "chapterId": "c274a541-5c00-429d-8b8d-e82bcb515159",
+  "chapterId": "9d6c8f17-8b70-471a-9095-1769e8e1ce2a",
   "syllabusItemId": null,
   "title": "口腔种植的生物学基础：种植体与骨组织间的界面",
   "content": null,
@@ -743,7 +743,7 @@
  "fecc1f53-bbaf-511d-9cc0-75e293503a51": {
   "id": "fecc1f53-bbaf-511d-9cc0-75e293503a51",
   "subjectId": "763f5b52-4e21-414e-b4b8-5eab04668227",
-  "chapterId": "c274a541-5c00-429d-8b8d-e82bcb515159",
+  "chapterId": "9d6c8f17-8b70-471a-9095-1769e8e1ce2a",
   "syllabusItemId": null,
   "title": "口腔种植的生物学基础：种植体与软组织间的界面",
   "content": null,
@@ -777,7 +777,7 @@
  "59821d88-c406-5a2d-b674-a008f79bbb31": {
   "id": "59821d88-c406-5a2d-b674-a008f79bbb31",
   "subjectId": "763f5b52-4e21-414e-b4b8-5eab04668227",
-  "chapterId": "c274a541-5c00-429d-8b8d-e82bcb515159",
+  "chapterId": "9d6c8f17-8b70-471a-9095-1769e8e1ce2a",
   "syllabusItemId": null,
   "title": "口腔种植的生物学基础：影响种植体骨结合的因素",
   "content": null,
@@ -811,7 +811,7 @@
  "ce99b9d8-b66f-5084-a46e-1f6cc4408a95": {
   "id": "ce99b9d8-b66f-5084-a46e-1f6cc4408a95",
   "subjectId": "763f5b52-4e21-414e-b4b8-5eab04668227",
-  "chapterId": "0f79857d-80ac-401a-ba92-3f74fe7008ba",
+  "chapterId": "391cf585-1387-4a55-9d1c-062fa01f06fa",
   "syllabusItemId": null,
   "title": "口腔种植外科的应用解剖：下颌骨种植的应用解剖",
   "content": null,
@@ -947,7 +947,7 @@
  "7d507016-99e9-5e74-8a4d-7e032c65ed29": {
   "id": "7d507016-99e9-5e74-8a4d-7e032c65ed29",
   "subjectId": "763f5b52-4e21-414e-b4b8-5eab04668227",
-  "chapterId": "c993482d-b4e2-4a42-8892-7dc3ce39c5a7",
+  "chapterId": "42be14bf-e6ef-43ee-b862-298a591176e7",
   "syllabusItemId": null,
   "title": "种植手术并发症",
   "content": null,
@@ -1083,7 +1083,7 @@
  "6190f333-c013-5c85-8f4b-87d3e9a646dc": {
   "id": "6190f333-c013-5c85-8f4b-87d3e9a646dc",
   "subjectId": "763f5b52-4e21-414e-b4b8-5eab04668227",
-  "chapterId": "c993482d-b4e2-4a42-8892-7dc3ce39c5a7",
+  "chapterId": "05b8d043-99e4-44e4-8825-e32f4e833a2f",
   "syllabusItemId": null,
   "title": "智齿冠周炎",
   "content": null,
@@ -1389,7 +1389,7 @@
  "662e7803-6351-5221-bfee-9c0ec0df2368": {
   "id": "662e7803-6351-5221-bfee-9c0ec0df2368",
   "subjectId": "763f5b52-4e21-414e-b4b8-5eab04668227",
-  "chapterId": "b92976bf-abe7-4d89-aa8f-a2516d349ce4",
+  "chapterId": "05b8d043-99e4-44e4-8825-e32f4e833a2f",
   "syllabusItemId": null,
   "title": "颌骨骨髓炎：化脓性颌骨骨髓炎",
   "content": null,
@@ -1423,7 +1423,7 @@
  "7e2c8693-90e1-5599-b22c-940ffa369446": {
   "id": "7e2c8693-90e1-5599-b22c-940ffa369446",
   "subjectId": "763f5b52-4e21-414e-b4b8-5eab04668227",
-  "chapterId": "b92976bf-abe7-4d89-aa8f-a2516d349ce4",
+  "chapterId": "05b8d043-99e4-44e4-8825-e32f4e833a2f",
   "syllabusItemId": null,
   "title": "颌骨骨髓炎：放射性颌骨坏死（骨髓炎）",
   "content": null,
@@ -1457,7 +1457,7 @@
  "c99d7a33-8887-59d0-8f68-36095f9a3898": {
   "id": "c99d7a33-8887-59d0-8f68-36095f9a3898",
   "subjectId": "763f5b52-4e21-414e-b4b8-5eab04668227",
-  "chapterId": "b92976bf-abe7-4d89-aa8f-a2516d349ce4",
+  "chapterId": "05b8d043-99e4-44e4-8825-e32f4e833a2f",
   "syllabusItemId": null,
   "title": "颌骨骨髓炎：化学性颌骨坏死",
   "content": null,
@@ -1906,7 +1906,7 @@
  "e09691aa-ae1e-5484-aeba-a50e73d5a471": {
   "id": "e09691aa-ae1e-5484-aeba-a50e73d5a471",
   "subjectId": "763f5b52-4e21-414e-b4b8-5eab04668227",
-  "chapterId": "da917120-5e9a-4f32-9abf-74a5aa365aff",
+  "chapterId": "ba25ec01-e770-4d1b-bc8e-17014c29b754",
   "syllabusItemId": null,
   "title": "口腔颌面部损伤患者的急救：防治窒息",
   "content": null,
@@ -1940,7 +1940,7 @@
  "e42864d5-b01b-55bd-b63c-0b2facd0a1d7": {
   "id": "e42864d5-b01b-55bd-b63c-0b2facd0a1d7",
   "subjectId": "763f5b52-4e21-414e-b4b8-5eab04668227",
-  "chapterId": "da917120-5e9a-4f32-9abf-74a5aa365aff",
+  "chapterId": "ba25ec01-e770-4d1b-bc8e-17014c29b754",
   "syllabusItemId": null,
   "title": "口腔颌面部损伤患者的急救：防治感染",
   "content": null,
@@ -2901,7 +2901,7 @@
  "f95dccaa-a823-541c-a737-c020dfb86fc8": {
   "id": "f95dccaa-a823-541c-a737-c020dfb86fc8",
   "subjectId": "763f5b52-4e21-414e-b4b8-5eab04668227",
-  "chapterId": "da917120-5e9a-4f32-9abf-74a5aa365aff",
+  "chapterId": "b3c1fdf1-122a-4999-97d6-b3869ea7dfbf",
   "syllabusItemId": null,
   "title": "唾液腺损伤和唾液腺瘘",
   "content": null,
@@ -3454,7 +3454,7 @@
  "04b6733e-eb75-5850-9d8c-a741a8716803": {
   "id": "04b6733e-eb75-5850-9d8c-a741a8716803",
   "subjectId": "763f5b52-4e21-414e-b4b8-5eab04668227",
-  "chapterId": "da917120-5e9a-4f32-9abf-74a5aa365aff",
+  "chapterId": "fcd1c279-ee31-4af7-bde5-9fb11c7d7efd",
   "syllabusItemId": null,
   "title": "唇腭裂的序列治疗",
   "content": null,
@@ -3590,7 +3590,7 @@
  "63b983fc-44b8-5347-86d2-9e88ba3949bc": {
   "id": "63b983fc-44b8-5347-86d2-9e88ba3949bc",
   "subjectId": "763f5b52-4e21-414e-b4b8-5eab04668227",
-  "chapterId": "da917120-5e9a-4f32-9abf-74a5aa365aff",
+  "chapterId": "fac4d4c3-d911-4bfd-a367-13400bbfc1ff",
   "syllabusItemId": null,
   "title": "牙颌面畸形与正颌外科",
   "content": null,
@@ -3624,7 +3624,7 @@
  "ff64cf8b-d426-5e69-8831-f37f1d92c810": {
   "id": "ff64cf8b-d426-5e69-8831-f37f1d92c810",
   "subjectId": "763f5b52-4e21-414e-b4b8-5eab04668227",
-  "chapterId": "da917120-5e9a-4f32-9abf-74a5aa365aff",
+  "chapterId": "fac4d4c3-d911-4bfd-a367-13400bbfc1ff",
   "syllabusItemId": null,
   "title": "牙颌面畸形的矫治原则与设计",
   "content": null,
@@ -3658,7 +3658,7 @@
  "73daa494-8838-56f0-8e63-52a0dc7712d2": {
   "id": "73daa494-8838-56f0-8e63-52a0dc7712d2",
   "subjectId": "763f5b52-4e21-414e-b4b8-5eab04668227",
-  "chapterId": "c993482d-b4e2-4a42-8892-7dc3ce39c5a7",
+  "chapterId": "fac4d4c3-d911-4bfd-a367-13400bbfc1ff",
   "syllabusItemId": null,
   "title": "牙颌面畸形的治疗程序与步骤",
   "content": null,
@@ -3692,7 +3692,7 @@
  "1ca0eff1-0fee-563f-a3d2-4b0a8c46b30c": {
   "id": "1ca0eff1-0fee-563f-a3d2-4b0a8c46b30c",
   "subjectId": "763f5b52-4e21-414e-b4b8-5eab04668227",
-  "chapterId": "c993482d-b4e2-4a42-8892-7dc3ce39c5a7",
+  "chapterId": "fac4d4c3-d911-4bfd-a367-13400bbfc1ff",
   "syllabusItemId": null,
   "title": "牙颌面畸形的治疗程序与步骤：术前正畸治疗",
   "content": null,
@@ -3726,7 +3726,7 @@
  "4d0a85b4-8ac7-53c8-b37a-f8cc788dfcb1": {
   "id": "4d0a85b4-8ac7-53c8-b37a-f8cc788dfcb1",
   "subjectId": "763f5b52-4e21-414e-b4b8-5eab04668227",
-  "chapterId": "da917120-5e9a-4f32-9abf-74a5aa365aff",
+  "chapterId": "fac4d4c3-d911-4bfd-a367-13400bbfc1ff",
   "syllabusItemId": null,
   "title": "常用正颌外科手术",
   "content": null,
@@ -18279,8 +18279,8 @@
  "b5aa7fb8-d482-5405-8720-88873296f7f9": {
   "id": "b5aa7fb8-d482-5405-8720-88873296f7f9",
   "subjectId": "52696978-5ca9-4829-9bac-c84440c99573",
-  "chapterId": "804dcd2d-cb69-4664-a7da-2f86fcef97cc",
-  "syllabusItemId": "c3678faf-70a8-4d11-bcdb-d67d41a8943a",
+  "chapterId": "f856ef9b-4662-4865-bae1-0c6e20fde3a8",
+  "syllabusItemId": null,
   "title": "𬌗的类型",
   "content": null,
   "summary": null,
@@ -18308,16 +18308,7 @@
     }
    ]
   },
-  "syllabusItem": {
-   "id": "c3678faf-70a8-4d11-bcdb-d67d41a8943a",
-   "subjectId": "52696978-5ca9-4829-9bac-c84440c99573",
-   "chapterId": "804dcd2d-cb69-4664-a7da-2f86fcef97cc",
-   "title": "第二章 牙体解剖生理",
-   "originalText": null,
-   "requirementLevel": "unmarked",
-   "source": null,
-   "sortOrder": 20
-  }
+  "syllabusItem": null
  },
  "8809e76d-c819-5801-bdb3-aeb0ff91ebeb": {
   "id": "8809e76d-c819-5801-bdb3-aeb0ff91ebeb",
@@ -18666,8 +18657,8 @@
  "5f6cafc2-33d1-50e8-8d00-c01fb45b1091": {
   "id": "5f6cafc2-33d1-50e8-8d00-c01fb45b1091",
   "subjectId": "52696978-5ca9-4829-9bac-c84440c99573",
-  "chapterId": "804dcd2d-cb69-4664-a7da-2f86fcef97cc",
-  "syllabusItemId": "c3678faf-70a8-4d11-bcdb-d67d41a8943a",
+  "chapterId": "d65c1b85-407d-4788-a3c8-9544ea3fdf2d",
+  "syllabusItemId": null,
   "title": "唾液腺：腮腺",
   "content": null,
   "summary": null,
@@ -18695,22 +18686,13 @@
     }
    ]
   },
-  "syllabusItem": {
-   "id": "c3678faf-70a8-4d11-bcdb-d67d41a8943a",
-   "subjectId": "52696978-5ca9-4829-9bac-c84440c99573",
-   "chapterId": "804dcd2d-cb69-4664-a7da-2f86fcef97cc",
-   "title": "第二章 牙体解剖生理",
-   "originalText": null,
-   "requirementLevel": "unmarked",
-   "source": null,
-   "sortOrder": 20
-  }
+  "syllabusItem": null
  },
  "74e600ce-deb0-50bf-8e2c-626b82fd50b7": {
   "id": "74e600ce-deb0-50bf-8e2c-626b82fd50b7",
   "subjectId": "52696978-5ca9-4829-9bac-c84440c99573",
-  "chapterId": "804dcd2d-cb69-4664-a7da-2f86fcef97cc",
-  "syllabusItemId": "c3678faf-70a8-4d11-bcdb-d67d41a8943a",
+  "chapterId": "d65c1b85-407d-4788-a3c8-9544ea3fdf2d",
+  "syllabusItemId": null,
   "title": "唾液腺：下颌下腺",
   "content": null,
   "summary": null,
@@ -18738,16 +18720,7 @@
     }
    ]
   },
-  "syllabusItem": {
-   "id": "c3678faf-70a8-4d11-bcdb-d67d41a8943a",
-   "subjectId": "52696978-5ca9-4829-9bac-c84440c99573",
-   "chapterId": "804dcd2d-cb69-4664-a7da-2f86fcef97cc",
-   "title": "第二章 牙体解剖生理",
-   "originalText": null,
-   "requirementLevel": "unmarked",
-   "source": null,
-   "sortOrder": 20
-  }
+  "syllabusItem": null
  },
  "430249c9-6f35-5267-89c7-66774df3306c": {
   "id": "430249c9-6f35-5267-89c7-66774df3306c",
@@ -19878,8 +19851,8 @@
  "eb60c89b-8b84-57d1-9467-8ccd6137d702": {
   "id": "eb60c89b-8b84-57d1-9467-8ccd6137d702",
   "subjectId": "52696978-5ca9-4829-9bac-c84440c99573",
-  "chapterId": "d65c1b85-407d-4788-a3c8-9544ea3fdf2d",
-  "syllabusItemId": "54be5218-1414-46c8-9530-37b2e1d60137",
+  "chapterId": "9a912651-976d-4b8d-b3ba-4f1a41e94df2",
+  "syllabusItemId": null,
   "title": "唾液分泌及功能",
   "content": null,
   "summary": null,
@@ -19907,16 +19880,7 @@
     }
    ]
   },
-  "syllabusItem": {
-   "id": "54be5218-1414-46c8-9530-37b2e1d60137",
-   "subjectId": "52696978-5ca9-4829-9bac-c84440c99573",
-   "chapterId": "d65c1b85-407d-4788-a3c8-9544ea3fdf2d",
-   "title": "第四章 第四节 唾液腺",
-   "originalText": null,
-   "requirementLevel": "unmarked",
-   "source": null,
-   "sortOrder": 70
-  }
+  "syllabusItem": null
  },
  "8b26c660-7025-5479-9ec2-d0f289f76b39": {
   "id": "8b26c660-7025-5479-9ec2-d0f289f76b39",

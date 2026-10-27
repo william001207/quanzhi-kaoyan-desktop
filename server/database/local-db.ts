@@ -69,7 +69,7 @@ export function initializeDatabase(): Promise<void> {
 
 // 数据内容版本：线上题库内容（知识点卡片/题目等）有更新时递增。
 // 客户端检测到版本变化后执行增量内容同步（只更新内容字段，保留用户学习进度）。
-const DATA_VERSION = '2026-10-27.1'; // 题库按《口腔考研真题表》《口腔考研知识点表》全量重建：真题 1931 道、知识点 589 个，关系与章节挂载全部重算，并修正教材章节 10 处 OCR 错字
+const DATA_VERSION = '2026-10-27.2'; // 修正 24 个知识点的大纲章节归属（颌面外 20、解剖 4）：旧库同一教材节点下大纲章节对错混杂，多数票会选错，改为以教材章号为硬约束重新定位
 
 async function ensureSchemaAndData(db: PGlite): Promise<void> {
   const schemaSql = await fs.readFile(

@@ -2,6 +2,20 @@
 
 所有版本的变更记录。格式参考 [Keep a Changelog](https://keepachangelog.com/zh-CN/1.1.0/)，版本号遵循语义化版本。
 
+## [v1.3.1] - 2026-10-27
+
+### 修复
+- **大纲章节归属错挂修复**：24 个知识点在「大纲」视图下出现在错误的章节，如颌骨骨髓炎 3 条挂到「口腔颌面部肿瘤」、唾液腺的腮腺与下颌下腺挂到「牙体解剖生理」、唇腭裂的序列治疗挂到「绪论」
+- **大纲归属与教材章号对齐**：修正后 24 条的大纲章节与教材所在章号全部一致，浏览大纲不再跳章
+
+### 数据治理（DATA_VERSION → 2026-10-27.2，启动自动同步）
+- **大纲归属改以教材章号为硬约束**：原先沿用旧库「同一教材节点取出现最多的大纲章节」，旧库本身对错混杂会把错的选出来
+- **口腔种植外科按教材挂载**：口腔颌面外科学大纲没有「口腔种植外科」这一章，该章下 5 个知识点改挂教材章节，与同章其他知识点保持一致
+- 题库规模：1931 道真题 / 589 个知识点 / 8 个科目
+
+### 说明
+- 本次只调整「归属哪个大纲章节」一个字段，知识点标题、教材路径、题目与答案均未变动，题库条数与 v1.3.0 完全一致
+
 ## [v1.3.0] - 2026-10-27
 
 ### 变更
@@ -329,7 +343,8 @@
 - 安装包文件名改为英文（ASCII），解决 GitHub 下载链接 404
 - dmg 标准布局：打开即见 app + Applications 快捷方式
 
-[unreleased]: https://github.com/william001207/quanzhi-kaoyan-desktop/compare/v1.3.0...HEAD
+[unreleased]: https://github.com/william001207/quanzhi-kaoyan-desktop/compare/v1.3.1...HEAD
+[v1.3.1]: https://github.com/william001207/quanzhi-kaoyan-desktop/compare/v1.3.0...v1.3.1
 [v1.3.0]: https://github.com/william001207/quanzhi-kaoyan-desktop/compare/v1.2.5...v1.3.0
 [v1.2.5]: https://github.com/william001207/quanzhi-kaoyan-desktop/compare/v1.2.4...v1.2.5
 [v1.2.4]: https://github.com/william001207/quanzhi-kaoyan-desktop/compare/v1.2.3...v1.2.4
