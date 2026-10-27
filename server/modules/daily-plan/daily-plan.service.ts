@@ -366,12 +366,7 @@ export class DailyPlanService {
   ): Promise<PaginatedResponse<KnowledgePoint>> {
     const conditions = [];
     if (query.keyword)
-      conditions.push(
-        or(
-          ilike(knowledgePoint.title, `%${query.keyword}%`),
-          ilike(knowledgePoint.summary, `%${query.keyword}%`),
-        ),
-      );
+      conditions.push(ilike(knowledgePoint.title, `%${query.keyword}%`));
     if (query.subjectId)
       conditions.push(eq(knowledgePoint.subjectId, query.subjectId));
 
@@ -407,9 +402,6 @@ export class DailyPlanService {
         subjectId: knowledgePoint.subjectId,
         chapterId: knowledgePoint.chapterId,
         title: knowledgePoint.title,
-        content: knowledgePoint.content,
-        summary: knowledgePoint.summary,
-        keywords: knowledgePoint.keywords,
         requirementLevel: knowledgePoint.requirementLevel,
         importanceScore: knowledgePoint.importanceScore,
         examFrequency: knowledgePoint.examFrequency,
@@ -433,9 +425,6 @@ export class DailyPlanService {
       chapterId: row.chapterId ?? null,
       syllabusItemId: null,
       title: row.title,
-      content: row.content ?? '',
-      summary: row.summary ?? '',
-      keywords: row.keywords ?? [],
       requirementLevel: row.requirementLevel as KnowledgePoint['requirementLevel'],
       importanceScore: row.importanceScore ?? 0,
       examFrequency: row.examFrequency ?? 0,
@@ -1142,9 +1131,6 @@ export class DailyPlanService {
       chapterId: row.chapterId,
       syllabusItemId: '',
       title: row.title,
-      content: '',
-      summary: '',
-      keywords: [],
       requirementLevel: row.requirementLevel as KnowledgePoint['requirementLevel'],
       importanceScore: row.importanceScore,
       examFrequency: row.examFrequency,
@@ -1205,9 +1191,6 @@ export class DailyPlanService {
       chapterId: row.chapterId,
       syllabusItemId: row.syllabusItemId,
       title: row.title,
-      content: row.content,
-      summary: row.summary,
-      keywords: row.keywords ?? [],
       requirementLevel: row.requirementLevel as KnowledgePoint['requirementLevel'],
       importanceScore: row.importanceScore,
       examFrequency: row.examFrequency,

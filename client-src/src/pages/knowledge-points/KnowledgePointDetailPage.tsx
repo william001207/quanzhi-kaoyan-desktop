@@ -1,7 +1,6 @@
 import React, { useEffect, useState, useCallback } from 'react';
 import { useParams, useNavigate, useSearchParams, Link } from 'react-router-dom';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
-import { Markdown } from '@/components/ui/markdown';
 import {
   Tabs,
   TabsContent,
@@ -11,11 +10,6 @@ import {
 import { Skeleton } from '@/components/ui/skeleton';
 import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
-import {
-  Collapsible,
-  CollapsibleContent,
-  CollapsibleTrigger,
-} from '@/components/ui/collapsible';
 import {
   Select,
   SelectContent,
@@ -42,8 +36,6 @@ import {
   DialogTrigger,
 } from '@/components/ui/dialog';
 import { Input } from '@/components/ui/input';
-import { Label } from '@/components/ui/label';
-import { Textarea } from '@/components/ui/textarea';
 import { ScrollArea } from '@/components/ui/scroll-area';
 import { Search, Plus } from 'lucide-react';
 import * as api from '@/api';
@@ -66,23 +58,17 @@ import {
 } from '@shared/api.interface';
 import {
   ArrowLeft,
-  BookOpen,
   Brain,
   FileText,
   History,
-  ChevronDown,
-  ChevronUp,
-  Lightbulb,
-  Key,
-  Eye,
   Flag,
   X,
 } from 'lucide-react';
 import { masteryColor, masteryTextColor, requirementBorderClass, formatDate, isOverdue, statusBadgeClass } from '@/utils/mastery';
 import KnowledgeCardView from '@/components/knowledge-card/KnowledgeCardView';
-import KnowledgeCardEditor from '@/components/knowledge-card/KnowledgeCardEditor';
+import KnowledgeMindMap from '@/components/knowledge-card/KnowledgeMindMap';
 import type { KnowledgePointCardData } from '@shared/api.interface';
-import { Pencil, LayoutGrid, FileText as FileTextIcon, ExternalLink, Layers } from 'lucide-react';
+import { LayoutGrid, ExternalLink, Layers, Network } from 'lucide-react';
 import { resolveAppUrl } from '@lark-apaas/client-toolkit/utils/resolveAppUrl';
 import { UniversalLink } from '@lark-apaas/client-toolkit/components/UniversalLink';
 import { QuestionTags } from '@/components/question-tags';
@@ -96,11 +82,15 @@ import type { WeakMarkReason } from '@shared/api.interface';
 import { WEAK_MARK_REASON_LABEL } from '@shared/api.interface';
 import { showConfirm } from '@lark-apaas/client-toolkit';
 
+type RecallView = 'card' | 'mindmap';
+
 const KnowledgePointDetailPage: React.FC = () => {
   const { id } = useParams<{ id: string }>();
   const navigate = useNavigate();
   const [searchParams, setSearchParams] = useSearchParams();
-  const tabFromUrl = searchParams.get('tab') || 'content';
+  // 旧链接里的 tab=content 已并入「主动回忆」
+  const rawTab = searchParams.get('tab') || 'recall';
+  const tabFromUrl = rawTab === 'content' ? 'recall' : rawTab;
 
   const [kp, setKp] = useState<KnowledgePoint | null>(null);
   const [questions, setQuestions] = useState<ExamQuestion[]>([]);
@@ -175,46 +165,6 @@ const KnowledgePointDetailPage: React.FC = () => {
     }
   };
 
-  const openFieldEditor = () => {
-    if (!kp) return;
-    setFieldForm({
-      title: kp.title ?? '',
-      content: kp.content ?? '',
-      summary: kp.summary ?? '',
-      keywords: (kp.keywords ?? []).join('，'),
-      requirementLevel: kp.requirementLevel ?? 'master',
-    });
-    setEditingFields(true);
-  };
-
-  const saveFields = async () => {
-    if (!kp) return;
-    setSavingFields(true);
-    try {
-      const keywords = fieldForm.keywords
-        .split(/[，,]/)
-        .map((s) => s.trim())
-        .filter(Boolean);
-      const updated = await api.knowledgePoints.update(kp.id, {
-        title: fieldForm.title.trim(),
-        content: fieldForm.content,
-        summary: fieldForm.summary,
-        keywords,
-        requirementLevel: fieldForm.requirementLevel,
-      });
-      setKp({ ...kp, ...updated });
-      setEditingFields(false);
-      toast.success('已保存知识点修改');
-    } catch (err) {
-      logger.error('保存知识点修改失败', err);
-      const msg =
-        (err as any)?.response?.data?.error?.message ?? '保存失败，请重试';
-      toast.error(msg);
-    } finally {
-      setSavingFields(false);
-    }
-  };
-
   const pathLabelMap: Record<SyllabusMode, { label: string; color: string }> = {
     exam_syllabus: { label: '真题大纲', color: 'bg-blue-50 text-blue-700 border-blue-200' },
     textbook: { label: '本科教材', color: 'bg-emerald-50 text-emerald-700 border-emerald-200' },
@@ -269,10 +219,6 @@ const KnowledgePointDetailPage: React.FC = () => {
     );
   };
 
-  // 主动回忆状态
-  const [showHint, setShowHint] = useState(false);
-  const [showKeywords, setShowKeywords] = useState(false);
-  const [showAnswer, setShowAnswer] = useState(false);
   const [submitting, setSubmitting] = useState(false);
 
   // 关联真题筛选
@@ -281,40 +227,23 @@ const KnowledgePointDetailPage: React.FC = () => {
   const [expandedCardQuestionId, setExpandedCardQuestionId] = useState<string | null>(null);
   const [questionSort, setQuestionSort] = useState<string>('year_desc');
 
-  // 知识内容视图切换
+  // 知识内容视图切换：知识卡片 / 思维导图
   const hasCardData = (data: KnowledgePointCardData | undefined): boolean => {
     if (!data) return false;
     return !!(data.flowSteps?.length || data.blocks?.length || data.summary);
   };
-  const getInitialView = (): 'note' | 'card' => {
-    const saved = localStorage.getItem(`kp_view_${id}`);
-    if (saved === 'card' || saved === 'note') return saved;
-    return hasCardData(kp?.cardData) ? 'card' : 'note';
-  };
-  const [contentView, setContentView] = useState<'note' | 'card'>('note');
-  const [editingCard, setEditingCard] = useState(false);
-  const [editingFields, setEditingFields] = useState(false);
-  const [fieldForm, setFieldForm] = useState<{
-    title: string;
-    content: string;
-    summary: string;
-    keywords: string;
-    requirementLevel: string;
-  }>({ title: '', content: '', summary: '', keywords: '', requirementLevel: 'master' });
-  const [savingFields, setSavingFields] = useState(false);
+  const [recallView, setRecallView] = useState<RecallView>('mindmap');
 
   useEffect(() => {
     if (!kp) return;
     const saved = localStorage.getItem(`kp_view_${id}`);
-    if (saved === 'card' || saved === 'note') {
-      setContentView(saved);
-    } else {
-      setContentView(hasCardData(kp.cardData) ? 'card' : 'note');
-    }
+    // 旧版本存过 note/card，没有记录时默认落在思维导图
+    if (saved === 'card') setRecallView('card');
+    else setRecallView('mindmap');
   }, [kp?.id, id]);
 
-  const setContentViewAndSave = (view: 'note' | 'card') => {
-    setContentView(view);
+  const setRecallViewAndSave = (view: RecallView) => {
+    setRecallView(view);
     if (id) localStorage.setItem(`kp_view_${id}`, view);
   };
 
@@ -370,12 +299,6 @@ const KnowledgePointDetailPage: React.FC = () => {
 
   const handleTabChange = (value: string) => {
     setSearchParams({ tab: value }, { replace: true });
-    // 重置回忆状态
-    if (value === 'recall') {
-      setShowHint(false);
-      setShowKeywords(false);
-      setShowAnswer(false);
-    }
   };
 
   // 薄弱标记
@@ -437,9 +360,6 @@ const KnowledgePointDetailPage: React.FC = () => {
         `复习已记录，掌握度 ${oldScore} → ${result.reviewRecord.newMasteryScore}`,
       );
       setKp(result.knowledgePoint);
-      setShowHint(false);
-      setShowKeywords(false);
-      setShowAnswer(false);
       const recordsResult = await api.knowledgePoints.getReviewRecords(id);
       setRecords(recordsResult);
     } catch (err: unknown) {
@@ -507,21 +427,21 @@ const KnowledgePointDetailPage: React.FC = () => {
 
   const overdue = isOverdue(kp.nextReviewAt);
 
-   return (
-      <div className="p-3 md:p-6">
-        <Link
-          to="/knowledge-points"
-          className="inline-flex items-center gap-1 text-sm text-muted-foreground hover:text-foreground mb-3 md:mb-4 min-h-[32px]"
-        >
-          <ArrowLeft className="h-4 w-4" />
-          返回知识点列表
-        </Link>
+  return (
+    <div className="p-3 md:p-6">
+      <Link
+        to="/knowledge-points"
+        className="inline-flex items-center gap-1 text-sm text-muted-foreground hover:text-foreground mb-3 md:mb-4 min-h-[32px]"
+      >
+        <ArrowLeft className="h-4 w-4" />
+        返回知识点列表
+      </Link>
 
-        {/* 顶部信息条 */}
-        <Card className="mb-4 md:mb-6">
-          <CardContent className="pt-4 md:pt-6">
-            {/* 双目录路径 */}
-            <div className="space-y-2 mb-3 md:mb-4">
+      {/* 顶部信息条 */}
+      <Card className="mb-4 md:mb-6">
+        <CardContent className="pt-4 md:pt-6">
+          {/* 双目录路径 */}
+          <div className="space-y-2 mb-3 md:mb-4">
             {renderPathLine('exam_syllabus' as SyllabusMode, kp.chapterPaths?.examSyllabus)}
             {renderPathLine('textbook' as SyllabusMode, kp.chapterPaths?.textbook)}
           </div>
@@ -699,10 +619,6 @@ const KnowledgePointDetailPage: React.FC = () => {
       <Tabs value={tabFromUrl} onValueChange={handleTabChange}>
         <div className="overflow-x-auto scrollbar-none -mx-3 px-3 md:mx-0 md:px-0 mb-4">
           <TabsList className="mb-0">
-            <TabsTrigger value="content" className="flex items-center gap-1.5 whitespace-nowrap flex-shrink-0">
-              <BookOpen className="h-4 w-4" />
-              知识内容
-            </TabsTrigger>
             <TabsTrigger value="recall" className="flex items-center gap-1.5 whitespace-nowrap flex-shrink-0">
               <Brain className="h-4 w-4" />
               主动回忆
@@ -719,117 +635,47 @@ const KnowledgePointDetailPage: React.FC = () => {
           </TabsList>
         </div>
 
-        {/* Tab 1: 知识内容 */}
-        <TabsContent value="content">
+        {/* Tab 1: 主动回忆（知识卡片 / 思维导图 + 自评） */}
+        <TabsContent value="recall">
           <Card className="border-slate-200">
             <CardHeader className="pb-3 border-b border-slate-100">
-              <div className="flex items-center justify-between">
-                <CardTitle className="text-base font-semibold text-slate-800">知识内容</CardTitle>
-                <div className="flex items-center gap-1">
-                  <div className="flex items-center bg-slate-100 rounded-md p-0.5 border border-slate-200">
-                    <button
-                      onClick={() => setContentViewAndSave('note')}
-                      className={`flex items-center gap-1.5 px-3 py-1 rounded text-xs font-medium transition-colors ${
-                        contentView === 'note'
-                          ? 'bg-white text-slate-800 shadow-sm'
-                          : 'text-slate-500 hover:text-slate-700'
-                      }`}
-                    >
-                      <FileTextIcon className="h-3.5 w-3.5" />
-                      笔记视图
-                    </button>
-                    <button
-                      onClick={() => setContentViewAndSave('card')}
-                      className={`flex items-center gap-1.5 px-3 py-1 rounded text-xs font-medium transition-colors ${
-                        contentView === 'card'
-                          ? 'bg-white text-slate-800 shadow-sm'
-                          : 'text-slate-500 hover:text-slate-700'
-                      }`}
-                    >
-                      <LayoutGrid className="h-3.5 w-3.5" />
-                      卡片视图
-                    </button>
-                  </div>
-                  {contentView === 'card' && !editingCard && (
-                    <Button
-                      size="sm"
-                      variant="outline"
-                      className="ml-1"
-                      onClick={() => setEditingCard(true)}
-                    >
-                      <Pencil className="h-3.5 w-3.5 mr-1" />
-                      编辑卡片
-                    </Button>
-                  )}
-                  <Button
-                    size="sm"
-                    variant="outline"
-                    className="ml-1"
-                    onClick={openFieldEditor}
+              <div className="flex items-center justify-between gap-3">
+                <div className="flex items-center bg-slate-100 rounded-md p-0.5 border border-slate-200">
+                  <button
+                    onClick={() => setRecallViewAndSave('card')}
+                    className={`flex items-center gap-1.5 px-3 py-1.5 rounded text-xs font-medium transition-colors ${
+                      recallView === 'card'
+                        ? 'bg-white text-slate-800 shadow-sm'
+                        : 'text-slate-500 hover:text-slate-700'
+                    }`}
                   >
-                    <Pencil className="h-3.5 w-3.5 mr-1" />
-                    编辑知识点
-                  </Button>
+                    <LayoutGrid className="h-3.5 w-3.5" />
+                    知识卡片
+                  </button>
+                  <button
+                    onClick={() => setRecallViewAndSave('mindmap')}
+                    className={`flex items-center gap-1.5 px-3 py-1.5 rounded text-xs font-medium transition-colors ${
+                      recallView === 'mindmap'
+                        ? 'bg-white text-slate-800 shadow-sm'
+                        : 'text-slate-500 hover:text-slate-700'
+                    }`}
+                  >
+                    <Network className="h-3.5 w-3.5" />
+                    思维导图
+                  </button>
                 </div>
+                <Badge
+                  variant="outline"
+                  className={statusBadgeClass(kp.status) + ' text-xs flex-shrink-0'}
+                >
+                  {KP_STATUS_LABEL[kp.status]}
+                </Badge>
               </div>
             </CardHeader>
-            <CardContent className="pt-4 md:pt-5">
-              {contentView === 'note' && (
-                <div className="space-y-4 md:space-y-6">
-                  {kp.keywords.length > 0 && (
-                    <div className="flex flex-col sm:flex-row sm:items-start gap-2 sm:gap-3">
-                      <div className="text-xs font-medium text-slate-500 sm:w-16 flex-shrink-0 pt-0.5">关键词</div>
-                      <div className="flex items-center gap-1.5 flex-wrap flex-1">
-                        {kp.keywords.map((kw, i) => (
-                          <Badge key={i} variant="outline" className="text-xs bg-slate-50 border-slate-200 text-slate-700 font-normal">
-                            {kw}
-                          </Badge>
-                        ))}
-                      </div>
-                    </div>
-                  )}
-                  <div className="flex flex-col sm:flex-row sm:items-start gap-2 sm:gap-3">
-                    <div className="text-xs font-medium text-slate-500 sm:w-16 flex-shrink-0 pt-1">详细内容</div>
-                    <div className="flex-1 min-w-0 w-full">
-                      {kp.content ? (
-                        <div className="kp-markdown text-sm border border-slate-200 rounded-md p-4 md:p-6 bg-white shadow-sm w-full">
-                          <Markdown>{kp.content}</Markdown>
-                        </div>
-                      ) : kp.summary ? (
-                        <div className="kp-markdown text-sm border border-slate-200 rounded-md p-4 md:p-6 bg-white shadow-sm w-full">
-                          <Markdown>{kp.summary}</Markdown>
-                        </div>
-                      ) : (
-                        <div className="py-10 text-center text-sm text-muted-foreground border border-dashed border-slate-200 rounded-md">
-                          暂无知识内容
-                        </div>
-                      )}
-                    </div>
-                  </div>
-                  {kp.summary && kp.content && (
-                    <div className="flex flex-col sm:flex-row sm:items-start gap-2 sm:gap-3">
-                      <div className="text-xs font-medium text-slate-500 sm:w-16 flex-shrink-0 pt-1">内容摘要</div>
-                      <div className="flex-1 text-sm leading-relaxed text-slate-600 bg-slate-50 rounded-md p-4 border border-slate-100">
-                        {kp.summary}
-                      </div>
-                    </div>
-                  )}
-                  <Collapsible>
-                    <CollapsibleTrigger className="flex items-center gap-1 text-xs text-slate-500 hover:text-slate-700 transition-colors sm:ml-[76px] min-h-[32px]">
-                      <ChevronDown className="h-3.5 w-3.5" />
-                      查看大纲原文
-                    </CollapsibleTrigger>
-                    <CollapsibleContent className="mt-2 sm:ml-[76px]">
-                      <div className="text-sm text-slate-600 bg-slate-50 rounded-md p-3 border border-slate-200 leading-relaxed">
-                        {kp.syllabusTitle || '（大纲原文关联中...）'}
-                      </div>
-                    </CollapsibleContent>
-                  </Collapsible>
-                </div>
-              )}
 
-              {contentView === 'card' && !editingCard && (
-                <div>
+            <CardContent className="pt-4 md:pt-5">
+              {recallView === 'card' && (
+                <>
                   {hasCardData(kp.cardData) ? (
                     <KnowledgeCardView
                       data={kp.cardData}
@@ -837,246 +683,69 @@ const KnowledgePointDetailPage: React.FC = () => {
                       subjectName={kp.subjectName}
                     />
                   ) : (
-                    <div className="py-16 text-center border border-dashed border-amber-200 rounded-lg bg-amber-50/30">
-                      <div className="text-amber-800 text-sm font-medium mb-2">
-                        还没有知识卡片
+                    <div className="py-16 text-center border border-dashed border-slate-200 rounded-lg bg-slate-50/40">
+                      <div className="text-slate-600 text-sm font-medium mb-1">
+                        本知识点暂无卡片内容
                       </div>
-                      <p className="text-xs text-amber-700/70 mb-4">
-                        用教材总结卡片版式整理重点，更方便记忆
+                      <p className="text-xs text-slate-400">
+                        当前只收录了标题与章节归属
                       </p>
-                      <Button
-                        size="sm"
-                        onClick={() => setEditingCard(true)}
-                        className="bg-stone-700 hover:bg-stone-800"
-                      >
-                        <Pencil className="h-3.5 w-3.5 mr-1" />
-                        点此创建卡片
-                      </Button>
                     </div>
                   )}
-                </div>
+                </>
               )}
 
-              {contentView === 'card' && editingCard && (
-                <KnowledgeCardEditor
-                  kpId={kp.id}
-                  initialData={kp.cardData ?? {}}
-                  onSaved={(newData) => {
-                    setKp({ ...kp, cardData: newData });
-                    setEditingCard(false);
-                    if (!hasCardData(newData)) {
-                      setContentViewAndSave('note');
-                    }
-                  }}
-                  onCancel={() => setEditingCard(false)}
+              {recallView === 'mindmap' && (
+                <KnowledgeMindMap
+                  title={kp.title}
+                  data={kp.cardData}
                 />
               )}
             </CardContent>
-          </Card>
 
-          <Dialog open={editingFields} onOpenChange={setEditingFields}>
-            <DialogContent className="sm:max-w-2xl">
-              <DialogHeader>
-                <DialogTitle className="text-base">编辑知识点</DialogTitle>
-              </DialogHeader>
-              <div className="space-y-4">
-                <div className="space-y-1.5">
-                  <Label htmlFor="kp-title">标题</Label>
-                  <Input
-                    id="kp-title"
-                    value={fieldForm.title}
-                    onChange={(e) => setFieldForm({ ...fieldForm, title: e.target.value })}
-                    className="text-sm"
-                  />
-                </div>
-                <div className="space-y-1.5">
-                  <Label htmlFor="kp-requirement">大纲要求</Label>
-                  <Select
-                    value={fieldForm.requirementLevel}
-                    onValueChange={(v) => setFieldForm({ ...fieldForm, requirementLevel: v })}
-                  >
-                    <SelectTrigger id="kp-requirement" className="text-sm">
-                      <SelectValue />
-                    </SelectTrigger>
-                    <SelectContent>
-                      <SelectItem value="unmarked">{REQUIREMENT_LEVEL_LABEL['unmarked']}</SelectItem>
-                      <SelectItem value="master">掌握</SelectItem>
-                      <SelectItem value="familiar">熟悉</SelectItem>
-                      <SelectItem value="understand">了解</SelectItem>
-                    </SelectContent>
-                  </Select>
-                </div>
-                <div className="space-y-1.5">
-                  <Label htmlFor="kp-keywords">关键词（多个用逗号隔开）</Label>
-                  <Input
-                    id="kp-keywords"
-                    value={fieldForm.keywords}
-                    onChange={(e) => setFieldForm({ ...fieldForm, keywords: e.target.value })}
-                    className="text-sm"
-                    placeholder="如：固位，稳定，吸附力"
-                  />
-                </div>
-                <div className="space-y-1.5">
-                  <Label htmlFor="kp-content">详细内容（支持 Markdown）</Label>
-                  <Textarea
-                    id="kp-content"
-                    value={fieldForm.content}
-                    onChange={(e) => setFieldForm({ ...fieldForm, content: e.target.value })}
-                    className="text-sm min-h-[160px]"
-                  />
-                </div>
-                <div className="space-y-1.5">
-                  <Label htmlFor="kp-summary">内容摘要</Label>
-                  <Textarea
-                    id="kp-summary"
-                    value={fieldForm.summary}
-                    onChange={(e) => setFieldForm({ ...fieldForm, summary: e.target.value })}
-                    className="text-sm min-h-[100px]"
-                  />
-                </div>
-              </div>
-              <DialogFooter>
-                <Button variant="outline" onClick={() => setEditingFields(false)} disabled={savingFields}>
-                  取消
-                </Button>
-                <Button onClick={saveFields} disabled={savingFields}>
-                  {savingFields ? '保存中…' : '保存'}
-                </Button>
-              </DialogFooter>
-            </DialogContent>
-          </Dialog>
-        </TabsContent>
-
-        {/* Tab 2: 主动回忆 */}
-        <TabsContent value="recall">
-          <Card>
-            <CardHeader>
-              <CardTitle className="text-lg font-medium">
-                请复述：{kp.title}
-              </CardTitle>
-            </CardHeader>
-            <CardContent className="space-y-4">
-              {/* 操作按钮 */}
-              <div className="flex items-center gap-2 flex-wrap">
+            {/* 自评结果 */}
+            <div className="px-4 md:px-6 pb-4 md:pb-6 pt-4 border-t border-slate-100">
+              <div className="text-sm font-medium mb-3 text-slate-700">自评结果</div>
+              <div className="grid grid-cols-2 md:grid-cols-4 gap-2 md:gap-3">
                 <Button
-                  variant={showHint ? 'default' : 'outline'}
-                  size="sm"
-                  onClick={() => setShowHint(!showHint)}
-                  className="h-10 min-h-[40px]"
+                  variant="destructive"
+                  onClick={() => handleSelfRating('again')}
+                  disabled={submitting}
+                  className="flex-col py-3 md:py-4 h-auto min-h-[56px]"
                 >
-                  <Lightbulb className="h-4 w-4" />
-                  {showHint ? '隐藏提示' : '显示提示'}
+                  <span className="text-base font-semibold">不会</span>
+                  <span className="text-[11px] opacity-80">重新学习</span>
                 </Button>
                 <Button
-                  variant={showKeywords ? 'default' : 'outline'}
-                  size="sm"
-                  onClick={() => setShowKeywords(!showKeywords)}
-                  className="h-10 min-h-[40px]"
+                  className="flex-col py-3 md:py-4 h-auto min-h-[56px] bg-amber-500 hover:bg-amber-600 text-white border-amber-600"
+                  onClick={() => handleSelfRating('hard')}
+                  disabled={submitting}
                 >
-                  <Key className="h-4 w-4" />
-                  {showKeywords ? '隐藏关键词' : '显示关键词'}
+                  <span className="text-base font-semibold">模糊</span>
+                  <span className="text-[11px] opacity-80">加强记忆</span>
                 </Button>
                 <Button
-                  variant={showAnswer ? 'default' : 'secondary'}
-                  size="sm"
-                  onClick={() => setShowAnswer(!showAnswer)}
-                  className="h-10 min-h-[40px]"
+                  className="flex-col py-3 md:py-4 h-auto min-h-[56px] bg-emerald-500 hover:bg-emerald-600 text-white border-emerald-600"
+                  onClick={() => handleSelfRating('good')}
+                  disabled={submitting}
                 >
-                  <Eye className="h-4 w-4" />
-                  {showAnswer ? '隐藏答案' : '显示完整答案'}
+                  <span className="text-base font-semibold">基本掌握</span>
+                  <span className="text-[11px] opacity-80">正常间隔</span>
+                </Button>
+                <Button
+                  className="flex-col py-3 md:py-4 h-auto min-h-[56px] bg-green-700 hover:bg-green-800 text-white border-green-800"
+                  onClick={() => handleSelfRating('easy')}
+                  disabled={submitting}
+                >
+                  <span className="text-base font-semibold">熟练</span>
+                  <span className="text-[11px] opacity-80">延长间隔</span>
                 </Button>
               </div>
-
-              {/* 提示区 */}
-              {showHint && (
-                <div className="rounded-md border border-amber-200 bg-amber-50 p-4">
-                  <div className="text-xs text-amber-600 font-medium mb-1">💡 提示</div>
-                  <div className="text-sm text-amber-900">
-                    {kp.summary || '暂无摘要提示'}
-                  </div>
-                </div>
-              )}
-
-              {/* 关键词区 */}
-              {showKeywords && kp.keywords.length > 0 && (
-                <div className="rounded-md border border-blue-200 bg-blue-50 p-4">
-                  <div className="text-xs text-blue-600 font-medium mb-2">🔑 关键词</div>
-                  <div className="flex flex-wrap gap-2">
-                    {kp.keywords.map((kw, i) => (
-                      <Badge key={i} variant="outline" className="bg-white">
-                        {kw}
-                      </Badge>
-                    ))}
-                  </div>
-                </div>
-              )}
-              {showKeywords && kp.keywords.length === 0 && (
-                <div className="rounded-md border border-blue-200 bg-blue-50 p-4">
-                  <div className="text-xs text-blue-600 font-medium mb-1">🔑 关键词</div>
-                  <div className="text-sm text-blue-900">暂无关键词</div>
-                </div>
-              )}
-
-              {/* 答案区 */}
-              {showAnswer && (
-                <div className="rounded-md border p-4">
-                  <div className="text-xs text-muted-foreground font-medium mb-2">📖 完整答案</div>
-                  <div className="text-sm whitespace-pre-wrap leading-relaxed">
-                    {kp.content || kp.summary || '暂无内容'}
-                  </div>
-                </div>
-              )}
-
-              {!showHint && !showKeywords && !showAnswer && (
-                <div className="py-12 text-center text-sm text-muted-foreground">
-                  先尝试在脑中回忆答案，再点击下方按钮验证
-                </div>
-              )}
-
-              {/* 自评按钮组 */}
-              <div className="pt-4 border-t">
-                <div className="text-sm font-medium mb-3">自评结果</div>
-                <div className="grid grid-cols-2 md:grid-cols-4 gap-2 md:gap-3">
-                  <Button
-                    variant="destructive"
-                    onClick={() => handleSelfRating('again')}
-                    disabled={submitting}
-                    className="flex-col py-3 md:py-4 h-auto min-h-[56px]"
-                  >
-                    <span className="text-base font-semibold">不会</span>
-                    <span className="text-[11px] opacity-80">重新学习</span>
-                  </Button>
-                  <Button
-                    className="flex-col py-3 md:py-4 h-auto min-h-[56px] bg-amber-500 hover:bg-amber-600 text-white border-amber-600"
-                    onClick={() => handleSelfRating('hard')}
-                    disabled={submitting}
-                  >
-                    <span className="text-base font-semibold">模糊</span>
-                    <span className="text-[11px] opacity-80">加强记忆</span>
-                  </Button>
-                  <Button
-                    className="flex-col py-3 md:py-4 h-auto min-h-[56px] bg-emerald-500 hover:bg-emerald-600 text-white border-emerald-600"
-                    onClick={() => handleSelfRating('good')}
-                    disabled={submitting}
-                  >
-                    <span className="text-base font-semibold">基本掌握</span>
-                    <span className="text-[11px] opacity-80">正常间隔</span>
-                  </Button>
-                  <Button
-                    className="flex-col py-3 md:py-4 h-auto min-h-[56px] bg-green-700 hover:bg-green-800 text-white border-green-800"
-                    onClick={() => handleSelfRating('easy')}
-                    disabled={submitting}
-                  >
-                    <span className="text-base font-semibold">熟练</span>
-                    <span className="text-[11px] opacity-80">延长间隔</span>
-                  </Button>
-                </div>
-              </div>
-            </CardContent>
+            </div>
           </Card>
         </TabsContent>
 
-        {/* Tab 3: 关联真题 */}
+        {/* Tab 2: 关联真题 */}
         <TabsContent value="questions">
           <Card>
              <CardHeader className="flex-row items-center justify-between">
@@ -1295,7 +964,7 @@ const KnowledgePointDetailPage: React.FC = () => {
                                   {QUESTION_STATUS_LABEL[
                                     getQuestionStatus(q.answered, q.masteryScore)
                                   ]}
-                                </Badge>
+                                 </Badge>
                               </TableCell>
                               <TableCell
                                 className="text-sm"
@@ -1563,7 +1232,7 @@ const KnowledgePointDetailPage: React.FC = () => {
           </Card>
         </TabsContent>
 
-        {/* Tab 4: 复习历史 */}
+        {/* Tab 3: 复习历史 */}
         <TabsContent value="history">
           <Card>
             <CardHeader>

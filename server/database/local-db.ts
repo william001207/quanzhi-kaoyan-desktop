@@ -69,7 +69,7 @@ export function initializeDatabase(): Promise<void> {
 
 // 数据内容版本：线上题库内容（知识点卡片/题目等）有更新时递增。
 // 客户端检测到版本变化后执行增量内容同步（只更新内容字段，保留用户学习进度）。
-const DATA_VERSION = '2026-10-27.2'; // 修正 24 个知识点的大纲章节归属（颌面外 20、解剖 4）：旧库同一教材节点下大纲章节对错混杂，多数票会选错，改为以教材章号为硬约束重新定位
+const DATA_VERSION = '2026-10-28.1'; // 移除知识点 content/summary/keywords 三个死字段（全空且前端无展示入口），知识点内容统一走 card_data；同步/搜索/每日计划/review/data 相关读写一并清理
 
 async function ensureSchemaAndData(db: PGlite): Promise<void> {
   const schemaSql = await fs.readFile(
@@ -88,6 +88,23 @@ async function ensureSchemaAndData(db: PGlite): Promise<void> {
     );
   } catch (e) {
     console.warn('[local-db] 补列失败（可忽略）：', (e as Error).message);
+  }
+
+  // 迁移：删除知识点 content/summary/keywords 三列（2026-10-28）。
+  // 这三列从未写入数据（全空），前端也无展示入口，属死字段；彻底移除，
+  // 后续知识点内容统一走 card_data。用 IF EXISTS 保证幂等，老库新库都能安全执行。
+  try {
+    await db.exec(
+      'ALTER TABLE knowledge_point DROP COLUMN IF EXISTS content, DROP COLUMN IF EXISTS summary, DROP COLUMN IF EXISTS keywords;',
+    );
+  } catch (e) {
+    console.warn('[local-db] 删除知识点冗余列失败（可忽略）：', (e as Error).message);
+  }
+  // 若历史库存在 summary 的 gin 索引，一并删除（列删掉后该索引会失效报错）。
+  try {
+    await db.exec('DROP INDEX IF EXISTS idx_kp_summary_trgm;');
+  } catch (e) {
+    console.warn('[local-db] 删除 summary 索引失败（可忽略）：', (e as Error).message);
   }
 
   // 已导入过则跳过（幂等）
@@ -208,17 +225,16 @@ async function importData(db: PGlite) {
     }
     await db.query(
       `INSERT INTO knowledge_point (
-         id, subject_id, chapter_id, syllabus_item_id, title, content, summary, keywords,
+         id, subject_id, chapter_id, syllabus_item_id, title,
          requirement_level, importance_score, exam_frequency, mastery_score, status,
          first_learned_at, last_reviewed_at, next_review_at, review_stage,
          consecutive_correct, consecutive_wrong, total_review_count, total_question_count,
          correct_question_count, manually_pinned, card_data, is_weak_marked, weak_marked_at,
          weak_mark_reason, recall_mastery, question_mastery, answered_question_count
-       ) VALUES ($1,$2,$3,$4,$5,$6,$7,$8,$9,$10,$11,$12,$13,$14,$15,$16,$17,$18,$19,$20,$21,$22,$23,$24,$25,$26,$27,$28,$29,$30)
+       ) VALUES ($1,$2,$3,$4,$5,$6,$7,$8,$9,$10,$11,$12,$13,$14,$15,$16,$17,$18,$19,$20,$21,$22,$23,$24,$25,$26,$27)
        ON CONFLICT (id) DO NOTHING`,
       [
         kp.id, kp.subjectId, kp.chapterId, kp.syllabusItemId ?? null, kp.title,
-        kp.content ?? null, kp.summary ?? null, kp.keywords ?? [],
         kp.requirementLevel ?? 'unmarked', kp.importanceScore ?? 0, kp.examFrequency ?? 0,
         kp.masteryScore ?? 0, kp.status ?? 'not_started',
         iso(kp.firstLearnedAt), iso(kp.lastReviewedAt), iso(kp.nextReviewAt),
@@ -369,9 +385,6 @@ async function buildKpList(): Promise<any[]> {
           subjectId: k.subjectId ?? null,
           chapterId: k.chapterPaths?.examSyllabus?.[0]?.id ?? null,
           syllabusItemId: null,
-          content: null,
-          summary: null,
-          keywords: [],
           requirementLevel: 'unmarked',
           importanceScore: 0,
           examFrequency: 0,
@@ -447,17 +460,16 @@ async function syncBusinessContent(db: PGlite) {
     }
     await db.query(
       `INSERT INTO knowledge_point (
-         id, subject_id, chapter_id, syllabus_item_id, title, content, summary, keywords,
+         id, subject_id, chapter_id, syllabus_item_id, title,
          requirement_level, importance_score, exam_frequency, mastery_score, status,
          first_learned_at, last_reviewed_at, next_review_at, review_stage,
          consecutive_correct, consecutive_wrong, total_review_count, total_question_count,
          correct_question_count, manually_pinned, card_data, is_weak_marked, weak_marked_at,
          weak_mark_reason, recall_mastery, question_mastery, answered_question_count
-       ) VALUES ($1,$2,$3,$4,$5,$6,$7,$8,$9,$10,$11,$12,$13,$14,$15,$16,$17,$18,$19,$20,$21,$22,$23,$24,$25,$26,$27,$28,$29,$30)
+       ) VALUES ($1,$2,$3,$4,$5,$6,$7,$8,$9,$10,$11,$12,$13,$14,$15,$16,$17,$18,$19,$20,$21,$22,$23,$24,$25,$26,$27)
        ON CONFLICT (id) DO UPDATE SET
          subject_id = EXCLUDED.subject_id, chapter_id = EXCLUDED.chapter_id,
          syllabus_item_id = EXCLUDED.syllabus_item_id, title = EXCLUDED.title,
-         content = EXCLUDED.content, summary = EXCLUDED.summary, keywords = EXCLUDED.keywords,
          requirement_level = EXCLUDED.requirement_level,
          importance_score = EXCLUDED.importance_score, exam_frequency = EXCLUDED.exam_frequency,
          card_data = EXCLUDED.card_data
@@ -465,7 +477,6 @@ async function syncBusinessContent(db: PGlite) {
        `,
       [
         kp.id, kp.subjectId, kp.chapterId, kp.syllabusItemId ?? null, kp.title,
-        kp.content ?? null, kp.summary ?? null, kp.keywords ?? [],
         kp.requirementLevel ?? 'unmarked', kp.importanceScore ?? 0, kp.examFrequency ?? 0,
         kp.masteryScore ?? 0, kp.status ?? 'not_started',
         iso(kp.firstLearnedAt), iso(kp.lastReviewedAt), iso(kp.nextReviewAt),

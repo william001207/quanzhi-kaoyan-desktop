@@ -50,9 +50,6 @@ export interface CreateKnowledgePointData {
   subjectId: string;
   chapterId: string;
   title: string;
-  content?: string;
-  summary?: string;
-  keywords?: string[];
   requirementLevel?: string;
   importanceScore?: number;
   cardData?: KnowledgePointCardData;
@@ -91,9 +88,6 @@ export async function getReviewRecords(id: string): Promise<ReviewRecord[]> {
 
 export interface UpdateKnowledgePointData {
   title?: string;
-  content?: string;
-  summary?: string;
-  keywords?: string[];
   requirementLevel?: string;
   importanceScore?: number;
 }

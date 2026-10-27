@@ -73,12 +73,7 @@ export class KnowledgePointsService {
 
     const conditions = [];
     if (query.keyword)
-      conditions.push(
-        or(
-          ilike(knowledgePoint.title, `%${query.keyword}%`),
-          ilike(knowledgePoint.summary, `%${query.keyword}%`),
-        ),
-      );
+      conditions.push(ilike(knowledgePoint.title, `%${query.keyword}%`));
     if (query.subjectId) conditions.push(eq(knowledgePoint.subjectId, query.subjectId));
     if (query.status) conditions.push(eq(knowledgePoint.status, query.status));
     if (query.weakMarked !== undefined)
@@ -135,7 +130,6 @@ export class KnowledgePointsService {
         chapterId: knowledgePoint.chapterId,
         syllabusItemId: knowledgePoint.syllabusItemId,
         title: knowledgePoint.title,
-        keywords: knowledgePoint.keywords,
         requirementLevel: knowledgePoint.requirementLevel,
         importanceScore: knowledgePoint.importanceScore,
         examFrequency: knowledgePoint.examFrequency,
@@ -170,9 +164,6 @@ export class KnowledgePointsService {
 
     const items: KnowledgePoint[] = rows.map((row) => ({
       ...row,
-      summary: '',
-      content: '',
-      keywords: row.keywords ?? [],
       requirementLevel: row.requirementLevel as KnowledgePoint['requirementLevel'],
       status: row.status as KnowledgePoint['status'],
       firstLearnedAt: row.firstLearnedAt ? row.firstLearnedAt.toISOString() : null,
@@ -605,9 +596,6 @@ export class KnowledgePointsService {
         subjectId: dto.subjectId,
         chapterId: dto.chapterId,
         title,
-        content: dto.content ?? null,
-        summary: dto.summary ?? null,
-        keywords: dto.keywords ?? [],
         requirementLevel: dto.requirementLevel ?? 'unmarked',
         importanceScore: dto.importanceScore ?? 0,
         cardData: (dto.cardData ?? {}) as any,
@@ -622,8 +610,6 @@ export class KnowledgePointsService {
   async update(id: string, dto: UpdateKnowledgePointDto): Promise<KnowledgePoint> {
     const patch: Partial<typeof knowledgePoint.$inferInsert> = {};
     if (dto.title !== undefined) patch.title = dto.title;
-    if (dto.content !== undefined) patch.content = dto.content;
-    if (dto.summary !== undefined) patch.summary = dto.summary;
     if (dto.requirementLevel !== undefined)
       patch.requirementLevel = dto.requirementLevel;
     if (dto.masteryScore !== undefined) {
@@ -895,9 +881,6 @@ export class KnowledgePointsService {
       chapterId: row.chapterId,
       syllabusItemId: row.syllabusItemId,
       title: row.title,
-      content: row.content,
-      summary: row.summary,
-      keywords: row.keywords ?? [],
       requirementLevel: row.requirementLevel as KnowledgePoint['requirementLevel'],
       importanceScore: row.importanceScore,
       examFrequency: row.examFrequency,

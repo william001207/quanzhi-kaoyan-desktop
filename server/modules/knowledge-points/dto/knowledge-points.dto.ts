@@ -79,20 +79,6 @@ export class CreateKnowledgePointDto {
   title!: string;
 
   @IsOptional()
-  @IsString()
-  content?: string;
-
-  @IsOptional()
-  @IsString()
-  summary?: string;
-
-  @IsOptional()
-  @IsArray()
-  @ArrayMaxSize(50)
-  @IsString({ each: true })
-  keywords?: string[];
-
-  @IsOptional()
   @Type(() => String)
   @IsString()
   @IsIn(['master', 'familiar', 'understand', 'unmarked'])
@@ -114,14 +100,6 @@ export class UpdateKnowledgePointDto {
   @IsOptional()
   @IsString()
   title?: string;
-
-  @IsOptional()
-  @IsString()
-  content?: string;
-
-  @IsOptional()
-  @IsString()
-  summary?: string;
 
   @IsOptional()
   @Type(() => String)

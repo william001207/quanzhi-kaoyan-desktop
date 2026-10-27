@@ -43,7 +43,7 @@ const DATA_VERSION = '2026-10-27.1';   // 改成新值，否则应用不会触�
 触发条件只有一个：**新安装包的 `DATA_VERSION` 与本地库中记录的值不同**。
 日常启动时版本没变，什么都不做。
 
-对齐只 UPDATE 内容字段（`content` / `summary` / `keywords` / `card_data`），
+对齐只 UPDATE 内容字段（`title` / `card_data` / 章节归属等），
 不会触碰 `mastery_score` / `status` / `review_*` / `is_weak_marked` 等学习进度字段。
 
 > 只想加少量新题，不必动本目录：用应用内「数据导入」直接写本地库即可。

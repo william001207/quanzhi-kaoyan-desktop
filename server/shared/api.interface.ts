@@ -114,9 +114,6 @@ export interface KnowledgePoint {
   chapterId: string;
   syllabusItemId: string | null;
   title: string;
-  content: string | null;
-  summary: string | null;
-  keywords: string[];
   requirementLevel: RequirementLevel;
   importanceScore: number;
   examFrequency: number;

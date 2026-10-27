@@ -75,9 +75,7 @@ const CreateKnowledgePointDialog: React.FC<CreateKnowledgePointDialogProps> = ({
   const [chapterId, setChapterId] = useState('');
 
   const [title, setTitle] = useState('');
-  const [content, setContent] = useState('');
   const [summary, setSummary] = useState('');
-  const [keywordsText, setKeywordsText] = useState('');
   const [requirementLevel, setRequirementLevel] = useState<string>('unmarked');
   const [importanceScore, setImportanceScore] = useState<string>('50');
   const [blocks, setBlocks] = useState<CardBlockDraft[]>([emptyBlock()]);
@@ -90,9 +88,7 @@ const CreateKnowledgePointDialog: React.FC<CreateKnowledgePointDialogProps> = ({
     setChapterSource('exam_syllabus');
     setChapterId('');
     setTitle('');
-    setContent('');
     setSummary('');
-    setKeywordsText('');
     setRequirementLevel('unmarked');
     setImportanceScore('50');
     setBlocks([emptyBlock()]);
@@ -163,11 +159,6 @@ const CreateKnowledgePointDialog: React.FC<CreateKnowledgePointDialogProps> = ({
       return;
     }
 
-    const keywords = keywordsText
-      .split(/[,，、;；\s]+/)
-      .map((s) => s.trim())
-      .filter(Boolean);
-
     const validBlocks = blocks
       .map((b) => ({ title: b.title.trim(), content: b.content.trim() }))
       .filter((b) => b.title || b.content);
@@ -188,9 +179,6 @@ const CreateKnowledgePointDialog: React.FC<CreateKnowledgePointDialogProps> = ({
         subjectId,
         chapterId,
         title: title.trim(),
-        content: content.trim() || undefined,
-        summary: summary.trim() || undefined,
-        keywords,
         requirementLevel,
         importanceScore: Number(importanceScore) || 0,
         cardData: Object.keys(cardData).length > 0 ? cardData : undefined,
@@ -344,32 +332,13 @@ const CreateKnowledgePointDialog: React.FC<CreateKnowledgePointDialogProps> = ({
             </div>
           </div>
 
-          {/* 正文 */}
-          <div className="space-y-1.5">
-            <label className="text-sm font-medium">正文</label>
-            <Textarea
-              value={content}
-              onChange={(e) => setContent(e.target.value)}
-              placeholder="知识点的完整文字内容，可留空后到详情页再补"
-              rows={5}
-            />
-          </div>
-
-          {/* 摘要 / 关键词 */}
+          {/* 摘要 */}
           <div className="space-y-1.5">
             <label className="text-sm font-medium">摘要</label>
             <Input
               value={summary}
               onChange={(e) => setSummary(e.target.value)}
               placeholder="一句话概括，会显示在卡片摘要区"
-            />
-          </div>
-          <div className="space-y-1.5">
-            <label className="text-sm font-medium">关键词</label>
-            <Input
-              value={keywordsText}
-              onChange={(e) => setKeywordsText(e.target.value)}
-              placeholder="用逗号或空格分隔，如：牙本质 球间区 矿化"
             />
           </div>
 

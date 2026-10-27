@@ -57,12 +57,7 @@ export class SearchService {
               chapterId: knowledgePoint.chapterId,
             })
             .from(knowledgePoint)
-            .where(
-              or(
-                ilike(knowledgePoint.title, keyword),
-                ilike(knowledgePoint.summary, keyword),
-              ),
-            )
+            .where(ilike(knowledgePoint.title, keyword))
             .limit(KP_LIMIT),
           this.db
             .select({

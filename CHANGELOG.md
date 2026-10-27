@@ -2,6 +2,23 @@
 
 所有版本的变更记录。格式参考 [Keep a Changelog](https://keepachangelog.com/zh-CN/1.1.0/)，版本号遵循语义化版本。
 
+## [v1.3.2] - 2026-10-28
+
+### 变更
+- **知识点详情页重构**：合并为「主动回忆 / 关联真题 / 复习历史」三个标签，主动回忆页左上角可切换「知识卡片 / 思维导图」，右上角显示掌握状态，底部为四色自评按钮
+- **新增知识点思维导图**：以知识卡片要点生成横向树状导图，节点宽度随文字自动换行，支持折叠、拖拽平移、滚轮缩放、双击适应、全屏查看
+
+### 移除
+- **删除知识点编辑与卡片编辑功能**：详情页的编辑弹窗、卡片编辑器一并移除，知识点改为只读展示
+- **删除笔记视图与三个展示开关**：显示提示、显示关键词、显示答案三个按钮，以及查看大纲原文折叠不再保留
+
+### 数据治理（DATA_VERSION → 2026-10-28.1，启动自动同步）
+- **移除知识点正文/摘要/关键词三个字段**：三者在界面不可见且全空，已从数据库列、类型定义、同步逻辑、搜索逻辑中彻底移除；搜索改由标题匹配
+
+### 说明
+- 数据库表结构本次删除了三个字段列，覆盖安装时由迁移脚本自动处理，无需全替换，学习进度与错题记录均保留
+- 关联真题标签与顶部信息条未做改动
+
 ## [v1.3.1] - 2026-10-27
 
 ### 修复
@@ -343,7 +360,8 @@
 - 安装包文件名改为英文（ASCII），解决 GitHub 下载链接 404
 - dmg 标准布局：打开即见 app + Applications 快捷方式
 
-[unreleased]: https://github.com/william001207/quanzhi-kaoyan-desktop/compare/v1.3.1...HEAD
+[unreleased]: https://github.com/william001207/quanzhi-kaoyan-desktop/compare/v1.3.2...HEAD
+[v1.3.2]: https://github.com/william001207/quanzhi-kaoyan-desktop/compare/v1.3.1...v1.3.2
 [v1.3.1]: https://github.com/william001207/quanzhi-kaoyan-desktop/compare/v1.3.0...v1.3.1
 [v1.3.0]: https://github.com/william001207/quanzhi-kaoyan-desktop/compare/v1.2.5...v1.3.0
 [v1.2.5]: https://github.com/william001207/quanzhi-kaoyan-desktop/compare/v1.2.4...v1.2.5
