@@ -3,6 +3,16 @@
 > 任何人（或 AI）接手这个仓库前，请先读完这一页。
 > 仓库主人不写代码，请用**人能听懂的话**沟通。
 
+**其它文档在哪**
+
+| 想知道 | 看 |
+|---|---|
+| 怎么发一个版本（含推送、建 Release 的完整步骤） | `docs/发布新版本.md` |
+| Release 正文该写什么（按版本存好的原文） | `docs/Release正文.md` |
+| 改了哪些东西、怎么退回 | `docs/改动说明与回退.md` |
+| 每个版本改了什么 | `CHANGELOG.md` |
+| 项目是什么、怎么装、怎么用 | `README.md` |
+
 ## 一、最重要的一条：发版前必须确认
 
 **改完功能、推送新版本之前，必须先向仓库主人确认两件事：**
@@ -20,10 +30,10 @@ AI：这次改动如下，请确认：
     【版本号建议】1.0.1 → 1.1.0（新增功能，按语义化版本升次版本号）
     【影响】不影响已有数据，无需迁移
 
-    确认后我再执行：改版本号 → 提交 → 打 tag → 推送触发构建
+    确认后我再执行：改版本号 → 提交 → 打 tag，然后请你在 GitHub Desktop 推送
 
 主人：确认
-AI ：（此时才执行 npm version / git tag / git push）
+AI ：（此时才执行 npm version / git commit / git tag；**push 由主人点，见第八节**）
 ```
 
 **未经确认，不要 push、不要打 tag、不要发 Release。**
@@ -152,3 +162,76 @@ docs/                   发布手册、改动与回退说明
 - 用中文，用大白话。不要假设对方懂 TypeScript、git、命令行。
 - 需要主人动手时，**给可以直接复制粘贴的完整命令**，并说明成功时长什么样。
 - 报告问题先说「会不会影响他正常使用」，再说技术细节。
+
+---
+
+## 八、发版与推送：AI 只做本地，推送由主人做
+
+在沙盒 / 容器里 `git push` 会失败（`could not read Username`），仓库主人也**明确拒绝配置 SSH / PAT**。
+所以分工是固定的，不要试图自己推：
+
+| 谁 | 做什么 |
+|---|---|
+| AI | 改版本号 → 写 CHANGELOG 和 Release 正文 → `git add/commit` → `git tag vX.Y.Z`（只打本地 tag） |
+| 主人 | GitHub Desktop 点 **Push origin**（它不会推 tag）→ 网页建 Release（输入同名 tag，网页会据此创建 tag） |
+
+**顺序是死规则：先把 main 推上去，再去网页建 Release。**
+
+网页建 Release 时，会用「当时的 main」新建 tag。若 main 还没推，tag 就落在上一个提交上，
+CI 拿旧代码打包 —— v1.2.3 踩过：Release 正文写 1975 题，产物却是上一版的 dmg，
+连资产名都还是旧版本号。补救流程：删 Release（勾选同时删 tag）→ 确认 main 已推送 → 重新
+Draft release，输入同名 tag、重贴正文。
+
+**不要碰 git 历史**：不 `--amend`、不 `rebase`、不 `reset`。动历史前先跑
+`git rev-list --count origin/main..HEAD`，非 0 说明本地已被远端超越，此时只能做向前提交。
+
+---
+
+## 九、CHANGELOG 与 Release 正文是两套格式，不要混用
+
+`CHANGELOG.md` 给开发者看，Release 正文给使用者看，**格式完全不同**。
+
+**CHANGELOG.md**
+
+- 二级标题 `## [vx.y.z] - YYYY-MM-DD`；
+- 三级章节只用这几种：`### 新增` / `### 修复` / `### 变更` /
+  `### 数据治理（DATA_VERSION → xxx，启动自动同步）` / `### 说明` / `### 文档` / `### 性能`；
+- 每条一句话写完，`**特性名**` 开头 + 冒号 + 简述，不要写成长段落；
+- 引号一律用「」，**不要用 ASCII 直引号**；
+- 文件末尾同步补 Compare 链接，`[unreleased]` 指向最新版本。
+
+**Release 正文**（同一份原文要存进 `docs/Release正文.md` 对应版本小节）
+
+- 只有三种章节：`### 新功能` / `### 界面修复` / `### 数据治理（首次启动自动同步）`；
+- 题库规模放在数据治理小节最后一条；
+- **不写**版本号标题、不写日期、不写 Compare 链接。
+
+---
+
+## 十、改数据与数据库的规矩
+
+- **改数据必须同时改 `DATA_VERSION`**（`server/database/local-db.ts`），否则用户机器不触发同步。
+  例外：只动索引层不用改，索引层不参与启动同步。
+- **同步语义是 `INSERT ... ON CONFLICT (id) DO UPDATE`，没有 DELETE**：
+  从 `data-export/` 里删掉的条目，在已安装的用户机器上**永远残留**，不会消失。
+  也就是说「删内容」这个动作对用户无效，只能让他走全替换（会清空学习进度）。
+  所以要删条目之前，先确认是真要删，还是手滑。
+- **改完详情层必须跑一次 `python3 scripts/sync_index.py`**，原因见第五节。
+- **新增知识点**（这套约定是实测摸出来的，照做，别自己发明）：
+  - `chapterId` 指向 **`exam_syllabus`（考试大纲）章节**，不是 textbook；
+    大纲路径由运行时 `buildChapterPaths()` 逐级递归生成，不用单独存。
+  - `chapterPaths` **只放 `textbook` 键**（教材路径，根节点 = 科目名，必须带上）。
+  - `syllabusItem` / `syllabusItemId` 可以留 `null`（既有 371 条就是 null），
+    不要为了让字段好看去造一个假考点。
+  - 改完要同步改 `subjects.json` 的 `totalKnowledgePoints`，接口直接读这个字段。
+- **表结构**：不动 `schema.sql`。确实要加列，必须同时提供迁移脚本
+  （启动时检测列是否存在 → `ALTER TABLE ADD COLUMN`），否则存量用户启动即报错。
+
+---
+
+## 十一、前端两个必踩的坑
+
+- **Tailwind v4 的 CSS 变量任意值**：必须写 `w-(--my-var)`。写成 `w-[--my-var]` 会编译成
+  `width:--my-var` 这种无效 CSS，**静默失效**（导入页弹窗踩过，弹窗宽度退回默认 288px）。
+- **Radix ScrollArea 必须给确定高度**（如 `h-[340px] max-h-[45vh]`）。只给 `max-h-*` 不会产生内部滚动，
+  内容会把父容器撑爆、溢出遮挡相邻元素。需要「最长多高」的场景，改用普通 `div` + `max-h` + `overflow-y-auto`。
