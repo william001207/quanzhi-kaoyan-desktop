@@ -1,3 +1,4 @@
+import StudyAnswer from '@/components/knowledge-card/StudyAnswer';
 import { useEffect, useState, useCallback } from 'react';
 import {
   Dialog,
@@ -293,7 +294,7 @@ const QuestionBatchDialog: React.FC<QuestionBatchDialogProps> = ({
                   参考答案
                 </h3>
                 <div className="p-3 rounded-md bg-emerald-50 border border-emerald-200 text-sm whitespace-pre-wrap leading-relaxed">
-                  {question.answer || '暂无参考答案'}
+                  <StudyAnswer>{question.answer || '暂无参考答案'}</StudyAnswer>
                 </div>
               </div>
             )}

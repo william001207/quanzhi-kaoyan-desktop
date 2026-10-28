@@ -16,136 +16,8 @@ import {
 } from 'lucide-react';
 import type { KnowledgePointCardData } from '@shared/api.interface';
 
-/* ------------------------------------------------------------------ */
-/* 树模型                                                              */
-/* ------------------------------------------------------------------ */
-
-export interface MindNode {
-  id: string;
-  label: string;
-  kind: 'root' | 'branch' | 'leaf';
-  /** 分支上的小标注，如「流程」「总结」 */
-  badge?: string;
-  children: MindNode[];
-}
-
-/* ------------------------------------------------------------------ */
-/* 文本解析：把知识点内容拆成要点树                                     */
-/* ------------------------------------------------------------------ */
-
-const ITEM_PREFIX =
-  /^\s*(?:\*\*)?(?:\(\d+\)|\d+\s*[.、)．]|[①-⑳]|[-•·*])\s*(?:\*\*)?\s*/;
-
-/** 去掉 markdown 行内标记，只留可读文本 */
-function stripMd(input: string): string {
-  return input
-    .replace(/\*\*/g, '')
-    .replace(/`{1,3}/g, '')
-    .replace(/^\s*#{1,6}\s*/, '')
-    .replace(/\[([^\]]*)\]\([^)]*\)/g, '$1')
-    .trim();
-}
-
-/** 把一段内容拆成若干要点 */
-function splitPoints(content: string): string[] {
-  const text = (content || '').replace(/\r\n/g, '\n').trim();
-  if (!text) return [];
-
-  // 先按行拆
-  const lines = text
-    .split(/\n+/)
-    .map((s) => s.trim())
-    .filter(Boolean);
-
-  const out: string[] = [];
-  for (const line of lines) {
-    if (line.startsWith('|')) continue; // 表格行不进导图
-    // 一行里可能并排多个 ①②③
-    const chunks = line.split(/(?=[①-⑳])/g).filter((s) => s.trim());
-    for (const chunk of chunks) {
-      const cleaned = stripMd(chunk.replace(ITEM_PREFIX, '')).trim();
-      if (!cleaned) continue;
-      // 过长的单条再按句号拆，避免节点变成一大坨
-      if (cleaned.length > 70 && /[。；;]/.test(cleaned)) {
-        cleaned
-          .split(/(?<=[。；;])/)
-          .map((s) => s.trim())
-          .filter((s) => s.length > 3)
-          .forEach((s) => out.push(s));
-      } else {
-        out.push(cleaned);
-      }
-    }
-  }
-  return out;
-}
-
-/** 知识点卡片数据 → 要点树 */
-export function buildMindTree(
-  title: string,
-  data: KnowledgePointCardData | undefined,
-): MindNode {
-  const children: MindNode[] = [];
-
-  if (data?.blocks?.length) {
-    data.blocks.forEach((block, bi) => {
-      const points = splitPoints(block.content);
-      if (!points.length) return;
-      const label = stripMd(block.title || `要点 ${bi + 1}`);
-      const isLabelUseful = !!label && !/^(得分点|答题思路|要点|内容)/.test(label);
-      if (isLabelUseful) {
-        children.push({
-          id: `b${bi}`,
-          label,
-          kind: 'branch',
-          children: points.map((p, pi) => ({
-            id: `b${bi}-l${pi}`,
-            label: p,
-            kind: 'leaf' as const,
-            children: [],
-          })),
-        });
-      } else {
-        // 「得分点（上）」这类分组标题没有信息量，直接把要点提到上一层
-        points.forEach((p, pi) => {
-          children.push({
-            id: `b${bi}-l${pi}`,
-            label: p,
-            kind: 'leaf',
-            children: [],
-          });
-        });
-      }
-    });
-  }
-
-  if (data?.flowSteps?.length) {
-    children.push({
-      id: 'flow',
-      label: '流程',
-      kind: 'branch',
-      badge: '流程',
-      children: data.flowSteps.map((step, si) => ({
-        id: `flow-${si}`,
-        label: stripMd(step),
-        kind: 'leaf' as const,
-        children: [],
-      })),
-    });
-  }
-
-  if (data?.summary) {
-    children.push({
-      id: 'summary',
-      label: stripMd(data.summary),
-      kind: 'branch',
-      badge: '总结',
-      children: [],
-    });
-  }
-
-  return { id: 'root', label: title, kind: 'root', children };
-}
+import { buildMindTree, type MindNode } from './knowledge-tree';
+export { buildMindTree, type MindNode } from './knowledge-tree';
 
 /* ------------------------------------------------------------------ */
 /* 布局                                                                */
@@ -357,7 +229,7 @@ const KnowledgeMindMap: React.FC<KnowledgeMindMapProps> = ({
       (box.h - pad * 2) / height,
       1.2,
     );
-    const nextScale = Math.max(0.35, k);
+    const nextScale = Math.max(0.05, k);
     setView({
       x: (box.w - width * nextScale) / 2,
       y: (box.h - height * nextScale) / 2,
@@ -379,7 +251,7 @@ const KnowledgeMindMap: React.FC<KnowledgeMindMapProps> = ({
   /** 按钮缩放：围绕画布中心 */
   const zoomBy = (factor: number) => {
     setView((prev) => {
-      const k = Math.min(2, Math.max(0.3, prev.k * factor));
+      const k = Math.min(2, Math.max(0.05, prev.k * factor));
       const cx = box.w / 2;
       const cy = box.h / 2;
       return {
@@ -401,7 +273,7 @@ const KnowledgeMindMap: React.FC<KnowledgeMindMapProps> = ({
       const cx = e.clientX - rect.left;
       const cy = e.clientY - rect.top;
       setView((prev) => {
-        const k = Math.min(2, Math.max(0.3, prev.k * factor));
+        const k = Math.min(2, Math.max(0.05, prev.k * factor));
         return {
           x: cx - ((cx - prev.x) / prev.k) * k,
           y: cy - ((cy - prev.y) / prev.k) * k,

@@ -1,3 +1,4 @@
+import StudyAnswer from '@/components/knowledge-card/StudyAnswer';
 import { useEffect, useState } from 'react';
 import {
   Dialog,
@@ -1044,7 +1045,7 @@ const QuestionAnswerDialog: React.FC<QuestionAnswerDialogProps> = ({
                      </div>
                    ) : question.answer ? (
                      <div className="p-3 rounded-md bg-muted/50 border text-sm leading-relaxed whitespace-pre-wrap">
-                       {question.answer}
+                       <StudyAnswer>{question.answer}</StudyAnswer>
                      </div>
                     ) : (
                       <button

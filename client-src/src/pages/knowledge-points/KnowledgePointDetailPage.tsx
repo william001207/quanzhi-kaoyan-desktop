@@ -1,3 +1,4 @@
+import StudyAnswer from '@/components/knowledge-card/StudyAnswer';
 import React, { useEffect, useState, useCallback } from 'react';
 import { useParams, useNavigate, useSearchParams, Link } from 'react-router-dom';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
@@ -1033,7 +1034,7 @@ const KnowledgePointDetailPage: React.FC = () => {
                                      <div>
                                        <div className="text-xs text-muted-foreground mb-1">参考答案</div>
                                        <div className="text-sm whitespace-pre-wrap text-emerald-700 bg-emerald-50 rounded p-3 border border-emerald-100">
-                                         {q.answer}
+                                         <StudyAnswer>{q.answer}</StudyAnswer>
                                        </div>
                                      </div>
                                    )}
@@ -1182,7 +1183,7 @@ const KnowledgePointDetailPage: React.FC = () => {
                                  <div>
                                    <div className="text-xs text-muted-foreground mb-1">参考答案</div>
                                    <div className="text-sm whitespace-pre-wrap text-emerald-700 bg-emerald-50 rounded p-3 border border-emerald-100">
-                                     {q.answer}
+                                     <StudyAnswer>{q.answer}</StudyAnswer>
                                    </div>
                                  </div>
                                )}

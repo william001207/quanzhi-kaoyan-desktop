@@ -1,1 +1,0 @@
-import{Y as e,q as t}from"./dist-DwDcaCV8.js";import{Tn as n}from"./index-Dw9fLh1Z.js";e();var r=t();function i({to:e,children:t,target:i,...a}){return i===`_blank`?(0,r.jsx)(`a`,{href:e,target:`_blank`,rel:`noreferrer noopener`,...a,children:t}):(0,r.jsx)(n,{to:e,...a,children:t})}async function a(e){return window.confirm(e)}export{i as n,a as t};

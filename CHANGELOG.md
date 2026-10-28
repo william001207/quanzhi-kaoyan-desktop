@@ -2,6 +2,27 @@
 
 所有版本的变更记录。格式参考 [Keep a Changelog](https://keepachangelog.com/zh-CN/1.1.0/)，版本号遵循语义化版本。
 
+## [v1.3.3] - 2026-10-29
+
+### 变更
+- **知识卡片排版**：589张知识卡采用浅色纸张、宋体、米色分区、红色加粗、黄色重点和对照表。
+- **思维导图内容**：从同一张卡片生成导图，保留表格行列含义及多级列表，长图支持更小比例适应窗口。
+
+### 修复
+- **参考答案格式显示**：答题、关联真题、每日复习、模考和打印统一显示分点、加粗、重点及表格。
+
+### 数据治理（DATA_VERSION → 2026-10-28.2，启动自动同步）
+- **参考内容重整**：依据八本本地教材、当前Markdown背诵笔记及口外增值资料重整真题答案、得分点、总结卡片和589张知识卡。
+- **已确认题意校正**：第1285题按牙源性钙化上皮瘤比较，第113和698题纳入新增教材增值资料。
+- **资料不足条目**：第363、367、971题明确标为待资料复核，得分点留空，其余术语及关联范围复核记录随仓库保存。
+- **原有关系与进度**：1931道真题、589个知识点、2252条关联及原有编号对应保持，内容同步保留学习进度。
+
+### 文档
+- **来源与复核记录**：保存逐条教材页码、笔记指纹及行号、补充来源和独立数据库升级验证结果。
+
+### 说明
+- **本地打包验证**：应用打包、临时签名和ZIP校验通过，DMG因本机磁盘服务不可用未生成，正式安装包待GitHub Actions构建验证。
+
 ## [v1.3.2] - 2026-10-28
 
 ### 变更
@@ -360,7 +381,8 @@
 - 安装包文件名改为英文（ASCII），解决 GitHub 下载链接 404
 - dmg 标准布局：打开即见 app + Applications 快捷方式
 
-[unreleased]: https://github.com/william001207/quanzhi-kaoyan-desktop/compare/v1.3.2...HEAD
+[unreleased]: https://github.com/william001207/quanzhi-kaoyan-desktop/compare/v1.3.3...HEAD
+[v1.3.3]: https://github.com/william001207/quanzhi-kaoyan-desktop/compare/v1.3.2...v1.3.3
 [v1.3.2]: https://github.com/william001207/quanzhi-kaoyan-desktop/compare/v1.3.1...v1.3.2
 [v1.3.1]: https://github.com/william001207/quanzhi-kaoyan-desktop/compare/v1.3.0...v1.3.1
 [v1.3.0]: https://github.com/william001207/quanzhi-kaoyan-desktop/compare/v1.2.5...v1.3.0

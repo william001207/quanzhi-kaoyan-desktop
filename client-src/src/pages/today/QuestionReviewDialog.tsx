@@ -1,3 +1,4 @@
+import StudyAnswer from '@/components/knowledge-card/StudyAnswer';
 import React, { useEffect, useState } from 'react';
 import {
   Dialog,
@@ -179,7 +180,7 @@ export const QuestionReviewDialog: React.FC<QuestionReviewDialogProps> = ({
                     参考答案
                   </div>
                   <div className="rounded-md border bg-blue-50/40 p-3 text-sm whitespace-pre-wrap leading-relaxed">
-                    {q.answer ?? '（暂无参考答案）'}
+                    <StudyAnswer>{q.answer ?? '（暂无参考答案）'}</StudyAnswer>
                   </div>
                 </div>
 

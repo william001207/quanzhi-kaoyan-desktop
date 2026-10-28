@@ -1,3 +1,4 @@
+import StudyAnswer from '@/components/knowledge-card/StudyAnswer';
 import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import { useParams, useSearchParams } from 'react-router-dom';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
@@ -573,7 +574,7 @@ const MockExamPage: React.FC = () => {
                     </button>
                     {showAnswer && (
                       <div className="mt-2 p-3 rounded-md bg-emerald-50 border border-emerald-200 text-sm whitespace-pre-wrap leading-relaxed">
-                        {q.answer || '暂无参考答案'}
+                        <StudyAnswer>{q.answer || '暂无参考答案'}</StudyAnswer>
                       </div>
                     )}
                   </div>
@@ -810,7 +811,7 @@ const MockExamPage: React.FC = () => {
                       参考答案
                     </div>
                     <div className="p-4 rounded-md bg-emerald-50 border border-emerald-200 text-sm whitespace-pre-wrap leading-relaxed">
-                      {currentQuestion.answer || '暂无参考答案'}
+                      <StudyAnswer>{currentQuestion.answer || '暂无参考答案'}</StudyAnswer>
                     </div>
                   </div>
                 )}

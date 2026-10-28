@@ -1,3 +1,4 @@
+import StudyAnswer from '@/components/knowledge-card/StudyAnswer';
 import { useEffect, useMemo, useState } from 'react';
 import { createPortal } from 'react-dom';
 import { useParams, Link } from 'react-router-dom';
@@ -197,7 +198,7 @@ const PaperPrintPage: React.FC = () => {
                           参考答案
                         </div>
                         <div className="whitespace-pre-wrap text-sm leading-relaxed bg-muted/30 p-3 rounded">
-                          {q.answer || '暂无答案'}
+                          <StudyAnswer>{q.answer || '暂无答案'}</StudyAnswer>
                         </div>
                       </div>
 
