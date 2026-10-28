@@ -208,7 +208,7 @@ const PaperPrintPage: React.FC = () => {
                             考点总结
                           </div>
                           <div className="whitespace-pre-wrap text-sm leading-relaxed bg-muted/30 p-3 rounded">
-                            {q.cardData.summary}
+                            <StudyAnswer>{q.cardData.summary}</StudyAnswer>
                           </div>
                         </div>
                       )}

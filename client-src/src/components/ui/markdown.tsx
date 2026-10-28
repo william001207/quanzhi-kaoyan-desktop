@@ -3,6 +3,7 @@
 import * as React from 'react';
 import ReactMarkdown, { type Options } from 'react-markdown';
 import remarkGfm from 'remark-gfm';
+import { remarkStudyStrong } from '../knowledge-card/study-markdown';
 
 import { cn } from '@/lib/utils';
 
@@ -267,7 +268,7 @@ export function Markdown({
   return (
     <div className={cn('prose-kp max-w-none', className)}>
       <ReactMarkdown
-        remarkPlugins={[remarkGfm, ...(remarkPlugins ?? [])]}
+        remarkPlugins={[remarkGfm, remarkStudyStrong, ...(remarkPlugins ?? [])]}
         components={{ ...defaultComponents, ...components }}
         {...props}
       />
