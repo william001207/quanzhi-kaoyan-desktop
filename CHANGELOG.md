@@ -2,6 +2,15 @@
 
 所有版本的变更记录。格式参考 [Keep a Changelog](https://keepachangelog.com/zh-CN/1.1.0/)，版本号遵循语义化版本。
 
+## [v1.3.4] - 2026-10-29
+
+### 修复
+- **中文加粗显示**：修复参考答案和知识卡片中中文标点紧邻正文时加粗星号外露及相邻重点错配。
+- **打印考点总结**：统一按 Markdown 渲染考点总结。
+
+### 说明
+- **数据兼容**：仅更新显示逻辑，保留题库、编辑原文和学习记录，无需删除数据库。
+
 ## [v1.3.3] - 2026-10-29
 
 ### 变更
@@ -381,7 +390,7 @@
 - 安装包文件名改为英文（ASCII），解决 GitHub 下载链接 404
 - dmg 标准布局：打开即见 app + Applications 快捷方式
 
-[unreleased]: https://github.com/william001207/quanzhi-kaoyan-desktop/compare/v1.3.3...HEAD
+[unreleased]: https://github.com/william001207/quanzhi-kaoyan-desktop/compare/v1.3.4...HEAD
 [v1.3.3]: https://github.com/william001207/quanzhi-kaoyan-desktop/compare/v1.3.2...v1.3.3
 [v1.3.2]: https://github.com/william001207/quanzhi-kaoyan-desktop/compare/v1.3.1...v1.3.2
 [v1.3.1]: https://github.com/william001207/quanzhi-kaoyan-desktop/compare/v1.3.0...v1.3.1
@@ -407,3 +416,5 @@
 [v1.0.2]: https://github.com/william001207/quanzhi-kaoyan-desktop/compare/v1.0.1...v1.0.2
 [v1.0.1]: https://github.com/william001207/quanzhi-kaoyan-desktop/compare/v1.0.0...v1.0.1
 [v1.0.0]: https://github.com/william001207/quanzhi-kaoyan-desktop/releases/tag/v1.0.0
+
+[v1.3.4]: https://github.com/william001207/quanzhi-kaoyan-desktop/compare/v1.3.3...v1.3.4
