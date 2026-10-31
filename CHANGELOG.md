@@ -2,6 +2,14 @@
 
 所有版本的变更记录。格式参考 [Keep a Changelog](https://keepachangelog.com/zh-CN/1.1.0/)，版本号遵循语义化版本。
 
+## [v1.3.5] - 2026-10-31
+
+### 新增
+- **卡片与导图编辑**：知识点详情页「主动回忆」标签右上角新增「编辑」按钮，可在弹窗中修改核心总结、卡片区块（标题 / 英文副标题 / 内容）与梳理顺序，保存后知识卡片和思维导图即时同步更新。
+
+### 说明
+- **数据兼容**：仅修改本机卡片内容，保留题库、学习进度与关联关系，无需删除数据库。
+
 ## [v1.3.4] - 2026-10-29
 
 ### 修复
@@ -390,7 +398,8 @@
 - 安装包文件名改为英文（ASCII），解决 GitHub 下载链接 404
 - dmg 标准布局：打开即见 app + Applications 快捷方式
 
-[unreleased]: https://github.com/william001207/quanzhi-kaoyan-desktop/compare/v1.3.4...HEAD
+[unreleased]: https://github.com/william001207/quanzhi-kaoyan-desktop/compare/v1.3.5...HEAD
+[v1.3.5]: https://github.com/william001207/quanzhi-kaoyan-desktop/compare/v1.3.4...v1.3.5
 [v1.3.3]: https://github.com/william001207/quanzhi-kaoyan-desktop/compare/v1.3.2...v1.3.3
 [v1.3.2]: https://github.com/william001207/quanzhi-kaoyan-desktop/compare/v1.3.1...v1.3.2
 [v1.3.1]: https://github.com/william001207/quanzhi-kaoyan-desktop/compare/v1.3.0...v1.3.1

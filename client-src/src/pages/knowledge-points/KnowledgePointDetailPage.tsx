@@ -64,10 +64,12 @@ import {
   History,
   Flag,
   X,
+  Pencil,
 } from 'lucide-react';
 import { masteryColor, masteryTextColor, requirementBorderClass, formatDate, isOverdue, statusBadgeClass } from '@/utils/mastery';
 import KnowledgeCardView from '@/components/knowledge-card/KnowledgeCardView';
 import KnowledgeMindMap from '@/components/knowledge-card/KnowledgeMindMap';
+import EditKnowledgePointCardDialog from './EditKnowledgePointCardDialog';
 import type { KnowledgePointCardData } from '@shared/api.interface';
 import { LayoutGrid, ExternalLink, Layers, Network } from 'lucide-react';
 import { resolveAppUrl } from '@lark-apaas/client-toolkit/utils/resolveAppUrl';
@@ -234,6 +236,7 @@ const KnowledgePointDetailPage: React.FC = () => {
     return !!(data.flowSteps?.length || data.blocks?.length || data.summary);
   };
   const [recallView, setRecallView] = useState<RecallView>('mindmap');
+  const [editCardOpen, setEditCardOpen] = useState(false);
 
   useEffect(() => {
     if (!kp) return;
@@ -665,12 +668,23 @@ const KnowledgePointDetailPage: React.FC = () => {
                     思维导图
                   </button>
                 </div>
-                <Badge
-                  variant="outline"
-                  className={statusBadgeClass(kp.status) + ' text-xs flex-shrink-0'}
-                >
-                  {KP_STATUS_LABEL[kp.status]}
-                </Badge>
+                <div className="flex items-center gap-2 flex-shrink-0">
+                  <Button
+                    variant="outline"
+                    size="sm"
+                    onClick={() => setEditCardOpen(true)}
+                    className="h-7 px-2.5 text-xs"
+                  >
+                    <Pencil className="h-3.5 w-3.5 mr-1" />
+                    编辑
+                  </Button>
+                  <Badge
+                    variant="outline"
+                    className={statusBadgeClass(kp.status) + ' text-xs flex-shrink-0'}
+                  >
+                    {KP_STATUS_LABEL[kp.status]}
+                  </Badge>
+                </div>
               </div>
             </CardHeader>
 
@@ -1306,6 +1320,13 @@ const KnowledgePointDetailPage: React.FC = () => {
           </Card>
         </TabsContent>
       </Tabs>
+
+      <EditKnowledgePointCardDialog
+        open={editCardOpen}
+        onOpenChange={setEditCardOpen}
+        knowledgePoint={kp}
+        onSaved={(updated) => setKp(updated)}
+      />
     </div>
   );
 };
