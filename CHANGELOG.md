@@ -2,6 +2,15 @@
 
 所有版本的变更记录。格式参考 [Keep a Changelog](https://keepachangelog.com/zh-CN/1.1.0/)，版本号遵循语义化版本。
 
+## [v1.3.6] - 2026-11-01
+
+### 数据治理（DATA_VERSION → 2026-11-01.1，启动自动同步）
+- **参考内容文字校正**：修正3道真题和3张知识卡中9个字段的「可可靠」重复表达。
+- **复核记录**：保存新版笔记与题库目标词形扫描、重点主题教材核对的范围和边界。
+
+### 说明
+- **升级兼容**：保留学习进度及关联；内容同步会覆盖本机编辑的答案和卡片，升级前请导出自改内容。
+
 ## [v1.3.5] - 2026-10-31
 
 ### 新增
@@ -398,7 +407,7 @@
 - 安装包文件名改为英文（ASCII），解决 GitHub 下载链接 404
 - dmg 标准布局：打开即见 app + Applications 快捷方式
 
-[unreleased]: https://github.com/william001207/quanzhi-kaoyan-desktop/compare/v1.3.5...HEAD
+[unreleased]: https://github.com/william001207/quanzhi-kaoyan-desktop/compare/v1.3.6...HEAD
 [v1.3.5]: https://github.com/william001207/quanzhi-kaoyan-desktop/compare/v1.3.4...v1.3.5
 [v1.3.3]: https://github.com/william001207/quanzhi-kaoyan-desktop/compare/v1.3.2...v1.3.3
 [v1.3.2]: https://github.com/william001207/quanzhi-kaoyan-desktop/compare/v1.3.1...v1.3.2
@@ -427,3 +436,5 @@
 [v1.0.0]: https://github.com/william001207/quanzhi-kaoyan-desktop/releases/tag/v1.0.0
 
 [v1.3.4]: https://github.com/william001207/quanzhi-kaoyan-desktop/compare/v1.3.3...v1.3.4
+
+[v1.3.6]: https://github.com/william001207/quanzhi-kaoyan-desktop/compare/v1.3.5...v1.3.6
