@@ -2,6 +2,15 @@
 
 所有版本的变更记录。格式参考 [Keep a Changelog](https://keepachangelog.com/zh-CN/1.1.0/)，版本号遵循语义化版本。
 
+## [v1.4.1] - 2026-11-08
+
+### 修复
+- **菜单语言**：应用、编辑、显示、窗口、帮助及托盘菜单按系统首选语言显示，中文使用中文，其余语言暂回退英文。
+
+### 说明
+- **生效方式**：更改系统语言后需退出并重新打开应用；本次仅调整菜单，应用正文及检查更新弹窗仍为中文。
+- **数据兼容**：不修改题库及个人编辑保护逻辑，可覆盖安装，无需删除数据库。
+
 ## [v1.4.0] - 2026-11-08
 
 ### 新增
@@ -453,7 +462,7 @@
 - 安装包文件名改为英文（ASCII），解决 GitHub 下载链接 404
 - dmg 标准布局：打开即见 app + Applications 快捷方式
 
-[unreleased]: https://github.com/william001207/quanzhi-kaoyan-desktop/compare/v1.4.0...HEAD
+[unreleased]: https://github.com/william001207/quanzhi-kaoyan-desktop/compare/v1.4.1...HEAD
 [v1.3.5]: https://github.com/william001207/quanzhi-kaoyan-desktop/compare/v1.3.4...v1.3.5
 [v1.3.3]: https://github.com/william001207/quanzhi-kaoyan-desktop/compare/v1.3.2...v1.3.3
 [v1.3.2]: https://github.com/william001207/quanzhi-kaoyan-desktop/compare/v1.3.1...v1.3.2
@@ -490,3 +499,5 @@
 [v1.3.8]: https://github.com/william001207/quanzhi-kaoyan-desktop/compare/v1.3.7...v1.3.8
 
 [v1.4.0]: https://github.com/william001207/quanzhi-kaoyan-desktop/compare/v1.3.8...v1.4.0
+
+[v1.4.1]: https://github.com/william001207/quanzhi-kaoyan-desktop/compare/v1.4.0...v1.4.1

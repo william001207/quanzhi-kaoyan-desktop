@@ -1,3 +1,4 @@
+const { menuText, applicationMenu } = require('./menu-language');
 /**
  * 全职高手考研系统 —— Electron 主进程
  *
@@ -791,10 +792,10 @@ function createTray(dirs) {
   tray.setToolTip('全职高手考研系统');
   tray.setContextMenu(
     Menu.buildFromTemplate([
-      { label: '显示主窗口', click: showMainWindow },
-      { label: '检查更新…', click: checkForUpdates },
+      { label: menuText(app)('显示主窗口', 'Show Main Window'), click: showMainWindow },
+      { label: menuText(app)('检查更新…', 'Check for Updates…'), click: checkForUpdates },
       { type: 'separator' },
-      { label: '退出', click: () => app.quit() },
+      { label: menuText(app)('退出', 'Quit'), click: () => app.quit() },
     ]),
   );
   // 左键单击：恢复窗口（win 用户对托盘的第一预期）
@@ -816,19 +817,9 @@ if (!app.requestSingleInstanceLock()) {
   });
 
   app.whenReady().then(() => {
-    Menu.setApplicationMenu(Menu.buildFromTemplate([
-      ...(process.platform === 'darwin' ? [{label: app.name, submenu: [
-        {role:'about'}, {label:'检查更新…',click:checkForUpdates}, {type:'separator'}, {role:'services'},
-        {type:'separator'}, {role:'hide'}, {role:'hideOthers'}, {role:'unhide'}, {type:'separator'}, {role:'quit'},
-      ]}] : [{label:'应用',submenu:[{label:'检查更新…',click:checkForUpdates},{role:'quit'}]}]),
-      {role:'editMenu'}, {role:'viewMenu'}, {role:'windowMenu'},
-      {role:'help',label:'帮助',submenu:[
-        {label:'使用说明',click:()=>shell.openExternal('https://github.com/william001207/quanzhi-kaoyan-desktop#readme')},
-        {label:'版本更新说明',click:()=>shell.openExternal('https://github.com/william001207/quanzhi-kaoyan-desktop/releases')},
-        {type:'separator'},
-        {label:'问题反馈',click:()=>shell.openExternal('https://github.com/william001207/quanzhi-kaoyan-desktop/issues')},
-      ]},
-    ]));
+    Menu.setApplicationMenu(Menu.buildFromTemplate(applicationMenu({
+      app, platform: process.platform, checkForUpdates, openExternal: url => shell.openExternal(url),
+    })));
     const dirs = resolveDirs();
     // Windows：创建托盘（点红叉收到托盘，右键可退出）
     if (process.platform === 'win32') createTray(dirs);
