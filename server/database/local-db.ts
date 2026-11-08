@@ -1,3 +1,4 @@
+import { officialBaseline, seedContentBaseline, protectContentSync } from './content-protection';
 /* eslint-disable */
 /**
  * 本地嵌入式数据库（PGlite / WASM PostgreSQL）单例
@@ -113,6 +114,7 @@ async function ensureSchemaAndData(db: PGlite): Promise<void> {
   if (n === 0) {
     await importData(db);
     await setDataVersion(db);
+    await seedContentBaseline(db, await bundledBaseline());
     return;
   }
 
@@ -123,10 +125,13 @@ async function ensureSchemaAndData(db: PGlite): Promise<void> {
   const version = vr.rows?.[0]?.value ?? null;
   if (version !== DATA_VERSION) {
     console.log(`[local-db] 检测到数据版本变化（${version ?? '旧版'} → ${DATA_VERSION}），执行增量内容同步…`);
-    await syncBusinessContent(db);
-    await setDataVersion(db);
+    await db.transaction(async tx => {
+      await protectContentSync(tx, await bundledBaseline(), () => syncBusinessContent(tx as any));
+      await setDataVersion(tx as any);
+    });
     console.log('[local-db] 增量内容同步完成');
   }
+  await seedContentBaseline(db, await bundledBaseline());
 }
 
 /**
@@ -139,7 +144,9 @@ export async function syncContentFromDir(dir: string): Promise<void> {
   const prev = process.env.DATA_DIR;
   process.env.DATA_DIR = dir;
   try {
-    await syncBusinessContent(db);
+    await db.transaction(async tx => {
+      await protectContentSync(tx, await bundledBaseline(), () => syncBusinessContent(tx as any));
+    });
   } finally {
     if (prev === undefined) delete process.env.DATA_DIR;
     else process.env.DATA_DIR = prev;
@@ -166,6 +173,10 @@ const readJson = async (name: string) => {
   const raw = await fs.readFile(json(name), 'utf-8');
   return JSON.parse(raw);
 };
+
+async function bundledBaseline() {
+  return officialBaseline(await readJson('exam_question_details.json'), await readJson('knowledge_point_details.json'));
+}
 
 const iso = (v: any): string | null =>
   v == null || v === '' ? null : v instanceof Date ? v.toISOString() : String(v);

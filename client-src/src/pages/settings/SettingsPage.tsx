@@ -916,7 +916,7 @@ const SettingsPage: React.FC = () => {
               选择之前「导出内容数据」生成的 4 个 JSON 文件（subjects、
               chapter_trees、knowledge_point_details、exam_question_details），
               选了 mock_templates.json 的话试卷模板也会一并同步。
-              导入后题库内容更新为文件版本，只更新内容，不影响学习进度。
+              导入时更新未自行修改的内容，保留个人编辑和学习进度。
             </p>
           </CardHeader>
           <CardContent className="space-y-3">

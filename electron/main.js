@@ -8,6 +8,7 @@
  * 4. 数据目录持久化在系统用户数据目录（userData/pglite-data）
  */
 const { app, BrowserWindow, shell, dialog, Tray, Menu } = require('electron');
+const checkForUpdates = require('./check-updates').createUpdateChecker({ app, dialog, shell });
 const { spawn, execFile } = require('child_process');
 const path = require('path');
 const fs = require('fs');
@@ -791,6 +792,7 @@ function createTray(dirs) {
   tray.setContextMenu(
     Menu.buildFromTemplate([
       { label: '显示主窗口', click: showMainWindow },
+      { label: '检查更新…', click: checkForUpdates },
       { type: 'separator' },
       { label: '退出', click: () => app.quit() },
     ]),
@@ -814,6 +816,19 @@ if (!app.requestSingleInstanceLock()) {
   });
 
   app.whenReady().then(() => {
+    Menu.setApplicationMenu(Menu.buildFromTemplate([
+      ...(process.platform === 'darwin' ? [{label: app.name, submenu: [
+        {role:'about'}, {label:'检查更新…',click:checkForUpdates}, {type:'separator'}, {role:'services'},
+        {type:'separator'}, {role:'hide'}, {role:'hideOthers'}, {role:'unhide'}, {type:'separator'}, {role:'quit'},
+      ]}] : [{label:'应用',submenu:[{label:'检查更新…',click:checkForUpdates},{role:'quit'}]}]),
+      {role:'editMenu'}, {role:'viewMenu'}, {role:'windowMenu'},
+      {role:'help',label:'帮助',submenu:[
+        {label:'使用说明',click:()=>shell.openExternal('https://github.com/william001207/quanzhi-kaoyan-desktop#readme')},
+        {label:'版本更新说明',click:()=>shell.openExternal('https://github.com/william001207/quanzhi-kaoyan-desktop/releases')},
+        {type:'separator'},
+        {label:'问题反馈',click:()=>shell.openExternal('https://github.com/william001207/quanzhi-kaoyan-desktop/issues')},
+      ]},
+    ]));
     const dirs = resolveDirs();
     // Windows：创建托盘（点红叉收到托盘，右键可退出）
     if (process.platform === 'win32') createTray(dirs);

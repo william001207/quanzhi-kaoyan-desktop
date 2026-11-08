@@ -2,6 +2,24 @@
 
 所有版本的变更记录。格式参考 [Keep a Changelog](https://keepachangelog.com/zh-CN/1.1.0/)，版本号遵循语义化版本。
 
+## [v1.4.0] - 2026-11-08
+
+### 新增
+- **个人编辑保护**：升级及内容导入按官方基线逐字段比较，保留个人编辑和真题关联，未改内容接收更新。
+- **检查更新**：Mac软件名菜单和Windows托盘菜单支持检查正式发布版本、查看说明并打开下载页。
+- **帮助菜单**：提供使用说明、版本更新说明和问题反馈入口。
+
+### 修复
+- **内容同步事务**：内容更新、个人编辑恢复及基线写入统一提交，失败整体回退。
+- **DMG颜色兼容**：背景色使用打包工具支持的小写十六进制格式，并明确Python解释器路径。
+
+### 变更
+- **DMG布局**：应用图标固定在左侧、Applications在右侧，采用浅灰蓝背景和统一窗口尺寸。
+
+### 说明
+- **升级兼容**：可覆盖安装，无需删除数据库；旧库缺少历史基线时保守保留现有内容，无法恢复此前已被覆盖的编辑。
+- **内容版本**：题库与DATA_VERSION保持不变，不主动触发全量内容更新。
+
 ## [v1.3.8] - 2026-11-08
 
 ### 修复
@@ -435,7 +453,7 @@
 - 安装包文件名改为英文（ASCII），解决 GitHub 下载链接 404
 - dmg 标准布局：打开即见 app + Applications 快捷方式
 
-[unreleased]: https://github.com/william001207/quanzhi-kaoyan-desktop/compare/v1.3.8...HEAD
+[unreleased]: https://github.com/william001207/quanzhi-kaoyan-desktop/compare/v1.4.0...HEAD
 [v1.3.5]: https://github.com/william001207/quanzhi-kaoyan-desktop/compare/v1.3.4...v1.3.5
 [v1.3.3]: https://github.com/william001207/quanzhi-kaoyan-desktop/compare/v1.3.2...v1.3.3
 [v1.3.2]: https://github.com/william001207/quanzhi-kaoyan-desktop/compare/v1.3.1...v1.3.2
@@ -470,3 +488,5 @@
 [v1.3.7]: https://github.com/william001207/quanzhi-kaoyan-desktop/compare/v1.3.6...v1.3.7
 
 [v1.3.8]: https://github.com/william001207/quanzhi-kaoyan-desktop/compare/v1.3.7...v1.3.8
+
+[v1.4.0]: https://github.com/william001207/quanzhi-kaoyan-desktop/compare/v1.3.8...v1.4.0

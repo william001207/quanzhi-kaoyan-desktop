@@ -247,3 +247,6 @@ Draft release，输入同名 tag、重贴正文。
   `width:--my-var` 这种无效 CSS，**静默失效**（导入页弹窗踩过，弹窗宽度退回默认 288px）。
 - **Radix ScrollArea 必须给确定高度**（如 `h-[340px] max-h-[45vh]`）。只给 `max-h-*` 不会产生内部滚动，
   内容会把父容器撑爆、溢出遮挡相邻元素。需要「最长多高」的场景，改用普通 `div` + `max-h` + `overflow-y-auto`。
+
+## 个人编辑保护（v1.4.0）
+启动升级和设置页内容导入通过content-protection.ts比较app_meta中的官方内容基线，逐字段保留个人修改及真题关联，整次同步必须在事务中完成。不得绕过保护直接调用syncBusinessContent。无历史基线时保守保留已有内容；DATA_VERSION不变也要补建基线。检查更新仅打开固定仓库正式发布页，不自动下载安装。

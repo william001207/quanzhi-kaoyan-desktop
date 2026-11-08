@@ -77,6 +77,14 @@ rm -rf release
 
 case "$PLATFORM" in
   mac)
+    # Explicit interpreter avoids dmg-builder hiding a Python 3 error behind
+    # a failed fallback lookup for the obsolete `python` command.
+    if [ -z "${PYTHON_PATH:-}" ]; then
+      PYTHON_PATH=$(command -v python3) || die "DMG布局需要Python 3，请安装Python 3.11或设置PYTHON_PATH"
+    fi
+    export PYTHON_PATH
+    "$PYTHON_PATH" --version
+
     # 1) 先出 .app（不签名）
     CSC_IDENTITY_AUTO_DISCOVERY=false npx electron-builder --mac dir \
       --config build/electron-builder.yml --publish never
@@ -91,15 +99,8 @@ case "$PLATFORM" in
 
     # 3) 封装成 dmg（拖拽安装布局）
     step "制作 dmg"
-    DMG="release/quanzhi-kaoyan-${VERSION}-mac-${ARCH}.dmg"
-    rm -rf release/dmg-staging
-    mkdir -p release/dmg-staging
-    cp -R "$APP_PATH" release/dmg-staging/
-    ln -s /Applications release/dmg-staging/Applications
-    hdiutil create -volname "全职高手考研系统" -srcfolder release/dmg-staging \
-      -ov -format UDZO "$DMG"
-    # dmg 已生成，这份临时副本没用了。留着会让 Spotlight 搜出多个同名应用
-    rm -rf release/dmg-staging
+    CSC_IDENTITY_AUTO_DISCOVERY=false npx electron-builder --mac dmg \
+      --prepackaged "$APP_PATH" --config build/electron-builder.yml --publish never
     ;;
   win)
     npx electron-builder --win --config build/electron-builder.yml --publish never
