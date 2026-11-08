@@ -1,3 +1,4 @@
+import { groupQuestions } from '../../common/utils/question-grouping';
 import { Inject, Injectable, NotFoundException, ConflictException, BadRequestException } from '@nestjs/common';
 import { validateUuid } from '../../common/utils/uuid-validate';
 import { and, desc, eq, count, sql, inArray, ilike, or, type SQL } from 'drizzle-orm';
@@ -120,9 +121,9 @@ export class ExamQuestionsService {
     // avoid multiplying counts when a question has several links/review records.
     const metadata = ids.length ? await this.db.select({
       questionId: examQuestion.id,
-      frequency: sql<number>`(SELECT MAX(kp.exam_frequency) FROM question_knowledge_point qkp JOIN knowledge_point kp ON kp.id = qkp.knowledge_point_id WHERE qkp.question_id = ${examQuestion.id})`,
-      wrongCount: sql<number>`(SELECT SUM(wq.wrong_count) FROM wrong_question wq WHERE wq.question_id = ${examQuestion.id})`,
-      reviewedAt: sql<string | null>`(SELECT MAX(rr.reviewed_at) FROM review_record rr WHERE rr.question_id = ${examQuestion.id} AND rr.review_type = 'question')`,
+      frequency: sql<number>`(SELECT MAX(kp.exam_frequency) FROM question_knowledge_point qkp JOIN knowledge_point kp ON kp.id = qkp.knowledge_point_id WHERE qkp.question_id = "exam_question"."id")`,
+      wrongCount: sql<number>`(SELECT SUM(wq.wrong_count) FROM wrong_question wq WHERE wq.question_id = "exam_question"."id")`,
+      reviewedAt: sql<string | null>`(SELECT MAX(rr.reviewed_at) FROM review_record rr WHERE rr.question_id = "exam_question"."id" AND rr.review_type = 'question')`,
     }).from(examQuestion).where(inArray(examQuestion.id, ids)) : [];
     const freqMap = new Map<string, number>();
     const wrongMap = new Map<string, number>();
@@ -465,7 +466,7 @@ export class ExamQuestionsService {
     const whereClauses: SQL[] = [];
 
     if (query.subjectId) {
-      whereClauses.push(sql`kp.subject_id = ${query.subjectId}`);
+      whereClauses.push(sql`eq.subject_id = ${query.subjectId}`);
     }
     if (query.source) {
       whereClauses.push(sql`eq.source = ${query.source}`);
@@ -483,40 +484,22 @@ export class ExamQuestionsService {
       ? sql`WHERE ${sql.join(whereClauses, sql` AND `)}`
       : sql``;
 
-    const totalRows = await this.db.execute(sql<{ count: number }>`
-      SELECT COUNT(*)::int AS count
-      FROM exam_question eq
-      LEFT JOIN question_knowledge_point qkp ON eq.id = qkp.question_id
-      LEFT JOIN knowledge_point kp ON qkp.knowledge_point_id = kp.id
-      ${whereSql}
-    `);
-    const total = Number(totalRows[0]?.count ?? 0);
-
-    const rows = await this.db.execute(sql<{
-      id: string;
-      year: number;
-      subject_id: string;
-      question_type: string;
-      question_text: string;
-      source: string | null;
-      difficulty: number;
-      answered: boolean;
-      mastery_score: number;
-      answer_count: number;
-      frequency: number;
-     }>`
-       SELECT eq.id, eq.year, eq.subject_id, eq.question_type, eq.question_text, eq.source, eq.difficulty,
-               eq.answered AS answered, eq.mastery_score AS mastery_score,
-               eq.answer_count AS answer_count,
-               COUNT(qkp.knowledge_point_id)::int AS frequency
-      FROM exam_question eq
-      LEFT JOIN question_knowledge_point qkp ON eq.id = qkp.question_id
-      LEFT JOIN knowledge_point kp ON qkp.knowledge_point_id = kp.id
-      ${whereSql}
-      GROUP BY eq.id
-      ORDER BY frequency DESC, eq.year DESC, eq.id DESC
-      LIMIT ${pageSize} OFFSET ${(page - 1) * pageSize}
-    `);
+    // Filter actual questions, then group before counting and paging. No link join:
+    // a question linked to several knowledge points still contributes once.
+    const candidates = await this.db.execute(sql<{
+      id: string; year: number; subject_id: string; question_type: string;
+      question_text: string; source: string | null; difficulty: number;
+      answered: boolean; mastery_score: number; answer_count: number;
+    }>`SELECT eq.id, eq.year, eq.subject_id, eq.question_type, eq.question_text,
+       eq.source, eq.difficulty, eq.answered, eq.mastery_score, eq.answer_count
+       FROM exam_question eq ${whereSql}`);
+    const groups = groupQuestions(candidates as any[]);
+    const total = groups.length;
+    const rows = groups.slice((page - 1) * pageSize, page * pageSize).map(group => ({
+      ...group[0], frequency: group.length,
+      occurrences: group.map(q => ({ id: q.id, year: q.year, source: q.source,
+        questionText: q.question_text, questionType: q.question_type })),
+    }));
 
     const ids = rows.map((r) => r.id);
     const subjectMap = new Map<string, string>();
@@ -571,6 +554,7 @@ export class ExamQuestionsService {
        mastery_score: number;
        answer_count: number;
        frequency: number;
+       occurrences: HighFreqQuestion['occurrences'];
       }>).map(
        (row, index): HighFreqQuestion => ({
          rank: (page - 1) * pageSize + index + 1,
@@ -586,6 +570,7 @@ export class ExamQuestionsService {
          masteryScore: Number(row.mastery_score) || 0,
          answerCount: Number(row.answer_count) || 0,
          frequency: Number(row.frequency),
+         occurrences: row.occurrences,
          knowledgePoints: kpMap.get(row.id) ?? [],
        }),
      );

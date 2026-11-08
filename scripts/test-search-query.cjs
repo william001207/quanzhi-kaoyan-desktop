@@ -10,7 +10,7 @@ const fs=require('node:fs');const assert=require('node:assert/strict');
  INSERT INTO review_record SELECT id,'2026-11-01','question' FROM exam_question WHERE id%2=0;INSERT INTO review_record SELECT id,'2026-11-08','knowledge_point' FROM exam_question;
  CREATE INDEX ON question_knowledge_point(question_id);CREATE INDEX ON wrong_question(question_id);CREATE INDEX ON review_record(question_id);`);
  const source=fs.readFileSync('server/modules/exam-questions/exam-questions.service.ts','utf8');
- const scalars=[...source.matchAll(/(?:frequency|wrongCount|reviewedAt): sql<[^>]+>`([^`]+)`/g)].slice(0,3).map(m=>m[1].replaceAll('${examQuestion.id}','eq.id'));
+ const scalars=[...source.matchAll(/(?:frequency|wrongCount|reviewedAt): sql<[^>]+>`([^`]+)`/g)].slice(0,3).map(m=>m[1].replaceAll('${examQuestion.id}','eq.id').replaceAll('"exam_question"."id"','eq.id'));
  assert.equal(scalars.length,3);
  const combined=`SELECT eq.id,${scalars[0]} AS frequency,${scalars[1]} AS wrong_count,${scalars[2]} AS reviewed_at FROM exam_question eq WHERE eq.id<=20 ORDER BY eq.id`;
  const prior=[`SELECT q.question_id,MAX(k.exam_frequency) v FROM question_knowledge_point q JOIN knowledge_point k ON q.knowledge_point_id=k.id WHERE q.question_id<=20 GROUP BY q.question_id`,`SELECT question_id,SUM(wrong_count) v FROM wrong_question WHERE question_id<=20 GROUP BY question_id`,`SELECT question_id,MAX(reviewed_at) v FROM review_record WHERE question_id<=20 AND review_type='question' GROUP BY question_id`];

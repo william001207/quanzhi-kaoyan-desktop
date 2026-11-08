@@ -561,6 +561,7 @@ export interface HighFreqItem {
 }
 
 export interface HighFreqQuestion {
+  occurrences: Array<{ id: string; year: number; source: string | null; questionText: string; questionType: string }>;
   rank: number;
   id: string;
   year: number;

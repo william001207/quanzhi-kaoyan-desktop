@@ -1419,7 +1419,7 @@ const QuestionsPage: React.FC = () => {
                  </div>
                </div>
                 <div className="text-xs text-muted-foreground mt-4 pt-4 border-t">
-                  共 {highFreqQuestionsTotal} 道高频真题
+                  共 {highFreqQuestionsTotal} 组考题（按所选条件统计出现次数）
                 </div>
              </CardContent>
            </Card>
@@ -1493,6 +1493,7 @@ const QuestionsPage: React.FC = () => {
                                       }
                                     </Badge>
                                   </div>
+                                  <QuestionOccurrences occurrences={q.occurrences} onOpen={id => { setSelectedQuestionId(id); setDialogOpen(true); }} />
                                   {q.knowledgePoints && q.knowledgePoints.length > 0 && (
                                     <div className="mt-1 flex flex-wrap gap-1">
                                       {q.knowledgePoints.slice(0, 2).map((kp) => (
@@ -1606,6 +1607,7 @@ const QuestionsPage: React.FC = () => {
                                    {q.answerCount > 0 ? `已答${q.answerCount}次` : '未答'}
                                  </span>
                                </div>
+                              <QuestionOccurrences occurrences={q.occurrences} onOpen={id => { setSelectedQuestionId(id); setDialogOpen(true); }} />
                               {q.knowledgePoints && q.knowledgePoints.length > 0 && (
                                 <div className="flex flex-wrap gap-1">
                                   {q.knowledgePoints.slice(0, 2).map((kp) => (
@@ -1949,5 +1951,22 @@ const QuestionsPage: React.FC = () => {
     </div>
   );
 };
+
+function QuestionOccurrences({ occurrences, onOpen }: {
+  occurrences: Array<{id: string; year: number; source: string | null; questionText: string}>;
+  onOpen: (id: string) => void;
+}) {
+  if (!occurrences?.length) return null;
+  return <details className="mt-2 text-xs" onClick={e => e.stopPropagation()}>
+    <summary className="cursor-pointer text-primary">查看原题（{occurrences.length}条）</summary>
+    <div className="mt-1 max-h-48 overflow-y-auto space-y-1">
+      {occurrences.map(item => <button type="button" key={item.id}
+        className="block w-full text-left rounded p-2 hover:bg-muted"
+        onClick={() => onOpen(item.id)}>
+        {item.year} · {item.source || '未知院校'} · {item.questionText}
+      </button>)}
+    </div>
+  </details>;
+}
 
 export default QuestionsPage;

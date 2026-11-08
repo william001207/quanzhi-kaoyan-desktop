@@ -2,6 +2,19 @@
 
 所有版本的变更记录。格式参考 [Keep a Changelog](https://keepachangelog.com/zh-CN/1.1.0/)，版本号遵循语义化版本。
 
+## [v1.3.8] - 2026-11-08
+
+### 修复
+- **全部真题加载**：修正合并查询中的字段歧义，恢复列表、搜索与翻页。
+- **真题高频榜**：按考题内容归组，累计原始真题出现次数，修正关联数误作考频及总数重复问题。
+
+### 新增
+- **组内原题查看**：支持展开查看各年份、院校和原题，并进入对应题目作答。
+
+### 说明
+- **合并边界**：处理常见提问形式及已核对的同义表述，不按模糊相似度自动合并；其他同义题仍可能分开。
+- **数据兼容**：知识点高频榜及原始题库不变，保留独立作答记录，无需删除数据库。
+
 ## [v1.3.7] - 2026-11-08
 
 ### 修复
@@ -422,7 +435,7 @@
 - 安装包文件名改为英文（ASCII），解决 GitHub 下载链接 404
 - dmg 标准布局：打开即见 app + Applications 快捷方式
 
-[unreleased]: https://github.com/william001207/quanzhi-kaoyan-desktop/compare/v1.3.7...HEAD
+[unreleased]: https://github.com/william001207/quanzhi-kaoyan-desktop/compare/v1.3.8...HEAD
 [v1.3.5]: https://github.com/william001207/quanzhi-kaoyan-desktop/compare/v1.3.4...v1.3.5
 [v1.3.3]: https://github.com/william001207/quanzhi-kaoyan-desktop/compare/v1.3.2...v1.3.3
 [v1.3.2]: https://github.com/william001207/quanzhi-kaoyan-desktop/compare/v1.3.1...v1.3.2
@@ -455,3 +468,5 @@
 [v1.3.6]: https://github.com/william001207/quanzhi-kaoyan-desktop/compare/v1.3.5...v1.3.6
 
 [v1.3.7]: https://github.com/william001207/quanzhi-kaoyan-desktop/compare/v1.3.6...v1.3.7
+
+[v1.3.8]: https://github.com/william001207/quanzhi-kaoyan-desktop/compare/v1.3.7...v1.3.8
