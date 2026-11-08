@@ -1,4 +1,4 @@
-import { useEffect, useState, useCallback, useMemo } from 'react';
+import { useEffect, useState, useCallback, useMemo, useRef } from 'react';
 import {
   Card,
   CardContent,
@@ -10,7 +10,7 @@ import {
   SelectTrigger,
   SelectValue,
 } from '@/components/ui/select';
-import { Input } from '@/components/ui/input';
+import { SearchInput } from '@/components/search/SearchInput';
 import { Skeleton } from '@/components/ui/skeleton';
 import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
@@ -138,8 +138,13 @@ const KnowledgePointsPage: React.FC = () => {
     load();
   }, []);
 
+  const requestId = useRef(0);
+  const [listReady, setListReady] = useState(false);
+  const [highFreqReady, setHighFreqReady] = useState(false);
+
   // 知识点列表加载
   const load = useCallback(async () => {
+     const id = ++requestId.current;
      setLoading(true);
      try {
        const result = await api.knowledgePoints.list({
@@ -152,40 +157,23 @@ const KnowledgePointsPage: React.FC = () => {
          page,
          pageSize: PAGE_SIZE,
        });
+       if (id !== requestId.current) return;
        setKps(result.items);
        setTotal(result.total);
      } catch (err) {
+       if (id !== requestId.current) return;
        logger.error('加载知识点失败', err);
        toast.error('加载知识点失败');
      } finally {
-       setLoading(false);
+       if (id === requestId.current) { setLoading(false); setListReady(true); }
      }
    }, [subjectId, status, keyword, weakMarkedFilter, page, reloadToken]);
 
   useEffect(() => {
     if (kpTab !== 'list') return;
     load();
+    return () => { ++requestId.current; };
   }, [load, kpTab]);
-
-  const handleSearch = () => {
-    setKeyword(searchInput.trim());
-    setPage(1);
-  };
-
-  const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const val = e.target.value;
-    setSearchInput(val);
-    if (val === '') {
-      setKeyword('');
-      setPage(1);
-    }
-  };
-
-  const handleKeyDown = (e: React.KeyboardEvent<HTMLInputElement>) => {
-     if (e.key === 'Enter') {
-       handleSearch();
-     }
-   };
 
   const toggleWeakMark = async (id: string, isCurrentlyMarked: boolean) => {
     setTogglingIds((prev) => new Set(prev).add(id));
@@ -213,17 +201,10 @@ const KnowledgePointsPage: React.FC = () => {
     }
   };
 
-  // 高频榜搜索防抖
-  useEffect(() => {
-    const timer = setTimeout(() => {
-      setDebouncedHighFreqKeyword(highFreqKeyword);
-    }, 300);
-    return () => clearTimeout(timer);
-  }, [highFreqKeyword]);
-
   // 高频榜：知识点榜
   useEffect(() => {
     if (kpTab !== 'high-freq') return;
+    let active = true;
     const load = async () => {
       setHighFreqLoading(true);
       try {
@@ -234,15 +215,18 @@ const KnowledgePointsPage: React.FC = () => {
           keyword: debouncedHighFreqKeyword || undefined,
           limit: 30,
         });
+        if (!active) return;
         setHighFreqItems(result);
       } catch (err) {
+        if (!active) return;
         logger.error('加载高频榜失败', err);
         toast.error('加载高频榜失败');
       } finally {
-        setHighFreqLoading(false);
+        if (active) { setHighFreqLoading(false); setHighFreqReady(true); }
       }
     };
     load();
+    return () => { active = false; };
   }, [
     kpTab,
     highFreqSubjectId,
@@ -257,6 +241,7 @@ const KnowledgePointsPage: React.FC = () => {
 
   return (
     <div className="p-3 md:p-6">
+      <div role="status" aria-live="polite" className="h-5 text-xs text-muted-foreground">{(kpTab === "list" ? loading && listReady : highFreqLoading && highFreqReady) ? "正在更新搜索结果…" : ""}</div>
       <div className="flex items-center justify-between gap-3 mb-4 md:mb-6 flex-wrap">
         <h1 className="text-xl md:text-2xl font-semibold">知识点中心</h1>
         <Button size="sm" onClick={() => setCreateOpen(true)}>
@@ -344,11 +329,11 @@ const KnowledgePointsPage: React.FC = () => {
                   <div className="flex-1 min-w-0 sm:min-w-64 w-full">
                   <div className="relative">
                     <Search className="absolute left-2.5 top-2.5 h-4 w-4 text-muted-foreground" />
-                    <Input
+                    <SearchInput
                       placeholder="搜索知识点..."
                       value={searchInput}
-                      onChange={handleInputChange}
-                      onKeyDown={handleKeyDown}
+                      onValueChange={setSearchInput}
+                      onSearch={(value) => { setKeyword(value); setPage(1); }}
                       className="pl-8"
                     />
                   </div>
@@ -359,7 +344,7 @@ const KnowledgePointsPage: React.FC = () => {
 
           <Card>
             <CardContent className="p-0">
-              {loading ? (
+              {loading && !listReady ? (
                 <div className="p-4 space-y-2">
                   {[...Array(PAGE_SIZE)].map((_, i) => (
                     <Skeleton key={i} className="h-10 w-full" />
@@ -701,10 +686,11 @@ const KnowledgePointsPage: React.FC = () => {
                  <div className="flex-1 min-w-0 sm:min-w-64">
                   <div className="relative">
                     <Search className="absolute left-2.5 top-2.5 h-4 w-4 text-muted-foreground" />
-                    <Input
+                    <SearchInput
                       placeholder="搜索关键词..."
                       value={highFreqKeyword}
-                      onChange={(e) => setHighFreqKeyword(e.target.value)}
+                      onValueChange={setHighFreqKeyword}
+                      onSearch={setDebouncedHighFreqKeyword}
                       className="pl-8"
                     />
                   </div>
@@ -719,7 +705,7 @@ const KnowledgePointsPage: React.FC = () => {
           <Card>
              <>
                  <CardContent className="p-0 overflow-x-auto hidden md:block">
-                  {highFreqLoading ? (
+                  {highFreqLoading && !highFreqReady ? (
                     <div className="p-4 space-y-2">
                       {[...Array(10)].map((_, i) => (
                         <Skeleton key={i} className="h-12 w-full" />
@@ -791,7 +777,7 @@ const KnowledgePointsPage: React.FC = () => {
                   )}
                 </CardContent>
                 <CardContent className="p-0 md:hidden">
-                  {highFreqLoading ? (
+                  {highFreqLoading && !highFreqReady ? (
                     <div className="p-4 space-y-2">
                       {[...Array(10)].map((_, i) => (
                         <Skeleton key={i} className="h-12 w-full" />

@@ -116,44 +116,21 @@ export class ExamQuestionsService {
       .offset((page - 1) * pageSize);
 
     const ids = rows.map((r) => r.id);
-    const freqMap = ids.length > 0
-      ? await this.loadExamFrequencyMap(ids)
-      : new Map<string, number>();
-
-    // 错题计数
+    // Fetch current-page priority metadata in one round trip. Scalar aggregates
+    // avoid multiplying counts when a question has several links/review records.
+    const metadata = ids.length ? await this.db.select({
+      questionId: examQuestion.id,
+      frequency: sql<number>`(SELECT MAX(kp.exam_frequency) FROM question_knowledge_point qkp JOIN knowledge_point kp ON kp.id = qkp.knowledge_point_id WHERE qkp.question_id = ${examQuestion.id})`,
+      wrongCount: sql<number>`(SELECT SUM(wq.wrong_count) FROM wrong_question wq WHERE wq.question_id = ${examQuestion.id})`,
+      reviewedAt: sql<string | null>`(SELECT MAX(rr.reviewed_at) FROM review_record rr WHERE rr.question_id = ${examQuestion.id} AND rr.review_type = 'question')`,
+    }).from(examQuestion).where(inArray(examQuestion.id, ids)) : [];
+    const freqMap = new Map<string, number>();
     const wrongMap = new Map<string, number>();
-    if (ids.length > 0) {
-      const wrongRows = await this.db
-        .select({
-          questionId: wrongQuestionTable.questionId,
-          totalWrong: sql<number>`SUM(${wrongQuestionTable.wrongCount})`,
-        })
-        .from(wrongQuestionTable)
-        .where(inArray(wrongQuestionTable.questionId, ids))
-        .groupBy(wrongQuestionTable.questionId);
-      for (const r of wrongRows) {
-        if (r.questionId) {
-          wrongMap.set(r.questionId, Number(r.totalWrong) || 0);
-        }
-      }
-    }
-
-    // 最后复习时间（review_record 按 questionId 取 max(reviewedAt)）
     const lastReviewedMap = new Map<string, Date | null>();
-    if (ids.length > 0) {
-      const lrRows = await this.db
-        .select({
-          questionId: reviewRecord.questionId,
-          maxReviewedAt: sql<Date>`MAX(${reviewRecord.reviewedAt})`,
-        })
-        .from(reviewRecord)
-        .where(and(inArray(reviewRecord.questionId, ids), eq(reviewRecord.reviewType, 'question')))
-        .groupBy(reviewRecord.questionId);
-      for (const r of lrRows) {
-        if (r.questionId && r.maxReviewedAt) {
-          lastReviewedMap.set(r.questionId, new Date(r.maxReviewedAt));
-        }
-      }
+    for (const row of metadata) {
+      freqMap.set(row.questionId, Number(row.frequency) || 0);
+      wrongMap.set(row.questionId, Number(row.wrongCount) || 0);
+      lastReviewedMap.set(row.questionId, row.reviewedAt ? new Date(row.reviewedAt) : null);
     }
 
     // 用户权重设置
@@ -188,28 +165,17 @@ export class ExamQuestionsService {
       examFrequency: freqMap.get(row.id) ?? 0,
     }));
 
-    // 按优先级重排当前页
-    items.sort((a, b) => {
-      const scoreA = calculateQuestionPriorityScore({
-        examFrequency: freqMap.get(a.id) ?? 0,
-        masteryScore: a.masteryScore,
-        wrongCount: wrongMap.get(a.id) ?? 0,
-        nextReviewAt: null,
-        lastReviewedAt: lastReviewedMap.get(a.id) ?? null,
-        difficulty: a.difficulty ?? 0,
-        settings: qSettings,
-      });
-      const scoreB = calculateQuestionPriorityScore({
-        examFrequency: freqMap.get(b.id) ?? 0,
-        masteryScore: b.masteryScore,
-        wrongCount: wrongMap.get(b.id) ?? 0,
-        nextReviewAt: null,
-        lastReviewedAt: lastReviewedMap.get(b.id) ?? null,
-        difficulty: b.difficulty ?? 0,
-        settings: qSettings,
-      });
-      return scoreB - scoreA;
-    });
+    // Calculate each score once, preserving the existing current-page ordering.
+    const priorities = new Map<string, number>(items.map((item) => [item.id, calculateQuestionPriorityScore({
+      examFrequency: freqMap.get(item.id) ?? 0,
+      masteryScore: item.masteryScore,
+      wrongCount: wrongMap.get(item.id) ?? 0,
+      nextReviewAt: null,
+      lastReviewedAt: lastReviewedMap.get(item.id) ?? null,
+      difficulty: item.difficulty ?? 0,
+      settings: qSettings,
+    })]));
+    items.sort((a, b) => priorities.get(b.id)! - priorities.get(a.id)!);
 
     return {
       items,

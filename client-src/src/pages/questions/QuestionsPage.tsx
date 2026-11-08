@@ -1,4 +1,4 @@
-import { useEffect, useMemo, useState } from 'react';
+import { useEffect, useMemo, useRef, useState } from 'react';
 import {
   Card,
   CardContent,
@@ -13,7 +13,7 @@ import {
   SelectTrigger,
   SelectValue,
 } from '@/components/ui/select';
-import { Input } from '@/components/ui/input';
+import { SearchInput } from '@/components/search/SearchInput';
 import { Skeleton } from '@/components/ui/skeleton';
 import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
@@ -70,6 +70,7 @@ const QuestionsPage: React.FC = () => {
   // 全部真题 tab
   const [allQuestions, setAllQuestions] = useState<ExamQuestion[]>([]);
   const [allTotal, setAllTotal] = useState(0);
+  const [allLoadingReady, setAllLoadingReady] = useState(false);
   const [allLoading, setAllLoading] = useState(false);
   const [allPage, setAllPage] = useState(1);
   const [allPageSize] = useState(20);
@@ -110,12 +111,13 @@ const QuestionsPage: React.FC = () => {
   const [highFreqQuestions, setHighFreqQuestions] = useState<HighFreqQuestion[]>([]);
   const [highFreqQuestionsTotal, setHighFreqQuestionsTotal] = useState(0);
   const [highFreqQuestionsPage, setHighFreqQuestionsPage] = useState(1);
+  const [highFreqQuestionsLoadingReady, setHighFreqQuestionsLoadingReady] = useState(false);
   const [highFreqQuestionsLoading, setHighFreqQuestionsLoading] = useState(false);
   const [allSources, setAllSources] = useState<string[]>([]);
-  const [sourcesLoaded, setSourcesLoaded] = useState(false);
 
   // 按院校 tab
   const [schoolGroups, setSchoolGroups] = useState<SchoolQuestionOverview[]>([]);
+  const [schoolLoadingReady, setSchoolLoadingReady] = useState(false);
   const [schoolLoading, setSchoolLoading] = useState(false);
   const [schoolKeyword, setSchoolKeyword] = useState('');
   const [debouncedSchoolKeyword, setDebouncedSchoolKeyword] = useState('');
@@ -175,39 +177,26 @@ const QuestionsPage: React.FC = () => {
     load();
   }, []);
 
-  // 搜索防抖
   useEffect(() => {
-    const timer = setTimeout(() => {
-      setDebouncedKeyword(keyword);
-    }, 300);
-    return () => clearTimeout(timer);
-  }, [keyword]);
+    let active = true;
+    api.examQuestions.getAllSources().then((items) => {
+      if (active) setAllSources(items);
+    }).catch((err) => logger.error('加载院校列表失败', err));
+    return () => { active = false; };
+  }, []);
 
-  // 院校搜索防抖
-  useEffect(() => {
-    const timer = setTimeout(() => {
-      setDebouncedSchoolKeyword(schoolKeyword);
-    }, 300);
-    return () => clearTimeout(timer);
-  }, [schoolKeyword]);
-
-  // 高频榜搜索防抖
-  useEffect(() => {
-    const timer = setTimeout(() => {
-      setDebouncedHighFreqKeyword(highFreqKeyword);
-    }, 300);
-    return () => clearTimeout(timer);
-  }, [highFreqKeyword]);
-
-  // 全部真题：筛选条件或关键词变更时回到第1页
-  useEffect(() => {
-    if (activeTab !== 'all') return;
-    setAllPage(1);
-  }, [activeTab, filterSubjectId, filterYear, filterType, filterSchool, debouncedKeyword]);
+  const allFilterKey = useRef('');
+  const highFreqFilterKey = useRef('');
 
   // 全部真题列表
   useEffect(() => {
     if (activeTab !== 'all') return;
+    const filterKey = JSON.stringify([filterSubjectId, filterYear, filterType, filterSchool, debouncedKeyword]);
+    if (allFilterKey.current !== filterKey) {
+      allFilterKey.current = filterKey;
+      if (allPage !== 1) { setAllPage(1); return; }
+    }
+    let active = true;
     const load = async () => {
       setAllLoading(true);
       try {
@@ -220,16 +209,19 @@ const QuestionsPage: React.FC = () => {
           school: filterSchool || undefined,
           keyword: debouncedKeyword || undefined,
         });
+        if (!active) return;
         setAllQuestions(result.items);
         setAllTotal(result.total);
       } catch (err) {
+        if (!active) return;
         logger.error('加载真题失败', err);
         toast.error('加载真题失败');
       } finally {
-        setAllLoading(false);
+        if (active) { setAllLoading(false); setAllLoadingReady(true); }
       }
     };
     load();
+    return () => { active = false; };
   }, [
     activeTab,
     allPage,
@@ -326,17 +318,13 @@ const QuestionsPage: React.FC = () => {
   // 高频榜：真题榜分页
   useEffect(() => {
     if (activeTab !== 'high-freq') return;
+    const filterKey = JSON.stringify([highFreqSource, highFreqSubjectId, highFreqYear, highFreqType, debouncedHighFreqKeyword]);
+    if (highFreqFilterKey.current !== filterKey) {
+      highFreqFilterKey.current = filterKey;
+      if (highFreqQuestionsPage !== 1) { setHighFreqQuestionsPage(1); return; }
+    }
+    let active = true;
     const load = async () => {
-      if (!sourcesLoaded) {
-        try {
-          const srcs = await api.examQuestions.getAllSources();
-          setAllSources(srcs);
-        } catch (err) {
-          logger.error('加载院校列表失败', err);
-        } finally {
-          setSourcesLoaded(true);
-        }
-      }
       setHighFreqQuestionsLoading(true);
       try {
         const result = await api.examQuestions.getHighFreqQuestions({
@@ -348,16 +336,19 @@ const QuestionsPage: React.FC = () => {
           page: highFreqQuestionsPage,
           pageSize: 20,
         });
+        if (!active) return;
         setHighFreqQuestions(result.items);
         setHighFreqQuestionsTotal(result.total);
       } catch (err) {
+        if (!active) return;
         logger.error('加载高频真题榜失败', err);
         toast.error('加载高频真题榜失败');
       } finally {
-        setHighFreqQuestionsLoading(false);
+        if (active) { setHighFreqQuestionsLoading(false); setHighFreqQuestionsLoadingReady(true); }
       }
     };
     load();
+    return () => { active = false; };
   }, [
     activeTab,
     highFreqSource,
@@ -366,44 +357,34 @@ const QuestionsPage: React.FC = () => {
     highFreqType,
     debouncedHighFreqKeyword,
     highFreqQuestionsPage,
-    sourcesLoaded,
-  ]);
-
-  // 高频榜筛选变化回到第1页
-  useEffect(() => {
-    if (activeTab !== 'high-freq') return;
-    setHighFreqQuestionsPage(1);
-  }, [
-    activeTab,
-    highFreqSource,
-    highFreqSubjectId,
-    highFreqYear,
-    highFreqType,
-    debouncedHighFreqKeyword,
   ]);
 
   // 按院校：加载概览
   useEffect(() => {
     if (activeTab !== 'school') return;
+    let active = true;
     const load = async () => {
       setSchoolLoading(true);
       try {
         const result = await api.examQuestions.getBySchool(
           debouncedSchoolKeyword || undefined,
         );
+        if (!active) return;
         setSchoolGroups(result);
         setExpandedSchool(null);
         setSchoolQuestions([]);
         setSchoolQuestionsTotal(0);
         setSchoolQuestionsPage(1);
       } catch (err) {
+        if (!active) return;
         logger.error('加载院校真题失败', err);
         toast.error('加载院校真题失败');
       } finally {
-        setSchoolLoading(false);
+        if (active) { setSchoolLoading(false); setSchoolLoadingReady(true); }
       }
     };
     load();
+    return () => { active = false; };
   }, [activeTab, debouncedSchoolKeyword]);
 
   // 按院校：展开时加载该院校题目分页
@@ -515,6 +496,11 @@ const QuestionsPage: React.FC = () => {
 
   return (
     <div className="p-3 md:p-6">
+      <div role="status" aria-live="polite" className="h-5 text-xs text-muted-foreground">
+        {((activeTab === 'all' && allLoading && allLoadingReady) ||
+          (activeTab === 'high-freq' && highFreqQuestionsLoading && highFreqQuestionsLoadingReady) ||
+          (activeTab === 'school' && schoolLoading && schoolLoadingReady)) ? '正在更新搜索结果…' : ''}
+      </div>
       <div className="flex items-center justify-between mb-4 md:mb-6">
         <h1 className="text-xl md:text-2xl font-semibold">真题中心</h1>
       </div>
@@ -1082,10 +1068,11 @@ const QuestionsPage: React.FC = () => {
             <CardContent className="pt-6">
               <div className="relative max-w-md">
                 <Search className="absolute left-2.5 top-2.5 h-4 w-4 text-muted-foreground" />
-                <Input
+                <SearchInput
                   placeholder="搜索学校名称..."
                   value={schoolKeyword}
-                  onChange={(e) => setSchoolKeyword(e.target.value)}
+                  onValueChange={setSchoolKeyword}
+                      onSearch={setDebouncedSchoolKeyword}
                   className="pl-8"
                 />
               </div>
@@ -1094,7 +1081,7 @@ const QuestionsPage: React.FC = () => {
 
           <Card>
             <CardContent className="p-0">
-              {schoolLoading ? (
+              {schoolLoading && !schoolLoadingReady ? (
                 <div className="p-4 space-y-2">
                   {[...Array(8)].map((_, i) => (
                     <Skeleton key={i} className="h-12 w-full" />
@@ -1421,10 +1408,11 @@ const QuestionsPage: React.FC = () => {
                  <div className="flex-1 min-w-0 sm:min-w-64">
                    <div className="relative">
                      <Search className="absolute left-2.5 top-2.5 h-4 w-4 text-muted-foreground" />
-                     <Input
+                     <SearchInput
                        placeholder="搜索关键词..."
                        value={highFreqKeyword}
-                       onChange={(e) => setHighFreqKeyword(e.target.value)}
+                       onValueChange={setHighFreqKeyword}
+                      onSearch={setDebouncedHighFreqKeyword}
                        className="pl-8"
                      />
                    </div>
@@ -1439,7 +1427,7 @@ const QuestionsPage: React.FC = () => {
              <Card>
                <>
                    <CardContent className="p-0 overflow-x-auto hidden md:block">
-                    {highFreqQuestionsLoading ? (
+                    {highFreqQuestionsLoading && !highFreqQuestionsLoadingReady ? (
                       <div className="p-4 space-y-2">
                         {[...Array(10)].map((_, i) => (
                           <Skeleton key={i} className="h-12 w-full" />
@@ -1553,7 +1541,7 @@ const QuestionsPage: React.FC = () => {
                     )}
                   </CardContent>
                   <CardContent className="p-0 md:hidden">
-                    {highFreqQuestionsLoading ? (
+                    {highFreqQuestionsLoading && !highFreqQuestionsLoadingReady ? (
                       <div className="p-4 space-y-2">
                         {[...Array(10)].map((_, i) => (
                           <Skeleton key={i} className="h-12 w-full" />
@@ -1747,10 +1735,11 @@ const QuestionsPage: React.FC = () => {
                  <div className="flex-1 min-w-0 sm:min-w-64">
                   <div className="relative">
                     <Search className="absolute left-2.5 top-2.5 h-4 w-4 text-muted-foreground" />
-                    <Input
+                    <SearchInput
                       placeholder="搜索题目关键词..."
                       value={keyword}
-                      onChange={(e) => setKeyword(e.target.value)}
+                      onValueChange={setKeyword}
+                      onSearch={setDebouncedKeyword}
                       className="pl-8"
                     />
                   </div>
@@ -1761,7 +1750,7 @@ const QuestionsPage: React.FC = () => {
 
           <Card>
             <CardContent className="p-0 overflow-x-auto hidden md:block">
-               {allLoading ? (
+               {allLoading && !allLoadingReady ? (
                  <div className="p-4 space-y-2">
                    {[...Array(8)].map((_, i) => (
                      <Skeleton key={i} className="h-12 w-full" />
@@ -1850,7 +1839,7 @@ const QuestionsPage: React.FC = () => {
              </CardContent>
              {/* 移动端卡片列表 */}
              <CardContent className="p-0 md:hidden">
-               {allLoading ? (
+               {allLoading && !allLoadingReady ? (
                  <div className="p-4 space-y-2">
                    {[...Array(8)].map((_, i) => (
                      <Skeleton key={i} className="h-12 w-full" />
