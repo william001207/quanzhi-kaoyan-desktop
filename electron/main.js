@@ -581,6 +581,8 @@ function openInnerWindow(url) {
     height: 1200,
     title: '试卷',
     autoHideMenuBar: true,
+    // 同理：窗口底色会成为打印画布背景，试卷窗口必须是纯白
+    backgroundColor: '#ffffff',
     webPreferences: {
       contextIsolation: true,
       nodeIntegration: false,
@@ -623,7 +625,12 @@ function createWindow(dirs) {
     title: '全职高手考研系统',
     icon: dirs.iconPath,
     autoHideMenuBar: true,
-    backgroundColor: '#f5f6fa',
+    // 必须用白色：窗口底色会被 Chromium 当成打印时的整页画布背景。
+    // 以前这里是 #f5f6fa，试卷走 window.print() 时（打印页是在主窗口里打开的）
+    // 整张纸连同页边距一起被铺成浅灰，打出来左右各一条灰带，而 body 是白的，
+    // 所以表现为「白纸中间一个白块、四周一圈灰」。
+    // 窗口是 show:false + ready-to-show 才显示，白色不会造成启动闪白。
+    backgroundColor: '#ffffff',
     show: false,
     webPreferences: {
       contextIsolation: true,

@@ -2,6 +2,15 @@
 
 所有版本的变更记录。格式参考 [Keep a Changelog](https://keepachangelog.com/zh-CN/1.1.0/)，版本号遵循语义化版本。
 
+## [v1.4.2] - 2026-11-15
+
+### 修复
+- **模拟卷打印灰边**：打印时的整页画布底色由窗口底色决定，改为纯白后试卷不再四周带灰色条带。
+
+### 说明
+- **纸张尺寸**：打印面板需选 A4，选 Letter 等其它尺寸时版面会被整体缩放到 94%。
+- **数据兼容**：不修改题库与内容同步逻辑，可覆盖安装，无需删除数据库。
+
 ## [v1.4.1] - 2026-11-08
 
 ### 修复
@@ -462,7 +471,7 @@
 - 安装包文件名改为英文（ASCII），解决 GitHub 下载链接 404
 - dmg 标准布局：打开即见 app + Applications 快捷方式
 
-[unreleased]: https://github.com/william001207/quanzhi-kaoyan-desktop/compare/v1.4.1...HEAD
+[unreleased]: https://github.com/william001207/quanzhi-kaoyan-desktop/compare/v1.4.2...HEAD
 [v1.3.5]: https://github.com/william001207/quanzhi-kaoyan-desktop/compare/v1.3.4...v1.3.5
 [v1.3.3]: https://github.com/william001207/quanzhi-kaoyan-desktop/compare/v1.3.2...v1.3.3
 [v1.3.2]: https://github.com/william001207/quanzhi-kaoyan-desktop/compare/v1.3.1...v1.3.2
@@ -501,3 +510,5 @@
 [v1.4.0]: https://github.com/william001207/quanzhi-kaoyan-desktop/compare/v1.3.8...v1.4.0
 
 [v1.4.1]: https://github.com/william001207/quanzhi-kaoyan-desktop/compare/v1.4.0...v1.4.1
+
+[v1.4.2]: https://github.com/william001207/quanzhi-kaoyan-desktop/compare/v1.4.1...v1.4.2
